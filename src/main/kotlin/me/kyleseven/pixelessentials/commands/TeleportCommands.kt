@@ -29,6 +29,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
             return
         }
 
+        if (player.uniqueId == target.player.uniqueId) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You can't teleport to yourself.</red>"))
+            return
+        }
+
         if (!plugin.teleportManager.addRequest(player, target.player, false)) {
             return
         }
@@ -60,6 +65,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         } seconds</white><red>.</red>"
                     )
             )
+            return
+        }
+
+        if (player.uniqueId == target.player.uniqueId) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You can't teleport to yourself.</red>"))
             return
         }
 
