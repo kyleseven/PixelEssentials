@@ -163,8 +163,8 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             activeTeleports.remove(player.uniqueId)
 
             player.sendMessage(mmd("<red>Teleport was canceled because you moved.</red>"))
-            Bukkit.getPlayer(request.requester)
-                ?.sendMessage(mmd("<red>Teleport to ${player.name} was canceled because they moved!</red>"))
+            Bukkit.getPlayer(request.target)
+                ?.sendMessage(mmd("<red>Teleport from ${mms(player.displayName())} was canceled because they moved!</red>"))
         }
     }
 
