@@ -39,7 +39,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         }
 
         player.sendMessage(
-            mmd("<gray>Sent teleport request to</gray> <white>${target.player.displayName()}</white><gray>.</gray>")
+            mmd("<gray>Sent teleport request to</gray> <white>${mms(target.player.displayName())}</white><gray>.</gray>")
         )
         target.player.sendMessage(
             mmd(
