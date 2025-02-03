@@ -7,7 +7,8 @@ import co.aikar.commands.annotation.CommandPermission
 import co.aikar.commands.annotation.Description
 import co.aikar.commands.bukkit.contexts.OnlinePlayer
 import me.kyleseven.pixelessentials.PixelEssentials
-import net.kyori.adventure.text.minimessage.MiniMessage
+import me.kyleseven.pixelessentials.utils.mmd
+import me.kyleseven.pixelessentials.utils.mms
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -19,18 +20,17 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onTpa(player: Player, target: OnlinePlayer) {
         if (plugin.teleportManager.isOnCooldown(player)) {
             player.sendMessage(
-                MiniMessage.miniMessage()
-                    .deserialize(
-                        "<red>You are on cooldown for another</red> <white>${
-                            plugin.teleportManager.getRemainingCooldown(player)
-                        } seconds</white><red>.</red>"
-                    )
+                mmd(
+                    "<red>You are on cooldown for another</red> <white>${
+                        plugin.teleportManager.getRemainingCooldown(player)
+                    } seconds</white><red>.</red>"
+                )
             )
             return
         }
 
         if (player.uniqueId == target.player.uniqueId) {
-            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You can't teleport to yourself.</red>"))
+            player.sendMessage(mmd("<red>You can't teleport to yourself.</red>"))
             return
         }
 
@@ -39,13 +39,13 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         }
 
         player.sendMessage(
-            MiniMessage.miniMessage()
-                .deserialize("<gray>Sent teleport request to</gray> <white>${target.player.displayName()}</white><gray>.</gray>")
+            mmd("<gray>Sent teleport request to</gray> <white>${target.player.displayName()}</white><gray>.</gray>")
         )
         target.player.sendMessage(
-            MiniMessage.miniMessage().deserialize(
-                "<white>${player.displayName()}</white> <gray>wants to teleport to you.</gray>\n" +
-                        "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n" + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
+            mmd(
+                "<white>${mms(player.displayName())}</white> <gray>wants to teleport to you.</gray>\n"
+                        + "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n"
+                        + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
             )
         )
 
@@ -58,18 +58,17 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onTpahere(player: Player, target: OnlinePlayer) {
         if (plugin.teleportManager.isOnCooldown(player)) {
             player.sendMessage(
-                MiniMessage.miniMessage()
-                    .deserialize(
-                        "<red>You are on cooldown for another</red> <white>${
-                            plugin.teleportManager.getRemainingCooldown(player)
-                        } seconds</white><red>.</red>"
-                    )
+                mmd(
+                    "<red>You are on cooldown for another</red> <white>${
+                        plugin.teleportManager.getRemainingCooldown(player)
+                    } seconds</white><red>.</red>"
+                )
             )
             return
         }
 
         if (player.uniqueId == target.player.uniqueId) {
-            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You can't teleport to yourself.</red>"))
+            player.sendMessage(mmd("<red>You can't teleport to yourself.</red>"))
             return
         }
 
@@ -78,17 +77,15 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         }
 
         player.sendMessage(
-            MiniMessage.miniMessage()
-                .deserialize("<gray>Sent teleport request to</gray> <white>${target.player.displayName()}</white><gray>.</gray>")
+            mmd("<gray>Sent teleport request to</gray> <white>${mms(target.player.displayName())}</white><gray>.</gray>")
         )
         target.player.sendMessage(
-            MiniMessage.miniMessage().deserialize(
-                "<white>${player.displayName()}</white> <gray>wants you to teleport to them.</gray>\n" +
-                        "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n" +
-                        "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
+            mmd(
+                "<white>${mms(player.displayName())}</white> <gray>wants you to teleport to them.</gray>\n"
+                        + "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n"
+                        + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
             )
         )
-
     }
 
     @CommandAlias("tpaall")
@@ -97,12 +94,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onTpaall(player: Player) {
         if (plugin.teleportManager.isOnCooldown(player)) {
             player.sendMessage(
-                MiniMessage.miniMessage()
-                    .deserialize(
-                        "<red>You are on cooldown for another</red> <white>${
-                            plugin.teleportManager.getRemainingCooldown(player)
-                        } seconds</white><red>.</red>"
-                    )
+                mmd(
+                    "<red>You are on cooldown for another</red> <white>${
+                        plugin.teleportManager.getRemainingCooldown(player)
+                    } seconds</white><red>.</red>"
+                )
             )
             return
         }
@@ -111,10 +107,10 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         Bukkit.getOnlinePlayers().forEach {
             if (it != player && plugin.teleportManager.addRequest(player, it, true)) {
                 it.sendMessage(
-                    MiniMessage.miniMessage().deserialize(
-                        "<white>${player.displayName()}</white> <gray>wants you to teleport to them.</gray>\n" +
-                                "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n" +
-                                "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
+                    mmd(
+                        "<white>${mms(player.displayName())}</white> <gray>wants you to teleport to them.</gray>\n"
+                                + "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n"
+                                + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
                     )
                 )
                 successCount++
@@ -122,9 +118,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         }
 
         when (successCount) {
-            0 -> player.sendMessage("§cNo players received your request")
-            1 -> player.sendMessage("§aSent request to 1 player")
-            else -> player.sendMessage("§aSent requests to $successCount players")
+            0 -> player.sendMessage(mmd("<red>No players to send requests to.</red>"))
+            1 -> player.sendMessage(mmd("<gray>Sent request to 1 player.</gray>"))
+            else -> player.sendMessage(
+                mmd("<gray>Sent request to $successCount players.</gray>")
+            )
         }
     }
 
@@ -140,8 +138,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onTpaccept(player: Player) {
         if (!plugin.teleportManager.acceptRequest(player)) {
             player.sendMessage(
-                MiniMessage.miniMessage()
-                    .deserialize("<red>You have no pending teleport requests.</red>")
+                mmd("<gray>You have no pending teleport requests.</gray>")
             )
         }
     }
@@ -151,8 +148,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onTpdeny(player: Player) {
         if (!plugin.teleportManager.denyRequest(player)) {
             player.sendMessage(
-                MiniMessage.miniMessage()
-                    .deserialize("<red>You have no pending teleport requests.</red>")
+                mmd("<gray>You have no pending teleport requests.</gray>")
             )
         }
     }

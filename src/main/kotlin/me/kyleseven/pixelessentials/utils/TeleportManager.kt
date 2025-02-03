@@ -44,7 +44,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
 
     fun addRequest(requester: Player, target: Player, isToRequester: Boolean): Boolean {
         if (pendingInvitations.containsKey(target.uniqueId)) {
-            requester.sendMessage("${target.name} already has a pending request.")
+            requester.sendMessage(mmd("<white>${mms(target.displayName())}</white> <gray>already has a pending teleport request.</gray>"))
             return false
         }
 
@@ -75,16 +75,17 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             processTpa(requester, target)
         }
 
-        requester.sendMessage("§a${target.name} accepted your teleport request.")
-        target.sendMessage("§aAccepted teleport request from ${requester.name}.")
+        requester.sendMessage(mmd("<white>${mms(target.displayName())}</white> <green>accepted</green> <gray>your teleport request.</gray>"))
+        target.sendMessage(mmd("<green>Accepted</green> <gray>teleport request from</gray> <white>${mms(requester.displayName())}</white><gray>.</gray>"))
         return true
     }
 
     fun denyRequest(target: Player): Boolean {
         val request = pendingInvitations.remove(target.uniqueId) ?: return false
         val requester = Bukkit.getPlayer(request.requester)
-        requester?.sendMessage("§c${target.name} denied your teleport request.")
-        target.sendMessage("§cDenied teleport request from ${requester?.name ?: "unknown player"}.")
+
+        requester?.sendMessage(mmd("<white>${mms(target.displayName())}</white> <red>denied</red> <gray>your teleport request.</gray>"))
+        target.sendMessage(mmd("<red>Denied</red> <gray>teleport request from</gray> <white>${requester?.displayName() ?: "Unknown Player"}</white><gray>.</gray>"))
         return true
     }
 
@@ -95,7 +96,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             delay = plugin.mainConfig.teleportDelay,
             requester = requester,
             target = target,
-            message = "§eTeleporting to ${target.name} in %d seconds. Do not move!"
+            message = "<gray>Teleporting to</gray> <white>${mms(target.displayName())}</white> <gray>in %d seconds. Do not move.</gray>"
         )
     }
 
@@ -106,7 +107,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             delay = plugin.mainConfig.teleportDelay,
             requester = requester,
             target = target,
-            message = "§eTeleporting to ${requester.name} in %d seconds. Do not move!"
+            message = "<gray>Teleporting to</gray> <white>${mms(requester.displayName())}</white> <gray>in %d seconds. Do not move.</gray>"
         )
     }
 
@@ -114,7 +115,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         Bukkit.getOnlinePlayers().forEach {
             if (it != requester) it.teleport(requester.location)
         }
-        requester.sendMessage("§aAll players have been teleported to you.")
+        requester.sendMessage(mmd("<gray>All players have been teleported to you.</gray>"))
     }
 
     private fun handleTeleport(
@@ -149,7 +150,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             target = target.uniqueId
         )
 
-        playerToMove.sendMessage(message.format(delay))
+        playerToMove.sendMessage(mmd(message.format(delay)))
     }
 
     @EventHandler
@@ -161,9 +162,9 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             Bukkit.getScheduler().cancelTask(request.taskId)
             activeTeleports.remove(player.uniqueId)
 
-            player.sendMessage("§cTeleport canceled due to movement!")
+            player.sendMessage(mmd("<red>Teleport was canceled because you moved.</red>"))
             Bukkit.getPlayer(request.requester)
-                ?.sendMessage("§cTeleport to ${player.name} was canceled because they moved!")
+                ?.sendMessage(mmd("<red>Teleport to ${player.name} was canceled because they moved!</red>"))
         }
     }
 
