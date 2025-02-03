@@ -3,19 +3,19 @@ package me.kyleseven.pixelessentials
 import co.aikar.commands.PaperCommandManager
 import me.kyleseven.pixelessentials.commands.MainCommand
 import me.kyleseven.pixelessentials.commands.TeleportCommands
-import me.kyleseven.pixelessentials.config.MainConfig
+import me.kyleseven.pixelessentials.config.PluginConfigProvider
 import me.kyleseven.pixelessentials.utils.TeleportManager
 import org.bukkit.plugin.java.JavaPlugin
 
 open class PixelEssentials : JavaPlugin() {
-    lateinit var mainConfig: MainConfig
+    lateinit var configProvider: PluginConfigProvider
     lateinit var teleportManager: TeleportManager
 
     override fun onEnable() {
         saveDefaultConfig()
 
         // Late init
-        mainConfig = MainConfig(this)
+        configProvider = PluginConfigProvider(this)
         teleportManager = TeleportManager(this)
 
         // Events
@@ -29,5 +29,10 @@ open class PixelEssentials : JavaPlugin() {
 
     override fun onDisable() {
         // Plugin shutdown logic
+    }
+
+    override fun reloadConfig() {
+        super.reloadConfig()
+        configProvider = PluginConfigProvider(this)
     }
 }

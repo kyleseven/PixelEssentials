@@ -39,7 +39,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
     }
 
     private fun setCooldown(player: Player) {
-        cooldowns[player.uniqueId] = System.currentTimeMillis() + (plugin.mainConfig.teleportCooldown * 1000L)
+        cooldowns[player.uniqueId] = System.currentTimeMillis() + (plugin.configProvider.teleportCooldown * 1000L)
     }
 
     fun addRequest(requester: Player, target: Player, isToRequester: Boolean): Boolean {
@@ -57,7 +57,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
                 requester.sendMessage(mmd("<gray>Your teleport request to <white>${mms(target.displayName())}</white> has expired.</gray>"))
                 target.sendMessage(mmd("<gray>Teleport request from <white>${mms(requester.displayName())}</white> has expired.</gray>"))
             }
-        }, plugin.mainConfig.teleportRequestExpiration * 20L)
+        }, plugin.configProvider.teleportRequestExpiration * 20L)
 
         return true
     }
@@ -93,7 +93,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         handleTeleport(
             playerToMove = requester,
             getDestination = { target.location },
-            delay = plugin.mainConfig.teleportDelay,
+            delay = plugin.configProvider.teleportDelay,
             requester = requester,
             target = target,
             message = "<gray>Teleporting to</gray> <white>${mms(target.displayName())}</white> <gray>in %d seconds. Do not move.</gray>"
@@ -104,7 +104,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         handleTeleport(
             playerToMove = target,
             getDestination = { requester.location },
-            delay = plugin.mainConfig.teleportDelay,
+            delay = plugin.configProvider.teleportDelay,
             requester = requester,
             target = target,
             message = "<gray>Teleporting to</gray> <white>${mms(requester.displayName())}</white> <gray>in %d seconds. Do not move.</gray>"
