@@ -9,6 +9,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.*
+import kotlin.math.abs
 
 class TeleportManager(private val plugin: PixelEssentials) : Listener {
     private val cooldowns = mutableMapOf<UUID, Long>()
@@ -169,6 +170,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
     }
 
     private fun hasMoved(from: Location, to: Location): Boolean {
-        return from.blockX != to.blockX || from.blockY != to.blockY || from.blockZ != to.blockZ
+        val tolerance = 0.5
+        return abs(from.x - to.x) > tolerance || abs(from.y - to.y) > tolerance || abs(from.z - to.z) > tolerance
     }
 }
