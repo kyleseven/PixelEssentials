@@ -1,0 +1,6 @@
+# PixelEssentials config
+
+teleportation:
+  cooldown: 30
+  delay: 5
+  request-expiration: 30

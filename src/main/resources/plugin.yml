@@ -1,0 +1,4 @@
+name: PixelEssentials
+version: '1.0-SNAPSHOT'
+main: me.kyleseven.pixelessentials.PixelEssentials
+api-version: '1.21'
