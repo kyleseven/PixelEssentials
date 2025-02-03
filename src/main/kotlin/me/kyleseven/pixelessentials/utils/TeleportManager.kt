@@ -90,6 +90,21 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         return true
     }
 
+    fun cancelRequest(requester: Player) {
+        val request = pendingInvitations.remove(requester.uniqueId) ?: return
+        val target = Bukkit.getPlayer(request.target)
+
+        target?.sendMessage(mmd("<gray>Teleport request from <white>${mms(requester.displayName())}</white> has been canceled.</gray>"))
+        requester.sendMessage(
+            mmd(
+                "<gray>Your teleport request to <white>${
+                    target?.displayName()
+                        ?.let { mms(it) }
+                }</white> has been canceled.</gray>"
+            )
+        )
+    }
+
     private fun processTpa(requester: Player, target: Player) {
         handleTeleport(
             playerToMove = requester,

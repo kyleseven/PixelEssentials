@@ -152,4 +152,10 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
             )
         }
     }
+
+    @CommandAlias("tpcancel")
+    @Description("Cancel a teleport request")
+    fun onTpcancel(player: Player) {
+        plugin.teleportManager.cancelRequest(player)
+    }
 }
