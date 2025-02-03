@@ -54,8 +54,8 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         Bukkit.getScheduler().runTaskLater(plugin, Runnable {
             if (pendingInvitations[target.uniqueId] == request) {
                 pendingInvitations.remove(target.uniqueId)
-                requester.sendMessage("§cYour teleport request to ${target.name} has expired.")
-                target.sendMessage("§cTeleport request from ${requester.name} has expired.")
+                requester.sendMessage(mmd("<gray>Your teleport request to <white>${mms(target.displayName())}</white> has expired.</gray>"))
+                target.sendMessage(mmd("<gray>Teleport request from <white>${mms(requester.displayName())}</white> has expired.</gray>"))
             }
         }, plugin.mainConfig.teleportRequestExpiration * 20L)
 
@@ -65,7 +65,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
     fun acceptRequest(target: Player): Boolean {
         val request = pendingInvitations.remove(target.uniqueId) ?: return false
         val requester = Bukkit.getPlayer(request.requester) ?: run {
-            target.sendMessage("§cThe requester is no longer online.")
+            target.sendMessage(mmd("<gray>The requester is no longer online.</gray>"))
             return false
         }
 
