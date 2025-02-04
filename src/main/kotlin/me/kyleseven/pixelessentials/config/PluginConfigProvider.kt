@@ -7,7 +7,7 @@ class PluginConfigProvider(private val plugin: PixelEssentials) : ConfigProvider
         get() = plugin.config.getBoolean("welcome-message.enabled")
 
     override val welcomeMessage: String
-        get() = plugin.config.getString("welcome-message.messaged").toString()
+        get() = plugin.config.getString("welcome-message.message").toString()
 
     override val teleportCooldown: Int
         get() = plugin.config.getInt("teleportation.cooldown")
