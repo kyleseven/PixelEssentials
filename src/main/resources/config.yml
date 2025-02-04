@@ -2,7 +2,7 @@
 
 welcome-message:
   enabled: true
-  message: "<purple>Welcome to the server {username}!</purple>"
+  message: "<light_purple>Welcome to the server {username}!</light_purple>"
 
 teleportation:
   cooldown: 30
