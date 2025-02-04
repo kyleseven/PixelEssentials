@@ -165,12 +165,10 @@ open class PlayerLastLocations(
         ) : super(path, childPath, parentPath)
 
         private constructor(alias: Name, aliased: Table<PlayerLastLocationsRecord>) : super(alias, aliased)
-
         override fun `as`(alias: String): PlayerLastLocationsPath = PlayerLastLocationsPath(DSL.name(alias), this)
         override fun `as`(alias: Name): PlayerLastLocationsPath = PlayerLastLocationsPath(alias, this)
         override fun `as`(alias: Table<*>): PlayerLastLocationsPath = PlayerLastLocationsPath(alias.qualifiedName, this)
     }
-
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
     override fun getPrimaryKey(): UniqueKey<PlayerLastLocationsRecord> = PLAYER_LAST_LOCATIONS__PK_PLAYER_LAST_LOCATIONS
     override fun getReferences(): List<ForeignKey<PlayerLastLocationsRecord, *>> =
@@ -190,7 +188,6 @@ open class PlayerLastLocations(
 
     val players: PlayersPath
         get(): PlayersPath = players()
-
     override fun `as`(alias: String): PlayerLastLocations = PlayerLastLocations(DSL.name(alias), this)
     override fun `as`(alias: Name): PlayerLastLocations = PlayerLastLocations(alias, this)
     override fun `as`(alias: Table<*>): PlayerLastLocations = PlayerLastLocations(alias.qualifiedName, this)

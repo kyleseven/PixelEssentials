@@ -29,7 +29,6 @@ dependencies {
 
     // Database
     implementation("org.xerial:sqlite-jdbc:3.48.0.0")
-    implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("org.jooq:jooq:3.19.18")
     implementation("org.flywaydb:flyway-core:11.3.0")
 

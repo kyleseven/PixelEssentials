@@ -7,6 +7,7 @@ package me.kyleseven.pixelessentials.database.generated.tables
 import me.kyleseven.pixelessentials.database.generated.DefaultSchema
 import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__FK_PLAYER_HOMES_PK_PLAYERS
 import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__PK_PLAYER_HOMES
+import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728
 import me.kyleseven.pixelessentials.database.generated.tables.Players.PlayersPath
 import me.kyleseven.pixelessentials.database.generated.tables.records.PlayerHomesRecord
 import org.jooq.*
@@ -171,17 +172,15 @@ open class PlayerHomes(
         ) : super(path, childPath, parentPath)
 
         private constructor(alias: Name, aliased: Table<PlayerHomesRecord>) : super(alias, aliased)
-
         override fun `as`(alias: String): PlayerHomesPath = PlayerHomesPath(DSL.name(alias), this)
         override fun `as`(alias: Name): PlayerHomesPath = PlayerHomesPath(alias, this)
         override fun `as`(alias: Table<*>): PlayerHomesPath = PlayerHomesPath(alias.qualifiedName, this)
     }
-
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
     override fun getIdentity(): Identity<PlayerHomesRecord, Int?> =
         super.getIdentity() as Identity<PlayerHomesRecord, Int?>
-
     override fun getPrimaryKey(): UniqueKey<PlayerHomesRecord> = PLAYER_HOMES__PK_PLAYER_HOMES
+    override fun getUniqueKeys(): List<UniqueKey<PlayerHomesRecord>> = listOf(PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728)
     override fun getReferences(): List<ForeignKey<PlayerHomesRecord, *>> =
         listOf(PLAYER_HOMES__FK_PLAYER_HOMES_PK_PLAYERS)
 
@@ -199,7 +198,6 @@ open class PlayerHomes(
 
     val players: PlayersPath
         get(): PlayersPath = players()
-
     override fun `as`(alias: String): PlayerHomes = PlayerHomes(DSL.name(alias), this)
     override fun `as`(alias: Name): PlayerHomes = PlayerHomes(alias, this)
     override fun `as`(alias: Table<*>): PlayerHomes = PlayerHomes(alias.qualifiedName, this)

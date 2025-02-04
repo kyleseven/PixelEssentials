@@ -19,6 +19,7 @@ import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 
 
+
 // -------------------------------------------------------------------------
 // UNIQUE and PRIMARY KEY definitions
 // -------------------------------------------------------------------------
@@ -27,6 +28,12 @@ val PLAYER_HOMES__PK_PLAYER_HOMES: UniqueKey<PlayerHomesRecord> = Internal.creat
     PlayerHomes.PLAYER_HOMES,
     DSL.name("pk_player_homes"),
     arrayOf(PlayerHomes.PLAYER_HOMES.ID),
+    true
+)
+val PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728: UniqueKey<PlayerHomesRecord> = Internal.createUniqueKey(
+    PlayerHomes.PLAYER_HOMES,
+    DSL.name("uk_player_homes_1_90449728"),
+    arrayOf(PlayerHomes.PLAYER_HOMES.PLAYER_ID),
     true
 )
 val PLAYER_LAST_LOCATIONS__PK_PLAYER_LAST_LOCATIONS: UniqueKey<PlayerLastLocationsRecord> = Internal.createUniqueKey(

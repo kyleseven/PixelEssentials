@@ -129,7 +129,6 @@ open class Warps(
      * Create a <code>warps</code> table reference
      */
     constructor() : this(DSL.name("warps"), null)
-
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
     override fun getIdentity(): Identity<WarpsRecord, Int?> = super.getIdentity() as Identity<WarpsRecord, Int?>
     override fun getPrimaryKey(): UniqueKey<WarpsRecord> = WARPS__PK_WARPS

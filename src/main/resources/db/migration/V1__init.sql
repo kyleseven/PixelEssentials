@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS player_last_locations (
 
 CREATE TABLE IF NOT EXISTS player_homes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    player_id INTEGER NOT NULL,
+    player_id INTEGER NOT NULL UNIQUE,
     x REAL NOT NULL,
     y REAL NOT NULL,
     z REAL NOT NULL,
