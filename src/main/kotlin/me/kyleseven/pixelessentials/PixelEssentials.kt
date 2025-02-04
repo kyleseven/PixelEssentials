@@ -7,6 +7,7 @@ import me.kyleseven.pixelessentials.config.PluginConfigProvider
 import me.kyleseven.pixelessentials.database.DatabaseManager
 import me.kyleseven.pixelessentials.database.repositories.PlayerRepository
 import me.kyleseven.pixelessentials.database.repositories.WarpRepository
+import me.kyleseven.pixelessentials.listeners.PlayerListener
 import me.kyleseven.pixelessentials.utils.TeleportManager
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -15,7 +16,7 @@ open class PixelEssentials : JavaPlugin() {
     lateinit var teleportManager: TeleportManager
 
     lateinit var databaseManager: DatabaseManager
-    lateinit var playerInfoRepository: PlayerRepository
+    lateinit var playerRepository: PlayerRepository
     lateinit var warpRepository: WarpRepository
 
     override fun onEnable() {
@@ -31,11 +32,12 @@ open class PixelEssentials : JavaPlugin() {
             server.pluginManager.disablePlugin(this)
             return
         }
-        playerInfoRepository = PlayerRepository(databaseManager.dsl)
+        playerRepository = PlayerRepository(databaseManager.dsl)
         warpRepository = WarpRepository(databaseManager.dsl)
 
         // Events
         server.pluginManager.registerEvents(teleportManager, this)
+        server.pluginManager.registerEvents(PlayerListener(this), this)
 
         // Commands
         val paperCommandManager = PaperCommandManager(this)

@@ -49,6 +49,22 @@ class PlayerRepository(private val dsl: DSLContext) {
             .execute()
     }
 
+    fun updateLastSeenAndPlaytime(uuid: UUID, playtime: Int) {
+        dsl.update(PLAYERS)
+            .set(PLAYERS.LAST_SEEN, (System.currentTimeMillis() / 1000).toInt())
+            .set(PLAYERS.TOTAL_PLAYTIME, PLAYERS.TOTAL_PLAYTIME.plus(playtime))
+            .where(PLAYERS.UUID.eq(uuid.toString()))
+            .execute()
+    }
+
+    fun updateBanStatus(uuid: UUID, isBanned: Boolean, banReason: String?) {
+        dsl.update(PLAYERS)
+            .set(PLAYERS.IS_BANNED, isBanned)
+            .set(PLAYERS.BAN_REASON, banReason)
+            .where(PLAYERS.UUID.eq(uuid.toString()))
+            .execute()
+    }
+
     fun getPlayerLastLocation(uuid: UUID): PlayerLastLocation? {
         return dsl.select(PLAYER_LAST_LOCATIONS.asterisk()) // Select all columns
             .from(PLAYER_LAST_LOCATIONS)

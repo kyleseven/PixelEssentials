@@ -1,5 +1,9 @@
 # PixelEssentials config
 
+welcome-message:
+  enabled: true
+  message: "<purple>Welcome to the server {username}!</purple>"
+
 teleportation:
   cooldown: 30
   delay: 5
