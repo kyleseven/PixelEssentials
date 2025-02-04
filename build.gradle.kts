@@ -62,6 +62,11 @@ jooq {
                 name = "org.jooq.meta.sqlite.SQLiteDatabase"
                 excludes = "flyway_schema_history"
             }
+            generate {
+                isKotlinNotNullPojoAttributes = true
+                isKotlinNotNullRecordAttributes = true
+                isKotlinNotNullInterfaceAttributes = true
+            }
             target {
                 packageName = "me.kyleseven.pixelessentials.database.generated"
                 directory = "src/main/kotlin"
