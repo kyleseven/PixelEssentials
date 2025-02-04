@@ -5,7 +5,7 @@ data class Warp(
     val x: Double,
     val y: Double,
     val z: Double,
-    val pitch: Float,
-    val yaw: Float,
+    val pitch: Double,
+    val yaw: Double,
     val world: String
 )

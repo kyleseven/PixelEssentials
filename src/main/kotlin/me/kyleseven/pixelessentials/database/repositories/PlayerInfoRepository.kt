@@ -26,6 +26,28 @@ class PlayerInfoRepository(private val dsl: DSLContext) {
             }
     }
 
+    fun upsertPlayer(player: Player) {
+        dsl.insertInto(PLAYERS)
+            .set(PLAYERS.UUID, player.uuid)
+            .set(PLAYERS.LAST_ACCOUNT_NAME, player.lastAccountName)
+            .set(PLAYERS.IP_ADDRESS, player.ipAddress)
+            .set(PLAYERS.FIRST_JOIN, player.firstJoin)
+            .set(PLAYERS.LAST_SEEN, player.lastSeen)
+            .set(PLAYERS.TOTAL_PLAYTIME, player.totalPlaytime)
+            .set(PLAYERS.IS_BANNED, player.isBanned)
+            .set(PLAYERS.BAN_REASON, player.banReason)
+            .onConflict(PLAYERS.UUID)
+            .doUpdate()
+            .set(PLAYERS.LAST_ACCOUNT_NAME, player.lastAccountName)
+            .set(PLAYERS.IP_ADDRESS, player.ipAddress)
+            .set(PLAYERS.FIRST_JOIN, player.firstJoin)
+            .set(PLAYERS.LAST_SEEN, player.lastSeen)
+            .set(PLAYERS.TOTAL_PLAYTIME, player.totalPlaytime)
+            .set(PLAYERS.IS_BANNED, player.isBanned)
+            .set(PLAYERS.BAN_REASON, player.banReason)
+            .execute()
+    }
+
     fun getPlayerLastLocation(uuid: String): PlayerLastLocation? {
         return dsl.select(PLAYER_LAST_LOCATIONS.asterisk()) // Select all columns
             .from(PLAYER_LAST_LOCATIONS)
@@ -43,6 +65,25 @@ class PlayerInfoRepository(private val dsl: DSLContext) {
             }
     }
 
+    fun upsertPlayerLastLocation(uuid: String, location: PlayerLastLocation) {
+        dsl.insertInto(PLAYER_LAST_LOCATIONS)
+            .set(PLAYER_LAST_LOCATIONS.X, location.x)
+            .set(PLAYER_LAST_LOCATIONS.Y, location.y)
+            .set(PLAYER_LAST_LOCATIONS.Z, location.z)
+            .set(PLAYER_LAST_LOCATIONS.PITCH, location.pitch)
+            .set(PLAYER_LAST_LOCATIONS.YAW, location.yaw)
+            .set(PLAYER_LAST_LOCATIONS.WORLD, location.world)
+            .onConflict(PLAYER_LAST_LOCATIONS.PLAYER_ID)
+            .doUpdate()
+            .set(PLAYER_LAST_LOCATIONS.X, location.x)
+            .set(PLAYER_LAST_LOCATIONS.Y, location.y)
+            .set(PLAYER_LAST_LOCATIONS.Z, location.z)
+            .set(PLAYER_LAST_LOCATIONS.PITCH, location.pitch)
+            .set(PLAYER_LAST_LOCATIONS.YAW, location.yaw)
+            .set(PLAYER_LAST_LOCATIONS.WORLD, location.world)
+            .execute()
+    }
+
     fun getPlayerHome(uuid: String): PlayerHome? {
         return dsl.select(PLAYER_HOMES.asterisk())
             .from(PLAYER_HOMES)
@@ -58,5 +99,24 @@ class PlayerInfoRepository(private val dsl: DSLContext) {
                     world = record.get(PLAYER_HOMES.WORLD)!!
                 )
             }
+    }
+
+    fun upsertPlayerHome(uuid: String, home: PlayerHome) {
+        dsl.insertInto(PLAYER_HOMES)
+            .set(PLAYER_HOMES.X, home.x)
+            .set(PLAYER_HOMES.Y, home.y)
+            .set(PLAYER_HOMES.Z, home.z)
+            .set(PLAYER_HOMES.PITCH, home.pitch)
+            .set(PLAYER_HOMES.YAW, home.yaw)
+            .set(PLAYER_HOMES.WORLD, home.world)
+            .onConflict(PLAYER_HOMES.PLAYER_ID)
+            .doUpdate()
+            .set(PLAYER_HOMES.X, home.x)
+            .set(PLAYER_HOMES.Y, home.y)
+            .set(PLAYER_HOMES.Z, home.z)
+            .set(PLAYER_HOMES.PITCH, home.pitch)
+            .set(PLAYER_HOMES.YAW, home.yaw)
+            .set(PLAYER_HOMES.WORLD, home.world)
+            .execute()
     }
 }
