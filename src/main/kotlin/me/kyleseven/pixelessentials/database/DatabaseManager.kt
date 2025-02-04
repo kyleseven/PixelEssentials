@@ -27,7 +27,7 @@ class DatabaseManager(private val plugin: PixelEssentials) {
             }
 
             // Run Flyway Migrations
-            Flyway.configure()
+            Flyway.configure(plugin.javaClass.classLoader)
                 .dataSource(jdbcUrl, "", "")
                 .locations("classpath:db/migration")
                 .load()
