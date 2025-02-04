@@ -9,7 +9,7 @@ import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import org.jooq.DSLContext
 import java.util.*
 
-class PlayerInfoRepository(private val dsl: DSLContext) {
+class PlayerRepository(private val dsl: DSLContext) {
     fun getPlayer(uuid: UUID): Player? {
         return dsl.selectFrom(PLAYERS)
             .where(PLAYERS.UUID.eq(uuid.toString()))
