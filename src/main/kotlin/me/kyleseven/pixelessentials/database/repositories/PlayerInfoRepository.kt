@@ -7,11 +7,12 @@ import me.kyleseven.pixelessentials.database.models.Player
 import me.kyleseven.pixelessentials.database.models.PlayerHome
 import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import org.jooq.DSLContext
+import java.util.*
 
 class PlayerInfoRepository(private val dsl: DSLContext) {
-    fun getPlayer(uuid: String): Player? {
+    fun getPlayer(uuid: UUID): Player? {
         return dsl.selectFrom(PLAYERS)
-            .where(PLAYERS.UUID.eq(uuid))
+            .where(PLAYERS.UUID.eq(uuid.toString()))
             .fetchOne()?.let { player ->
                 Player(
                     lastAccountName = player.lastAccountName,
@@ -48,11 +49,11 @@ class PlayerInfoRepository(private val dsl: DSLContext) {
             .execute()
     }
 
-    fun getPlayerLastLocation(uuid: String): PlayerLastLocation? {
+    fun getPlayerLastLocation(uuid: UUID): PlayerLastLocation? {
         return dsl.select(PLAYER_LAST_LOCATIONS.asterisk()) // Select all columns
             .from(PLAYER_LAST_LOCATIONS)
             .innerJoin(PLAYERS).on(PLAYER_LAST_LOCATIONS.PLAYER_ID.eq(PLAYERS.ID))
-            .where(PLAYERS.UUID.eq(uuid))
+            .where(PLAYERS.UUID.eq(uuid.toString()))
             .fetchOne()?.let { record ->
                 PlayerLastLocation(
                     x = record.get(PLAYER_LAST_LOCATIONS.X)!!,
@@ -65,8 +66,14 @@ class PlayerInfoRepository(private val dsl: DSLContext) {
             }
     }
 
-    fun upsertPlayerLastLocation(uuid: String, location: PlayerLastLocation) {
+    fun upsertPlayerLastLocation(uuid: UUID, location: PlayerLastLocation) {
         dsl.insertInto(PLAYER_LAST_LOCATIONS)
+            .set(
+                PLAYER_HOMES.PLAYER_ID,
+                dsl.select(PLAYERS.ID)
+                    .from(PLAYERS)
+                    .where(PLAYERS.UUID.eq(uuid.toString()))
+            )
             .set(PLAYER_LAST_LOCATIONS.X, location.x)
             .set(PLAYER_LAST_LOCATIONS.Y, location.y)
             .set(PLAYER_LAST_LOCATIONS.Z, location.z)
@@ -84,11 +91,11 @@ class PlayerInfoRepository(private val dsl: DSLContext) {
             .execute()
     }
 
-    fun getPlayerHome(uuid: String): PlayerHome? {
+    fun getPlayerHome(uuid: UUID): PlayerHome? {
         return dsl.select(PLAYER_HOMES.asterisk())
             .from(PLAYER_HOMES)
             .innerJoin(PLAYERS).on(PLAYER_HOMES.PLAYER_ID.eq(PLAYERS.ID))
-            .where(PLAYERS.UUID.eq(uuid))
+            .where(PLAYERS.UUID.eq(uuid.toString()))
             .fetchOne()?.let { record ->
                 PlayerHome(
                     x = record.get(PLAYER_HOMES.X)!!,
@@ -101,8 +108,14 @@ class PlayerInfoRepository(private val dsl: DSLContext) {
             }
     }
 
-    fun upsertPlayerHome(uuid: String, home: PlayerHome) {
+    fun upsertPlayerHome(uuid: UUID, home: PlayerHome) {
         dsl.insertInto(PLAYER_HOMES)
+            .set(
+                PLAYER_HOMES.PLAYER_ID,
+                dsl.select(PLAYERS.ID)
+                    .from(PLAYERS)
+                    .where(PLAYERS.UUID.eq(uuid.toString()))
+            )
             .set(PLAYER_HOMES.X, home.x)
             .set(PLAYER_HOMES.Y, home.y)
             .set(PLAYER_HOMES.Z, home.z)
