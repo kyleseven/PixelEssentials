@@ -24,25 +24,25 @@ open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(
         set(value): Unit = set(1, value)
         get(): String = get(1) as String
 
-    open var x: Float
+    open var x: Double
         set(value): Unit = set(2, value)
-        get(): Float = get(2) as Float
+        get(): Double = get(2) as Double
 
-    open var y: Float
+    open var y: Double
         set(value): Unit = set(3, value)
-        get(): Float = get(3) as Float
+        get(): Double = get(3) as Double
 
-    open var z: Float
+    open var z: Double
         set(value): Unit = set(4, value)
-        get(): Float = get(4) as Float
+        get(): Double = get(4) as Double
 
-    open var pitch: Float
+    open var pitch: Double
         set(value): Unit = set(5, value)
-        get(): Float = get(5) as Float
+        get(): Double = get(5) as Double
 
-    open var yaw: Float
+    open var yaw: Double
         set(value): Unit = set(6, value)
-        get(): Float = get(6) as Float
+        get(): Double = get(6) as Double
 
     open var world: String
         set(value): Unit = set(7, value)
@@ -60,11 +60,11 @@ open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(
     constructor(
         id: Int? = null,
         name: String,
-        x: Float,
-        y: Float,
-        z: Float,
-        pitch: Float,
-        yaw: Float,
+        x: Double,
+        y: Double,
+        z: Double,
+        pitch: Double,
+        yaw: Double,
         world: String
     ) : this() {
         this.id = id

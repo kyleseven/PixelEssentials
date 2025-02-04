@@ -65,28 +65,29 @@ open class Warps(
     /**
      * The column <code>warps.x</code>.
      */
-    val X: TableField<WarpsRecord, Float?> = createField(DSL.name("x"), SQLDataType.REAL.nullable(false), this, "")
+    val X: TableField<WarpsRecord, Double?> = createField(DSL.name("x"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>warps.y</code>.
      */
-    val Y: TableField<WarpsRecord, Float?> = createField(DSL.name("y"), SQLDataType.REAL.nullable(false), this, "")
+    val Y: TableField<WarpsRecord, Double?> = createField(DSL.name("y"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>warps.z</code>.
      */
-    val Z: TableField<WarpsRecord, Float?> = createField(DSL.name("z"), SQLDataType.REAL.nullable(false), this, "")
+    val Z: TableField<WarpsRecord, Double?> = createField(DSL.name("z"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>warps.pitch</code>.
      */
-    val PITCH: TableField<WarpsRecord, Float?> =
-        createField(DSL.name("pitch"), SQLDataType.REAL.nullable(false), this, "")
+    val PITCH: TableField<WarpsRecord, Double?> =
+        createField(DSL.name("pitch"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>warps.yaw</code>.
      */
-    val YAW: TableField<WarpsRecord, Float?> = createField(DSL.name("yaw"), SQLDataType.REAL.nullable(false), this, "")
+    val YAW: TableField<WarpsRecord, Double?> =
+        createField(DSL.name("yaw"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>warps.world</code>.

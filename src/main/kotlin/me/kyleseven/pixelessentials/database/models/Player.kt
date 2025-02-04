@@ -1,7 +1,6 @@
 package me.kyleseven.pixelessentials.database.models
 
 data class Player(
-    val id: Int,
     val lastAccountName: String,
     val uuid: String,
     val ipAddress: String,
@@ -13,22 +12,19 @@ data class Player(
 )
 
 data class PlayerLastLocation(
-    val playerId: Int,
     val x: Double,
     val y: Double,
     val z: Double,
-    val pitch: Float,
-    val yaw: Float,
+    val pitch: Double,
+    val yaw: Double,
     val world: String
 )
 
 data class PlayerHome(
-    val id: Int,
-    val playerId: Int,
     val x: Double,
     val y: Double,
     val z: Double,
-    val pitch: Float,
-    val yaw: Float,
+    val pitch: Double,
+    val yaw: Double,
     val world: String
 )

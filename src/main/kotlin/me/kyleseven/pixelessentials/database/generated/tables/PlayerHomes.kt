@@ -69,32 +69,32 @@ open class PlayerHomes(
     /**
      * The column <code>player_homes.x</code>.
      */
-    val X: TableField<PlayerHomesRecord, Float?> =
-        createField(DSL.name("x"), SQLDataType.REAL.nullable(false), this, "")
+    val X: TableField<PlayerHomesRecord, Double?> =
+        createField(DSL.name("x"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_homes.y</code>.
      */
-    val Y: TableField<PlayerHomesRecord, Float?> =
-        createField(DSL.name("y"), SQLDataType.REAL.nullable(false), this, "")
+    val Y: TableField<PlayerHomesRecord, Double?> =
+        createField(DSL.name("y"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_homes.z</code>.
      */
-    val Z: TableField<PlayerHomesRecord, Float?> =
-        createField(DSL.name("z"), SQLDataType.REAL.nullable(false), this, "")
+    val Z: TableField<PlayerHomesRecord, Double?> =
+        createField(DSL.name("z"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_homes.pitch</code>.
      */
-    val PITCH: TableField<PlayerHomesRecord, Float?> =
-        createField(DSL.name("pitch"), SQLDataType.REAL.nullable(false), this, "")
+    val PITCH: TableField<PlayerHomesRecord, Double?> =
+        createField(DSL.name("pitch"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_homes.yaw</code>.
      */
-    val YAW: TableField<PlayerHomesRecord, Float?> =
-        createField(DSL.name("yaw"), SQLDataType.REAL.nullable(false), this, "")
+    val YAW: TableField<PlayerHomesRecord, Double?> =
+        createField(DSL.name("yaw"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_homes.world</code>.

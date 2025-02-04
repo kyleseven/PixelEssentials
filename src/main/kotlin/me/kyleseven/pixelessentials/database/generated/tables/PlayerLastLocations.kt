@@ -62,32 +62,32 @@ open class PlayerLastLocations(
     /**
      * The column <code>player_last_locations.x</code>.
      */
-    val X: TableField<PlayerLastLocationsRecord, Float?> =
-        createField(DSL.name("x"), SQLDataType.REAL.nullable(false), this, "")
+    val X: TableField<PlayerLastLocationsRecord, Double?> =
+        createField(DSL.name("x"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_last_locations.y</code>.
      */
-    val Y: TableField<PlayerLastLocationsRecord, Float?> =
-        createField(DSL.name("y"), SQLDataType.REAL.nullable(false), this, "")
+    val Y: TableField<PlayerLastLocationsRecord, Double?> =
+        createField(DSL.name("y"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_last_locations.z</code>.
      */
-    val Z: TableField<PlayerLastLocationsRecord, Float?> =
-        createField(DSL.name("z"), SQLDataType.REAL.nullable(false), this, "")
+    val Z: TableField<PlayerLastLocationsRecord, Double?> =
+        createField(DSL.name("z"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_last_locations.pitch</code>.
      */
-    val PITCH: TableField<PlayerLastLocationsRecord, Float?> =
-        createField(DSL.name("pitch"), SQLDataType.REAL.nullable(false), this, "")
+    val PITCH: TableField<PlayerLastLocationsRecord, Double?> =
+        createField(DSL.name("pitch"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_last_locations.yaw</code>.
      */
-    val YAW: TableField<PlayerLastLocationsRecord, Float?> =
-        createField(DSL.name("yaw"), SQLDataType.REAL.nullable(false), this, "")
+    val YAW: TableField<PlayerLastLocationsRecord, Double?> =
+        createField(DSL.name("yaw"), SQLDataType.DOUBLE.nullable(false), this, "")
 
     /**
      * The column <code>player_last_locations.world</code>.

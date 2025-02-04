@@ -12,11 +12,11 @@ CREATE TABLE IF NOT EXISTS players (
 
 CREATE TABLE IF NOT EXISTS player_last_locations (
     player_id INTEGER PRIMARY KEY,
-    x REAL NOT NULL,
-    y REAL NOT NULL,
-    z REAL NOT NULL,
-    pitch REAL NOT NULL,
-    yaw REAL NOT NULL,
+    x DOUBLE NOT NULL,
+    y DOUBLE NOT NULL,
+    z DOUBLE NOT NULL,
+    pitch DOUBLE NOT NULL,
+    yaw DOUBLE NOT NULL,
     world TEXT NOT NULL,
     FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
 );
@@ -24,11 +24,11 @@ CREATE TABLE IF NOT EXISTS player_last_locations (
 CREATE TABLE IF NOT EXISTS player_homes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     player_id INTEGER NOT NULL UNIQUE,
-    x REAL NOT NULL,
-    y REAL NOT NULL,
-    z REAL NOT NULL,
-    pitch REAL NOT NULL,
-    yaw REAL NOT NULL,
+    x DOUBLE NOT NULL,
+    y DOUBLE NOT NULL,
+    z DOUBLE NOT NULL,
+    pitch DOUBLE NOT NULL,
+    yaw DOUBLE NOT NULL,
     world TEXT NOT NULL,
     FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
 );
@@ -36,10 +36,10 @@ CREATE TABLE IF NOT EXISTS player_homes (
 CREATE TABLE IF NOT EXISTS warps (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL,
-    x REAL NOT NULL,
-    y REAL NOT NULL,
-    z REAL NOT NULL,
-    pitch REAL NOT NULL,
-    yaw REAL NOT NULL,
+    x DOUBLE NOT NULL,
+    y DOUBLE NOT NULL,
+    z DOUBLE NOT NULL,
+    pitch DOUBLE NOT NULL,
+    yaw DOUBLE NOT NULL,
     world TEXT NOT NULL
 );
