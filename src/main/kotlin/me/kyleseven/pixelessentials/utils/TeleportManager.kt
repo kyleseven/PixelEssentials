@@ -61,7 +61,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         request: TeleportRequest,
         delaySeconds: Int = plugin.configProvider.teleportDelay,
         applyCooldown: Boolean = true
-    ): Boolean {
+    ) {
         val (playerToMove, destination, messageTemplate) = when (request) {
             is TeleportRequest.PlayerToPlayer -> Triple(
                 if (request.isToRequester) request.target else request.requester,
@@ -76,18 +76,6 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             )
         }
 
-        // Check cooldown
-        if (applyCooldown && isOnCooldown(playerToMove)) {
-            playerToMove.sendMessage(
-                mmd(
-                    "<red>You are on cooldown for another</red> <white>${
-                        getRemainingCooldown(playerToMove)
-                    } seconds</white><red>.</red>"
-                )
-            )
-            return false
-        }
-
         // Cancel any existing teleport
         cancelExistingTeleport(playerToMove)
 
@@ -97,7 +85,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             if (applyCooldown) {
                 setCooldown(playerToMove)
             }
-            return true
+            return
         }
 
         // Schedule delayed teleport
@@ -140,7 +128,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         )
 
         playerToMove.sendMessage(mmd(messageTemplate.format(delaySeconds)))
-        return true
+        return
     }
 
     fun addRequest(requester: Player, target: Player, isToRequester: Boolean): Boolean {

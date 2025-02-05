@@ -45,7 +45,18 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.tpa")
     @CommandCompletion("@players")
     fun onTpa(player: Player, target: OnlinePlayer) {
-        if (isSelfTeleport(player, target.player)) {
+        if (isSelfTeleport(player, target.player)) return
+
+        if (plugin.teleportManager.isOnCooldown(player)) {
+            player.sendMessage(
+                mmd(
+                    "<red>You are on cooldown for another</red> <white>${
+                        plugin.teleportManager.getRemainingCooldown(
+                            player
+                        )
+                    } seconds</white><red>.</red>"
+                )
+            )
             return
         }
 
@@ -64,7 +75,18 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.tpahere")
     @CommandCompletion("@players")
     fun onTpahere(player: Player, target: OnlinePlayer) {
-        if (isSelfTeleport(player, target.player)) {
+        if (isSelfTeleport(player, target.player)) return
+
+        if (plugin.teleportManager.isOnCooldown(target.player)) {
+            player.sendMessage(
+                mmd(
+                    "<white>${mms(target.player.displayName())}</white> is on cooldown for another <white>${
+                        plugin.teleportManager.getRemainingCooldown(
+                            target.player
+                        )
+                    } seconds</white>."
+                )
+            )
             return
         }
 
@@ -82,17 +104,6 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Request all players to teleport to you")
     @CommandPermission("pixelessentials.tpaall")
     fun onTpaall(player: Player) {
-        if (plugin.teleportManager.isOnCooldown(player)) {
-            player.sendMessage(
-                mmd(
-                    "<red>You are on cooldown for another</red> <white>${
-                        plugin.teleportManager.getRemainingCooldown(player)
-                    } seconds</white><red>.</red>"
-                )
-            )
-            return
-        }
-
         var successCount = 0
         Bukkit.getOnlinePlayers().forEach {
             if (it != player && plugin.teleportManager.addRequest(player, it, true)) {
@@ -186,6 +197,19 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Teleport to your home location")
     @CommandPermission("pixelessentials.home")
     fun onHome(player: Player) {
+        if (plugin.teleportManager.isOnCooldown(player)) {
+            player.sendMessage(
+                mmd(
+                    "<red>You are on cooldown for another</red> <white>${
+                        plugin.teleportManager.getRemainingCooldown(
+                            player
+                        )
+                    } seconds</white><red>.</red>"
+                )
+            )
+            return
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val home = plugin.playerRepository.getPlayerHome(player.uniqueId) ?: run {
                 player.sendMessage(mmd("<red>You don't have a home location set.</red>"))
@@ -265,6 +289,19 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Teleport to a warp location")
     @CommandPermission("pixelessentials.warp")
     fun onWarp(player: Player, name: String) {
+        if (plugin.teleportManager.isOnCooldown(player)) {
+            player.sendMessage(
+                mmd(
+                    "<red>You are on cooldown for another</red> <white>${
+                        plugin.teleportManager.getRemainingCooldown(
+                            player
+                        )
+                    } seconds</white><red>.</red>"
+                )
+            )
+            return
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val warp = plugin.warpRepository.getWarp(name) ?: run {
                 Bukkit.getScheduler().runTask(plugin, Runnable {
