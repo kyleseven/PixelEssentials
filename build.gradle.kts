@@ -24,6 +24,8 @@ repositories {
 dependencies {
     // Paper API
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("org.apache.logging.log4j:log4j-api:2.24.1")
+    compileOnly("org.apache.logging.log4j:log4j-core:2.24.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 

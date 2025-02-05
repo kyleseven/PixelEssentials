@@ -1,6 +1,8 @@
 package me.kyleseven.pixelessentials.database
 
 import me.kyleseven.pixelessentials.PixelEssentials
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.core.config.Configurator
 import org.flywaydb.core.Flyway
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
@@ -25,6 +27,9 @@ class DatabaseManager(private val plugin: PixelEssentials) {
                     statement.execute("PRAGMA foreign_keys=ON;")
                 }
             }
+
+            // Disable Flyway logging
+            Configurator.setLevel("me.kyleseven.pixelessentials.shaded.flyway.core", Level.WARN)
 
             // Run Flyway Migrations
             Flyway.configure(plugin.javaClass.classLoader)
