@@ -34,6 +34,8 @@ class DatabaseManager(private val plugin: PixelEssentials) {
                 .migrate()
 
             dsl = DSL.using(connection, SQLDialect.SQLITE)
+            dsl.settings().apply { withExecuteLogging(false) }
+            System.setProperty("org.jooq.log.org.jooq.impl.DefaultExecuteContext.logVersionSupport", "ERROR");
 
             return true
         } catch (e: Exception) {
