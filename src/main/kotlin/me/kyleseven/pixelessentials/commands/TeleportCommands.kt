@@ -17,13 +17,35 @@ import org.bukkit.Location
 import org.bukkit.entity.Player
 
 class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
+    private fun isSelfTeleport(player: Player, target: Player): Boolean {
+        if (player.uniqueId == target.uniqueId) {
+            player.sendMessage(mmd("<red>You can't teleport to yourself.</red>"))
+            return true
+        }
+        return false
+    }
+
+    private fun sendTpRequestMessage(sender: Player, receiver: Player, isTpahere: Boolean) {
+        val requestType = if (isTpahere) "wants you to teleport to them" else "wants to teleport to you"
+        receiver.sendMessage(
+            mmd(
+                "<white>${mms(sender.displayName())}</white> <gray>$requestType.</gray>\n" +
+                        "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'>" +
+                        "<click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> " +
+                        "<gray>to accept this request.</gray>\n" +
+                        "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'>" +
+                        "<click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> " +
+                        "<gray>to deny this request.</gray>"
+            )
+        )
+    }
+
     @CommandAlias("tpa")
     @Description("Request to teleport to a player")
     @CommandPermission("pixelessentials.tpa")
     @CommandCompletion("@players")
     fun onTpa(player: Player, target: OnlinePlayer) {
-        if (player.uniqueId == target.player.uniqueId) {
-            player.sendMessage(mmd("<red>You can't teleport to yourself.</red>"))
+        if (isSelfTeleport(player, target.player)) {
             return
         }
 
@@ -34,13 +56,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         player.sendMessage(
             mmd("<gray>Sent teleport request to</gray> <white>${mms(target.player.displayName())}</white><gray>.</gray>")
         )
-        target.player.sendMessage(
-            mmd(
-                "<white>${mms(player.displayName())}</white> <gray>wants to teleport to you.</gray>\n"
-                        + "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n"
-                        + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
-            )
-        )
+        sendTpRequestMessage(player, target.player, false)
     }
 
     @CommandAlias("tpahere")
@@ -48,8 +64,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.tpahere")
     @CommandCompletion("@players")
     fun onTpahere(player: Player, target: OnlinePlayer) {
-        if (player.uniqueId == target.player.uniqueId) {
-            player.sendMessage(mmd("<red>You can't teleport to yourself.</red>"))
+        if (isSelfTeleport(player, target.player)) {
             return
         }
 
@@ -60,13 +75,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         player.sendMessage(
             mmd("<gray>Sent teleport request to</gray> <white>${mms(target.player.displayName())}</white><gray>.</gray>")
         )
-        target.player.sendMessage(
-            mmd(
-                "<white>${mms(player.displayName())}</white> <gray>wants you to teleport to them.</gray>\n"
-                        + "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n"
-                        + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
-            )
-        )
+        sendTpRequestMessage(player, target.player, true)
     }
 
     @CommandAlias("tpaall")
@@ -87,13 +96,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         var successCount = 0
         Bukkit.getOnlinePlayers().forEach {
             if (it != player && plugin.teleportManager.addRequest(player, it, true)) {
-                it.sendMessage(
-                    mmd(
-                        "<white>${mms(player.displayName())}</white> <gray>wants you to teleport to them.</gray>\n"
-                                + "<gray>Use</gray> <hover:show_text:'<green>Click to accept request.</green>'><click:run_command:'/tpaccept'><green>/tpaccept</green></click></hover> <gray>to accept this request.</gray>\n"
-                                + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
-                    )
-                )
+                sendTpRequestMessage(player, it, true)
                 successCount++
             }
         }
