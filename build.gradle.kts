@@ -102,7 +102,8 @@ tasks.shadowJar {
     relocate("kotlin", "me.kyleseven.pixelessentials.kotlin")
     relocate("co.aikar.commands", "me.kyleseven.pixelessentials.acf")
     relocate("co.aikar.locales", "me.kyleseven.pixelessentials.locales")
-    relocate("org.flywaydb", "me.kyleseven.pixelessentials.shaded.flyway")
+    relocate("org.flywaydb", "me.kyleseven.pixelessentials.flyway")
+    relocate("org.jooq", "me.kyleseven.pixelessentials.jooq")
 
     mergeServiceFiles()
 
