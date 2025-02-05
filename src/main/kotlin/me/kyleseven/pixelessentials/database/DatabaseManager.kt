@@ -44,7 +44,10 @@ class DatabaseManager(private val plugin: PixelEssentials) {
             dsl.settings().apply { withExecuteLogging(false) }
             System.setProperty("org.jooq.no-logo", "true")
             System.setProperty("org.jooq.no-tips", "true")
-            System.setProperty("org.jooq.log.org.jooq.impl.DefaultExecuteContext.logVersionSupport", "ERROR")
+            System.setProperty(
+                "me.kyleseven.pixelessentials.jooq.log.me.kyleseven.pixelessentials.jooq.impl.DefaultExecuteContext.logVersionSupport",
+                "ERROR"
+            )
 
             return true
         } catch (e: Exception) {
