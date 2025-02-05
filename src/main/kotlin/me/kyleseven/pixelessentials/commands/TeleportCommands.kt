@@ -9,9 +9,11 @@ import co.aikar.commands.bukkit.contexts.OnlinePlayer
 import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.PlayerHome
 import me.kyleseven.pixelessentials.database.models.Warp
+import me.kyleseven.pixelessentials.utils.TeleportRequest
 import me.kyleseven.pixelessentials.utils.mmd
 import me.kyleseven.pixelessentials.utils.mms
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.entity.Player
 
 class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
@@ -20,17 +22,6 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.tpa")
     @CommandCompletion("@players")
     fun onTpa(player: Player, target: OnlinePlayer) {
-        if (plugin.teleportManager.isOnCooldown(player)) {
-            player.sendMessage(
-                mmd(
-                    "<red>You are on cooldown for another</red> <white>${
-                        plugin.teleportManager.getRemainingCooldown(player)
-                    } seconds</white><red>.</red>"
-                )
-            )
-            return
-        }
-
         if (player.uniqueId == target.player.uniqueId) {
             player.sendMessage(mmd("<red>You can't teleport to yourself.</red>"))
             return
@@ -50,7 +41,6 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         + "<gray>Use</gray> <hover:show_text:'<red>Click to deny request.</red>'><click:run_command:'/tpdeny'><red>/tpdeny</red></click></hover> <gray>to deny this request.</gray>"
             )
         )
-
     }
 
     @CommandAlias("tpahere")
@@ -58,17 +48,6 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.tpahere")
     @CommandCompletion("@players")
     fun onTpahere(player: Player, target: OnlinePlayer) {
-        if (plugin.teleportManager.isOnCooldown(player)) {
-            player.sendMessage(
-                mmd(
-                    "<red>You are on cooldown for another</red> <white>${
-                        plugin.teleportManager.getRemainingCooldown(player)
-                    } seconds</white><red>.</red>"
-                )
-            )
-            return
-        }
-
         if (player.uniqueId == target.player.uniqueId) {
             player.sendMessage(mmd("<red>You can't teleport to yourself.</red>"))
             return
@@ -204,8 +183,36 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Teleport to your home location")
     @CommandPermission("pixelessentials.home")
     fun onHome(player: Player) {
-        // Implement this later
-        player.sendMessage(mmd("<red>This command is not implemented yet.</red>"))
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            val home = plugin.playerRepository.getPlayerHome(player.uniqueId) ?: run {
+                player.sendMessage(mmd("<red>You don't have a home location set.</red>"))
+                return@Runnable
+            }
+
+            Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+                val world = Bukkit.getWorld(home.world) ?: run {
+                    player.sendMessage(mmd("<red>World <white>${home.world}</white> does not exist.</red>"))
+                    return@inner
+                }
+
+                plugin.teleportManager.scheduleTeleport(
+                    TeleportRequest.ToLocation(
+                        player = player,
+                        locationProvider = {
+                            Location(
+                                world,
+                                home.x,
+                                home.y,
+                                home.z,
+                                home.yaw.toFloat(),
+                                home.pitch.toFloat()
+                            )
+                        },
+                        destinationName = "home"
+                    )
+                )
+            })
+        })
     }
 
     @CommandAlias("setwarp")
@@ -255,7 +262,37 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Teleport to a warp location")
     @CommandPermission("pixelessentials.warp")
     fun onWarp(player: Player, name: String) {
-        // Implement this later
-        player.sendMessage(mmd("<red>This command is not implemented yet.</red>"))
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            val warp = plugin.warpRepository.getWarp(name) ?: run {
+                Bukkit.getScheduler().runTask(plugin, Runnable {
+                    player.sendMessage(mmd("<red>Warp location <white>$name</white> does not exist.</red>"))
+                })
+                return@Runnable
+            }
+
+            Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+                val world = Bukkit.getWorld(warp.world) ?: run {
+                    player.sendMessage(mmd("<red>World <white>${warp.world}</white> does not exist.</red>"))
+                    return@inner
+                }
+
+                plugin.teleportManager.scheduleTeleport(
+                    TeleportRequest.ToLocation(
+                        player = player,
+                        locationProvider = {
+                            Location(
+                                world,
+                                warp.x,
+                                warp.y,
+                                warp.z,
+                                warp.yaw.toFloat(),
+                                warp.pitch.toFloat()
+                            )
+                        },
+                        destinationName = warp.name
+                    )
+                )
+            })
+        })
     }
 }
