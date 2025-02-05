@@ -51,9 +51,4 @@ open class PixelEssentials : JavaPlugin() {
     override fun onDisable() {
         databaseManager.disconnect()
     }
-
-    override fun reloadConfig() {
-        super.reloadConfig()
-        configProvider = PluginConfigProvider(this)
-    }
 }
