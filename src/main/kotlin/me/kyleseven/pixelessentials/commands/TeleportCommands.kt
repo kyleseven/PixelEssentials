@@ -188,6 +188,13 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.sethome")
     fun onDelhome(player: Player) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            plugin.playerRepository.getPlayerHome(player.uniqueId) ?: run {
+                Bukkit.getScheduler().runTask(plugin, Runnable {
+                    player.sendMessage(mmd("<red>You don't have a home location set.</red>"))
+                })
+                return@Runnable
+            }
+
             plugin.playerRepository.deletePlayerHome(player.uniqueId)
             player.sendMessage(mmd("<gray>Your home location has been deleted.</gray>"))
         })
