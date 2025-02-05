@@ -77,7 +77,8 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
                 plugin.playerRepository.updateBanStatus(player.uniqueId, true, "")
             }
 
-            val sessionTime = ((System.currentTimeMillis() / 1000).toInt() - sessionStartTimes[player.uniqueId]!!)
+            val currentTimestamp = (System.currentTimeMillis() / 1000).toInt()
+            val sessionTime = (currentTimestamp - (sessionStartTimes[player.uniqueId] ?: currentTimestamp))
 
             plugin.playerRepository.updateLastSeenAndPlaytime(player.uniqueId, sessionTime)
             plugin.playerRepository.upsertPlayerLastLocation(
