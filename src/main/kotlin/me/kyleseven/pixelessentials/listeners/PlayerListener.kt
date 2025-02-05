@@ -6,6 +6,7 @@ import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import me.kyleseven.pixelessentials.utils.mmd
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap
 class PlayerListener(private val plugin: PixelEssentials) : Listener {
     private val sessionStartTimes = ConcurrentHashMap<UUID, Int>()
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
         val uuid = player.uniqueId
@@ -69,7 +70,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         })
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerQuit(event: PlayerQuitEvent) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val player = event.player
