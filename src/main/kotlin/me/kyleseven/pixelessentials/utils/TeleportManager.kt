@@ -91,7 +91,12 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
     }
 
     fun cancelRequest(requester: Player) {
-        val request = pendingInvitations.remove(requester.uniqueId) ?: return
+        val request = pendingInvitations.remove(requester.uniqueId)
+        if (request == null) {
+            requester.sendMessage(mmd("<red>You don't have any outgoing teleport requests.</red>"))
+            return
+        }
+
         val target = Bukkit.getPlayer(request.target)
 
         target?.sendMessage(mmd("<gray>Teleport request from <white>${mms(requester.displayName())}</white> has been canceled.</gray>"))
