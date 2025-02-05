@@ -166,7 +166,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     z = player.location.z,
                     pitch = player.location.pitch.toDouble(),
                     yaw = player.location.yaw.toDouble(),
-                    world = player.location.world.toString()
+                    world = player.location.world.name
                 )
             )
 
@@ -255,7 +255,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     z = player.location.z,
                     pitch = player.location.pitch.toDouble(),
                     yaw = player.location.yaw.toDouble(),
-                    world = player.location.world.toString()
+                    world = player.location.world.name
                 )
             )
 
