@@ -7,6 +7,8 @@ import co.aikar.commands.annotation.CommandPermission
 import co.aikar.commands.annotation.Description
 import co.aikar.commands.bukkit.contexts.OnlinePlayer
 import me.kyleseven.pixelessentials.PixelEssentials
+import me.kyleseven.pixelessentials.database.models.PlayerHome
+import me.kyleseven.pixelessentials.database.models.Warp
 import me.kyleseven.pixelessentials.utils.mmd
 import me.kyleseven.pixelessentials.utils.mms
 import org.bukkit.Bukkit
@@ -157,5 +159,96 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Cancel a teleport request")
     fun onTpacancel(player: Player) {
         plugin.teleportManager.cancelRequest(player)
+    }
+
+    @CommandAlias("sethome")
+    @Description("Set your home location")
+    @CommandPermission("pixelessentials.sethome")
+    fun onSethome(player: Player) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            plugin.playerRepository.upsertPlayerHome(
+                player.uniqueId, PlayerHome(
+                    x = player.location.x,
+                    y = player.location.y,
+                    z = player.location.z,
+                    pitch = player.location.pitch.toDouble(),
+                    yaw = player.location.yaw.toDouble(),
+                    world = player.location.world.toString()
+                )
+            )
+
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                player.sendMessage(mmd("<gray>Your home location has been set.</gray>"))
+            })
+        })
+    }
+
+    @CommandAlias("delhome")
+    @Description("Delete your home location")
+    @CommandPermission("pixelessentials.sethome")
+    fun onDelhome(player: Player) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            plugin.playerRepository.deletePlayerHome(player.uniqueId)
+            player.sendMessage(mmd("<gray>Your home location has been deleted.</gray>"))
+        })
+    }
+
+    @CommandAlias("home")
+    @Description("Teleport to your home location")
+    @CommandPermission("pixelessentials.home")
+    fun onHome(player: Player) {
+        // Implement this later
+        player.sendMessage(mmd("<red>This command is not implemented yet.</red>"))
+    }
+
+    @CommandAlias("setwarp")
+    @Description("Set a warp location")
+    @CommandPermission("pixelessentials.setwarp")
+    fun onSetwarp(player: Player, name: String) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            plugin.warpRepository.setWarp(
+                Warp(
+                    name = name,
+                    x = player.location.x,
+                    y = player.location.y,
+                    z = player.location.z,
+                    pitch = player.location.pitch.toDouble(),
+                    yaw = player.location.yaw.toDouble(),
+                    world = player.location.world.toString()
+                )
+            )
+
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                player.sendMessage(mmd("<gray>Warp location <white>$name</white> has been set.</gray>"))
+            })
+        })
+    }
+
+    @CommandAlias("delwarp")
+    @Description("Delete a warp location")
+    @CommandPermission("pixelessentials.setwarp")
+    fun onDelwarp(player: Player, name: String) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            plugin.warpRepository.getWarp(name) ?: run {
+                Bukkit.getScheduler().runTask(plugin, Runnable {
+                    player.sendMessage(mmd("<red>Warp location <white>$name</white> does not exist.</red>"))
+                })
+                return@Runnable
+            }
+
+            plugin.warpRepository.deleteWarp(name)
+
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                player.sendMessage(mmd("<gray>Warp location <white>$name</white> has been deleted.</gray>"))
+            })
+        })
+    }
+
+    @CommandAlias("warp")
+    @Description("Teleport to a warp location")
+    @CommandPermission("pixelessentials.warp")
+    fun onWarp(player: Player, name: String) {
+        // Implement this later
+        player.sendMessage(mmd("<red>This command is not implemented yet.</red>"))
     }
 }

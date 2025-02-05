@@ -7,6 +7,7 @@ import me.kyleseven.pixelessentials.database.models.Player
 import me.kyleseven.pixelessentials.database.models.PlayerHome
 import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import org.jooq.DSLContext
+import org.jooq.impl.DSL.count
 import java.util.*
 
 class PlayerRepository(private val dsl: DSLContext) {
@@ -25,6 +26,10 @@ class PlayerRepository(private val dsl: DSLContext) {
                     banReason = player.banReason
                 )
             }
+    }
+
+    fun getPlayerCount(): Int {
+        return dsl.select(count()).from(PLAYERS).fetchOne()?.value1() ?: 0
     }
 
     fun upsertPlayer(player: Player) {
@@ -146,6 +151,18 @@ class PlayerRepository(private val dsl: DSLContext) {
             .set(PLAYER_HOMES.PITCH, home.pitch)
             .set(PLAYER_HOMES.YAW, home.yaw)
             .set(PLAYER_HOMES.WORLD, home.world)
+            .execute()
+    }
+
+    fun deletePlayerHome(uuid: UUID) {
+        dsl.deleteFrom(PLAYER_HOMES)
+            .where(
+                PLAYER_HOMES.PLAYER_ID.eq(
+                    dsl.select(PLAYERS.ID)
+                        .from(PLAYERS)
+                        .where(PLAYERS.UUID.eq(uuid.toString()))
+                )
+            )
             .execute()
     }
 }
