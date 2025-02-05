@@ -16,13 +16,13 @@ class MotdBuilder(private val plugin: PixelEssentials) {
         "{max_players}" to { _, plugin -> plugin.server.maxPlayers.toString() },
         "{version}" to { _, plugin -> plugin.server.version },
 
-        "{server_time_12}" to { _, _ -> getServerTime("h:mm:ss a") },
-        "{server_time_24}" to { _, _ -> getServerTime("H:mm:ss") },
+        "{server_time_12}" to { _, _ -> getServerTime("h:mm a") },
+        "{server_time_24}" to { _, _ -> getServerTime("H:mm") },
         "{server_date_ymd}" to { _, _ -> getServerTime("y-M-d") },
         "{server_date_dmy}" to { _, _ -> getServerTime("d-M-y") },
         "{server_date_mdy}" to { _, _ -> getServerTime("M-d-y") },
-        "{world_time_12}" to { player, _ -> getWorldTime(player, "h:mm:ss a") },
-        "{world_time_24}" to { player, _ -> getWorldTime(player, "H:mm:ss") }
+        "{world_time_12}" to { player, _ -> getWorldTime(player, "h:mm a") },
+        "{world_time_24}" to { player, _ -> getWorldTime(player, "H:mm") }
     )
 
     private fun getServerTime(format: String): String {
