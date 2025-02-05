@@ -3,6 +3,12 @@ package me.kyleseven.pixelessentials.config
 import me.kyleseven.pixelessentials.PixelEssentials
 
 class PluginConfigProvider(private val plugin: PixelEssentials) : ConfigProvider {
+    override val motdShowOnJoin: Boolean
+        get() = plugin.config.getBoolean("motd.show-on-join")
+
+    override val motd: String
+        get() = plugin.config.getString("motd.message").toString()
+
     override val welcomeMessageEnabled: Boolean
         get() = plugin.config.getBoolean("welcome-message.enabled")
 

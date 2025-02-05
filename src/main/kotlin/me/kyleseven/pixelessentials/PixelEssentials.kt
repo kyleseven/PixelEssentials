@@ -8,12 +8,14 @@ import me.kyleseven.pixelessentials.database.DatabaseManager
 import me.kyleseven.pixelessentials.database.repositories.PlayerRepository
 import me.kyleseven.pixelessentials.database.repositories.WarpRepository
 import me.kyleseven.pixelessentials.listeners.PlayerListener
+import me.kyleseven.pixelessentials.utils.MotdBuilder
 import me.kyleseven.pixelessentials.utils.TeleportManager
 import org.bukkit.plugin.java.JavaPlugin
 
 open class PixelEssentials : JavaPlugin() {
     lateinit var configProvider: PluginConfigProvider
     lateinit var teleportManager: TeleportManager
+    lateinit var motdBuilder: MotdBuilder
 
     lateinit var databaseManager: DatabaseManager
     lateinit var playerRepository: PlayerRepository
@@ -25,6 +27,7 @@ open class PixelEssentials : JavaPlugin() {
         // Late init
         configProvider = PluginConfigProvider(this)
         teleportManager = TeleportManager(this)
+        motdBuilder = MotdBuilder(this)
 
         // Database
         databaseManager = DatabaseManager(this)

@@ -20,6 +20,10 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         val uuid = player.uniqueId
         val ipAddress = player.address.address.hostAddress
 
+        // Save and suppress original message
+        val joinMessage = event.joinMessage()
+        event.joinMessage(null)
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val existingPlayer = plugin.playerRepository.getPlayer(uuid)
             val isNewPlayer = existingPlayer == null
@@ -47,13 +51,20 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
             plugin.playerRepository.upsertPlayer(updatedPlayer)
 
             // Broadcast welcome message
-            if (isNewPlayer && plugin.configProvider.welcomeMessageEnabled) {
-                val welcomeMessage = plugin.configProvider.welcomeMessage.replace("{username}", player.name)
-
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                if (isNewPlayer && plugin.configProvider.welcomeMessageEnabled) {
+                    val welcomeMessage = plugin.configProvider.welcomeMessage.replace("{username}", player.name)
                     plugin.server.broadcast(mmd(welcomeMessage))
-                })
-            }
+                }
+
+                if (joinMessage != null) {
+                    plugin.server.broadcast(joinMessage)
+                }
+
+                if (plugin.configProvider.motdShowOnJoin) {
+                    player.sendMessage(plugin.motdBuilder.build(player))
+                }
+            })
         })
     }
 
