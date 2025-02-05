@@ -2,6 +2,7 @@ package me.kyleseven.pixelessentials.listeners
 
 import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.Player
+import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import me.kyleseven.pixelessentials.utils.mmd
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -69,9 +70,9 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
     }
 
     @EventHandler
-    fun onPlayerQuit(e: PlayerQuitEvent) {
+    fun onPlayerQuit(event: PlayerQuitEvent) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            val player = e.player
+            val player = event.player
             if (player.isBanned) {
                 plugin.playerRepository.updateBanStatus(player.uniqueId, true, "")
             }
@@ -79,6 +80,16 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
             val sessionTime = ((System.currentTimeMillis() / 1000).toInt() - sessionStartTimes[player.uniqueId]!!)
 
             plugin.playerRepository.updateLastSeenAndPlaytime(player.uniqueId, sessionTime)
+            plugin.playerRepository.upsertPlayerLastLocation(
+                player.uniqueId, PlayerLastLocation(
+                    x = player.location.x,
+                    y = player.location.y,
+                    z = player.location.z,
+                    pitch = player.location.pitch.toDouble(),
+                    yaw = player.location.yaw.toDouble(),
+                    world = player.world.name
+                )
+            )
         })
     }
 }
