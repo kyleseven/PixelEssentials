@@ -39,8 +39,12 @@ class DatabaseManager(private val plugin: PixelEssentials) {
                 .migrate()
 
             dsl = DSL.using(connection, SQLDialect.SQLITE)
+
+            // Disable jOOQ logging
             dsl.settings().apply { withExecuteLogging(false) }
-            System.setProperty("org.jooq.log.org.jooq.impl.DefaultExecuteContext.logVersionSupport", "ERROR");
+            System.setProperty("org.jooq.no-logo", "true")
+            System.setProperty("org.jooq.no-tips", "true")
+            System.setProperty("org.jooq.log.org.jooq.impl.DefaultExecuteContext.logVersionSupport", "ERROR")
 
             return true
         } catch (e: Exception) {
