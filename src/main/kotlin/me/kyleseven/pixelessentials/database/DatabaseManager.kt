@@ -29,7 +29,7 @@ class DatabaseManager(private val plugin: PixelEssentials) {
             }
 
             // Disable Flyway logging
-            Configurator.setLevel("me.kyleseven.pixelessentials.shaded.flyway.core", Level.WARN)
+            Configurator.setLevel("me.kyleseven.pixelessentials.flyway.core", Level.WARN)
 
             // Run Flyway Migrations
             Flyway.configure(plugin.javaClass.classLoader)
