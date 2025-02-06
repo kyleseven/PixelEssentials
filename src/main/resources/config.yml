@@ -3,7 +3,7 @@
 
 motd:
   show-on-join: true
-  message: "<gradient:#b0bec5:#eceff1>Welcome back, <gradient:#ff7e5f:#feb47b>{username}</gradient>!</gradient>\n<gradient:#b0bec5:#eceff1>It's currently <gradient:#ff7e5f:#feb47b>{server_time_12}</gradient> on <gradient:#ff7e5f:#feb47b>{server_date_mdy}</gradient>.</gradient>\n<gradient:#b0bec5:#eceff1>There are <gradient:#ff7e5f:#feb47b>{online}</gradient> players online.</gradient>"
+  message: "<gradient:#b0bec5:#eceff1>Welcome back, <gradient:#ff7e5f:#feb47b>{username}</gradient>!</gradient>\n<gradient:#b0bec5:#eceff1>It's currently <gradient:#ff7e5f:#feb47b>{server_time:h:mm a}</gradient> on <gradient:#ff7e5f:#feb47b>{server_time:M/d/y}</gradient>.</gradient>\n<gradient:#b0bec5:#eceff1>There are <gradient:#ff7e5f:#feb47b>{online}</gradient> players online.</gradient>"
 
 welcome-message:
   enabled: true
