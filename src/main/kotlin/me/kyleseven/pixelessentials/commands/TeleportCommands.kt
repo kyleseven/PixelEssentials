@@ -247,7 +247,15 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.setwarp")
     fun onSetwarp(player: Player, name: String) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            plugin.warpRepository.setWarp(
+            val warp = plugin.warpRepository.getWarp(name)
+            if (warp != null) {
+                Bukkit.getScheduler().runTask(plugin, Runnable {
+                    player.sendMessage(mmd("<red>Warp location <white>$name</white> already exists.</red>"))
+                })
+                return@Runnable
+            }
+
+            plugin.warpRepository.upsertWarp(
                 Warp(
                     name = name,
                     x = player.location.x,

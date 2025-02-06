@@ -21,7 +21,7 @@ class WarpRepository(private val dsl: DSLContext) {
             }
     }
 
-    fun setWarp(warp: Warp) {
+    fun upsertWarp(warp: Warp) {
         dsl.insertInto(WARPS)
             .set(WARPS.NAME, warp.name)
             .set(WARPS.X, warp.x)
