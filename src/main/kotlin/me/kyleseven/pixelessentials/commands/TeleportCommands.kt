@@ -250,7 +250,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
             val warp = plugin.warpRepository.getWarp(name)
             if (warp != null) {
                 Bukkit.getScheduler().runTask(plugin, Runnable {
-                    player.sendMessage(mmd("<red>Warp location <white>$name</white> already exists.</red>"))
+                    player.sendMessage(mmd("<red>Warp location <white>${warp.name}</white> already exists.</red>"))
                 })
                 return@Runnable
             }
