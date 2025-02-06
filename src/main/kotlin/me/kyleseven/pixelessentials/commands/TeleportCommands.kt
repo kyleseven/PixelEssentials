@@ -335,4 +335,36 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
             })
         })
     }
+
+    @CommandAlias("warps|listwarps")
+    @Description("List all warp locations")
+    @CommandPermission("pixelessentials.listwarps")
+    fun onListwarps(player: Player) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            val warps = plugin.warpRepository.getWarps()
+
+            var warpList = "<gray>Warps:</gray> "
+            warps.forEachIndexed { i, warp ->
+                val hoverText = """
+                <gray>x:</gray> <white>${warp.x}</white>
+                <gray>y:</gray> <white>${warp.y}</white>
+                <gray>z:</gray> <white>${warp.z}</white>
+                <gray>world:</gray> <white>${warp.world}</white>""".trimIndent()
+
+                warpList += "<hover:show_text:'$hoverText'><white>${warp.name}</white></hover>"
+                if (i < warps.size - 1) {
+                    warpList += "<gray>, </gray>"
+                }
+            }
+
+            Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+                if (warps.isEmpty()) {
+                    player.sendMessage(mmd("<red>There are no warps.</red>"))
+                    return@inner
+                }
+
+                player.sendMessage(mmd(warpList))
+            })
+        })
+    }
 }

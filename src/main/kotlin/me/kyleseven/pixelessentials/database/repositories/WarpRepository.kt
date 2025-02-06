@@ -61,4 +61,21 @@ class WarpRepository(private val dsl: DSLContext) {
                 )
             }
     }
+
+    fun getWarpsPaginated(page: Int, pageSize: Int): List<Warp> {
+        return dsl.selectFrom(WARPS)
+            .limit(pageSize)
+            .offset((page - 1) * pageSize)
+            .fetch { warp ->
+                Warp(
+                    name = warp.name,
+                    x = warp.x,
+                    y = warp.y,
+                    z = warp.z,
+                    pitch = warp.pitch,
+                    yaw = warp.yaw,
+                    world = warp.world
+                )
+            }
+    }
 }
