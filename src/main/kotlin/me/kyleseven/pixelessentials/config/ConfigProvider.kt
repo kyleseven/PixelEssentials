@@ -7,6 +7,12 @@ sealed interface ConfigProvider {
     val welcomeMessageEnabled: Boolean
     val welcomeMessage: String
 
+    val customJoinMessageEnabled: Boolean
+    val customJoinMessage: String
+
+    val customLeaveMessageEnabled: Boolean
+    val customLeaveMessage: String
+
     val teleportCooldown: Int
     val teleportDelay: Int
     val teleportRequestExpiration: Int
