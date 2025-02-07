@@ -3,7 +3,6 @@ package me.kyleseven.pixelessentials.utils
 import me.kyleseven.pixelessentials.PixelEssentials
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MotdBuilder(private val plugin: PixelEssentials) {
@@ -20,9 +19,7 @@ class MotdBuilder(private val plugin: PixelEssentials) {
 
     private fun getServerTime(format: String): String {
         return try {
-            val dateFormat = SimpleDateFormat(format)
-            dateFormat.timeZone = TimeZone.getDefault()
-            dateFormat.format(Date())
+            formatDate(format, System.currentTimeMillis())
         } catch (e: IllegalArgumentException) {
             plugin.logger.warning("Invalid server_time format: '$format'. Using default format.")
             getServerTime("h:mm a")
@@ -42,8 +39,7 @@ class MotdBuilder(private val plugin: PixelEssentials) {
             calendar.set(Calendar.MINUTE, minutes.toInt())
             calendar.set(Calendar.SECOND, seconds)
 
-            val dateFormat = SimpleDateFormat(format)
-            dateFormat.format(calendar.time)
+            formatDate(format, calendar.timeInMillis)
         } catch (e: IllegalArgumentException) {
             plugin.logger.warning("Invalid world_time format: '$format'. Using default format.")
             getWorldTime(player, "h:mm a")
