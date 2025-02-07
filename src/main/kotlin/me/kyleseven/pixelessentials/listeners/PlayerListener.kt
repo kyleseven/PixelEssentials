@@ -4,6 +4,7 @@ import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.Player
 import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import me.kyleseven.pixelessentials.utils.mmd
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -22,8 +23,12 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         val uuid = player.uniqueId
         val ipAddress = player.address.address.hostAddress
 
-        // Save and suppress original message
-        val joinMessage = event.joinMessage()
+        // Get custom join message (if enabled) and suppress default join message
+        val joinMessage: Component? = if (plugin.configProvider.customJoinMessageEnabled) {
+            mmd(plugin.configProvider.customJoinMessage.replace("{username}", player.name))
+        } else {
+            event.joinMessage()
+        }
         event.joinMessage(null)
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
@@ -72,6 +77,10 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerQuit(event: PlayerQuitEvent) {
+        if (plugin.configProvider.customLeaveMessageEnabled) {
+            event.quitMessage(mmd(plugin.configProvider.customLeaveMessage.replace("{username}", event.player.name)))
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val player = event.player
             if (player.isBanned) {
