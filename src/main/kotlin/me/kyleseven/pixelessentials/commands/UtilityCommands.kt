@@ -16,8 +16,7 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Get the message of the day")
     @CommandPermission("pixelessentials.motd")
     fun onMotd(sender: CommandSender) {
-        val motd = plugin.configProvider.motd
-        sender.sendMessage(mmd(motd))
+        sender.sendMessage(plugin.motdBuilder.build(sender))
     }
 
     @CommandAlias("list")
