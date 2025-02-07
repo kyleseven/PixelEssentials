@@ -3,6 +3,7 @@ package me.kyleseven.pixelessentials
 import co.aikar.commands.PaperCommandManager
 import me.kyleseven.pixelessentials.commands.MainCommand
 import me.kyleseven.pixelessentials.commands.TeleportCommands
+import me.kyleseven.pixelessentials.commands.UtilityCommands
 import me.kyleseven.pixelessentials.config.PluginConfigProvider
 import me.kyleseven.pixelessentials.database.DatabaseManager
 import me.kyleseven.pixelessentials.database.repositories.PlayerRepository
@@ -46,6 +47,7 @@ open class PixelEssentials : JavaPlugin() {
         val paperCommandManager = PaperCommandManager(this)
         paperCommandManager.registerCommand(MainCommand(this))
         paperCommandManager.registerCommand(TeleportCommands(this))
+        paperCommandManager.registerCommand(UtilityCommands(this))
     }
 
     override fun onDisable() {
