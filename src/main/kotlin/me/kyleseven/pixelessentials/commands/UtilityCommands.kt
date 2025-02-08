@@ -104,6 +104,12 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandCompletion("@players")
     @CommandPermission("pixelessentials.seen")
     fun onSeen(sender: CommandSender, playerName: String) {
+        val onlinePlayer = Bukkit.getPlayerExact(playerName)
+        if (onlinePlayer != null) {
+            sender.sendMessage(mmd("<gray>${onlinePlayer.name} is currently <green>online</green>.</gray>"))
+            return
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val offlinePlayer = playerName.let { Bukkit.getOfflinePlayer(it) }
             val player = offlinePlayer.uniqueId.let { plugin.playerRepository.getPlayer(it) }
