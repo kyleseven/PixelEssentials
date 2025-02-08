@@ -83,7 +83,7 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 sender.sendMessage(
                     mmd(
                         """
-                    <gray>Player Information</gray>
+                    <gray>─────── Player Information ───────</gray>
                     <gray>Username: <white>${player.lastAccountName}</white></gray>
                     <gray>UUID: <white>${player.uuid}</white></gray>
                     <gray>First Join: <white>$firstJoin</white></gray>
