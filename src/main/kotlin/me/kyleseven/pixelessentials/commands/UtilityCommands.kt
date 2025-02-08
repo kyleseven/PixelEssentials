@@ -23,7 +23,7 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onList(sender: CommandSender) {
         val players = plugin.server.onlinePlayers
         val playerList =
-            "<gray>Online Players (${players.size}): </gray>" + players.joinToString(separator = "<gray>, </gray>") { "<white>$it.name</white>" }
+            "<gray>Online Players (${players.size}): </gray>" + players.joinToString(separator = "<gray>, </gray>") { "<white>${it.name}</white>" }
 
         sender.sendMessage(mmd(playerList))
     }
