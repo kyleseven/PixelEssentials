@@ -58,8 +58,8 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 return@Runnable
             }
 
-            val firstJoin = formatDate("yyyy/MM/dd HH:mm:ss", player.firstJoin * 1000L)
-            val lastSeen = formatDate("yyyy/MM/dd HH:mm:ss", player.lastSeen * 1000L)
+            val firstJoin = formatDate("M/d/yyyy h:mm a", player.firstJoin * 1000L)
+            val lastSeen = formatDate("M/d/yyyy h:mm a", player.lastSeen * 1000L)
             val totalPlaytime = formatDuration(player.totalPlaytime * 1000L)
 
             Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
@@ -98,7 +98,7 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 return@Runnable
             }
 
-            val lastSeen = formatDate("yyyy/MM/dd HH:mm:ss", player.lastSeen * 1000L)
+            val lastSeen = formatDate("M/d/yyyy h:mm a", player.lastSeen * 1000L)
             Bukkit.getScheduler().runTask(plugin, Runnable {
                 sender.sendMessage(mmd("<gray>${player.lastAccountName} was last seen on <white>$lastSeen</white></gray>"))
             })
