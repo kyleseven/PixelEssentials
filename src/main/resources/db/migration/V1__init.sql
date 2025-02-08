@@ -5,9 +5,7 @@ CREATE TABLE IF NOT EXISTS players (
     ip_address TEXT NOT NULL,
     first_join INTEGER NOT NULL,
     last_seen INTEGER NOT NULL,
-    total_playtime INTEGER NOT NULL,
-    is_banned BOOLEAN NOT NULL DEFAULT 0,
-    ban_reason TEXT
+    total_playtime INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS player_last_locations (
@@ -35,7 +33,7 @@ CREATE TABLE IF NOT EXISTS player_homes (
 
 CREATE TABLE IF NOT EXISTS warps (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE NOT NULL COLLATE NOCASE,
+    name TEXT COLLATE NOCASE UNIQUE NOT NULL,
     x DOUBLE NOT NULL,
     y DOUBLE NOT NULL,
     z DOUBLE NOT NULL,

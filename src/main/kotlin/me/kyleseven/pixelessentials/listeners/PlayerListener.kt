@@ -44,9 +44,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
                 ipAddress = ipAddress,
                 firstJoin = currentTimestamp,
                 lastSeen = currentTimestamp,
-                totalPlaytime = 0,
-                isBanned = false,
-                banReason = null
+                totalPlaytime = 0
             )
 
             val updatedPlayer = dbPlayer.copy(
@@ -83,9 +81,6 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val player = event.player
-            if (player.isBanned) {
-                plugin.playerRepository.updateBanStatus(player.uniqueId, true, "")
-            }
 
             val currentTimestamp = (System.currentTimeMillis() / 1000).toInt()
             val sessionTime = (currentTimestamp - (sessionStartTimes[player.uniqueId] ?: currentTimestamp))

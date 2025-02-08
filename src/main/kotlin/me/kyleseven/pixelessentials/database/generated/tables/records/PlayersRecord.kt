@@ -44,16 +44,6 @@ open class PlayersRecord private constructor() : UpdatableRecordImpl<PlayersReco
         set(value): Unit = set(6, value)
         get(): Int = get(6) as Int
 
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    @set:JvmName("setIsBanned")
-    open var isBanned: Boolean?
-        set(value): Unit = set(7, value)
-        get(): Boolean? = get(7) as Boolean?
-
-    open var banReason: String?
-        set(value): Unit = set(8, value)
-        get(): String? = get(8) as String?
-
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -70,9 +60,7 @@ open class PlayersRecord private constructor() : UpdatableRecordImpl<PlayersReco
         ipAddress: String,
         firstJoin: Int,
         lastSeen: Int,
-        totalPlaytime: Int,
-        isBanned: Boolean? = null,
-        banReason: String? = null
+        totalPlaytime: Int
     ) : this() {
         this.id = id
         this.lastAccountName = lastAccountName
@@ -81,8 +69,6 @@ open class PlayersRecord private constructor() : UpdatableRecordImpl<PlayersReco
         this.firstJoin = firstJoin
         this.lastSeen = lastSeen
         this.totalPlaytime = totalPlaytime
-        this.isBanned = isBanned
-        this.banReason = banReason
         resetChangedOnNotNull()
     }
 }

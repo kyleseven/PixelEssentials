@@ -6,9 +6,7 @@ data class Player(
     val ipAddress: String,
     val firstJoin: Int,
     val lastSeen: Int,
-    val totalPlaytime: Int,
-    val isBanned: Boolean,
-    val banReason: String?
+    val totalPlaytime: Int
 )
 
 data class PlayerLastLocation(

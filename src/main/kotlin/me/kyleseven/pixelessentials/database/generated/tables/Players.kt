@@ -97,21 +97,6 @@ open class Players(
     val TOTAL_PLAYTIME: TableField<PlayersRecord, Int?> =
         createField(DSL.name("total_playtime"), SQLDataType.INTEGER.nullable(false), this, "")
 
-    /**
-     * The column <code>players.is_banned</code>.
-     */
-    val IS_BANNED: TableField<PlayersRecord, Boolean?> = createField(
-        DSL.name("is_banned"),
-        SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.BOOLEAN)),
-        this,
-        ""
-    )
-
-    /**
-     * The column <code>players.ban_reason</code>.
-     */
-    val BAN_REASON: TableField<PlayersRecord, String?> = createField(DSL.name("ban_reason"), SQLDataType.CLOB, this, "")
-
     private constructor(alias: Name, aliased: Table<PlayersRecord>?) : this(
         alias,
         null,

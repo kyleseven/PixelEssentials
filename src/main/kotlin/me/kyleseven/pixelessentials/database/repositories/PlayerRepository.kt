@@ -21,9 +21,7 @@ class PlayerRepository(private val dsl: DSLContext) {
                     ipAddress = player.ipAddress,
                     firstJoin = player.firstJoin,
                     lastSeen = player.lastSeen,
-                    totalPlaytime = player.totalPlaytime,
-                    isBanned = player.isBanned!!,
-                    banReason = player.banReason
+                    totalPlaytime = player.totalPlaytime
                 )
             }
     }
@@ -40,8 +38,6 @@ class PlayerRepository(private val dsl: DSLContext) {
             .set(PLAYERS.FIRST_JOIN, player.firstJoin)
             .set(PLAYERS.LAST_SEEN, player.lastSeen)
             .set(PLAYERS.TOTAL_PLAYTIME, player.totalPlaytime)
-            .set(PLAYERS.IS_BANNED, player.isBanned)
-            .set(PLAYERS.BAN_REASON, player.banReason)
             .onConflict(PLAYERS.UUID)
             .doUpdate()
             .set(PLAYERS.LAST_ACCOUNT_NAME, player.lastAccountName)
@@ -49,8 +45,6 @@ class PlayerRepository(private val dsl: DSLContext) {
             .set(PLAYERS.FIRST_JOIN, player.firstJoin)
             .set(PLAYERS.LAST_SEEN, player.lastSeen)
             .set(PLAYERS.TOTAL_PLAYTIME, player.totalPlaytime)
-            .set(PLAYERS.IS_BANNED, player.isBanned)
-            .set(PLAYERS.BAN_REASON, player.banReason)
             .execute()
     }
 
@@ -58,14 +52,6 @@ class PlayerRepository(private val dsl: DSLContext) {
         dsl.update(PLAYERS)
             .set(PLAYERS.LAST_SEEN, (System.currentTimeMillis() / 1000).toInt())
             .set(PLAYERS.TOTAL_PLAYTIME, PLAYERS.TOTAL_PLAYTIME.plus(playtime))
-            .where(PLAYERS.UUID.eq(uuid.toString()))
-            .execute()
-    }
-
-    fun updateBanStatus(uuid: UUID, isBanned: Boolean, banReason: String?) {
-        dsl.update(PLAYERS)
-            .set(PLAYERS.IS_BANNED, isBanned)
-            .set(PLAYERS.BAN_REASON, banReason)
             .where(PLAYERS.UUID.eq(uuid.toString()))
             .execute()
     }
