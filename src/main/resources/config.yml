@@ -9,10 +9,10 @@ messages:
   welcome-message:
     enabled: true
     message: "<light_purple>Welcome to the server {username}!</light_purple>"
-  custom_join_message:
+  custom-join-message:
     enabled: true
     message: "<yellow>{username} joined the game</yellow>"
-  custom_leave_message:
+  custom-leave-message:
     enabled: true
     message: "<yellow>{username} left the game</yellow>"
 
