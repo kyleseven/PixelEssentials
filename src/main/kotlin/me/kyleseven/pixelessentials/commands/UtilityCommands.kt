@@ -121,7 +121,13 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 return@Runnable
             }
 
-            val lastSeen = formatDate("M/d/yyyy h:mm a", player.lastSeen * 1000L)
+            val lastSeenTimestamp = player.lastSeen * 1000L
+            val lastSeen = "${
+                formatDate(
+                    "M/d/yyyy h:mm a",
+                    lastSeenTimestamp
+                )
+            } (${formatDuration(System.currentTimeMillis() - lastSeenTimestamp)} ago)"
             Bukkit.getScheduler().runTask(plugin, Runnable {
                 sender.sendMessage(mmd("<gray>${player.lastAccountName} was last seen on <white>$lastSeen</white></gray>"))
             })
