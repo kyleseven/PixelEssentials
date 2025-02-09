@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS players (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_id INTEGER PRIMARY KEY AUTOINCREMENT,
     last_account_name TEXT NOT NULL,
     uuid TEXT UNIQUE NOT NULL,
     ip_address TEXT NOT NULL,
-    first_join INTEGER NOT NULL,
-    last_seen INTEGER NOT NULL,
-    total_playtime INTEGER NOT NULL
+    first_join BIGINT NOT NULL,
+    last_seen BIGINT NOT NULL,
+    total_playtime BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS player_last_locations (
@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS player_last_locations (
     pitch DOUBLE NOT NULL,
     yaw DOUBLE NOT NULL,
     world TEXT NOT NULL,
-    FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
+    FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS player_homes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_home_id INTEGER PRIMARY KEY AUTOINCREMENT,
     player_id INTEGER NOT NULL UNIQUE,
     x DOUBLE NOT NULL,
     y DOUBLE NOT NULL,
@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS player_homes (
     pitch DOUBLE NOT NULL,
     yaw DOUBLE NOT NULL,
     world TEXT NOT NULL,
-    FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
+    FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS warps (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    warp_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT COLLATE NOCASE UNIQUE NOT NULL,
     x DOUBLE NOT NULL,
     y DOUBLE NOT NULL,

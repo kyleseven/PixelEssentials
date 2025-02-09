@@ -15,7 +15,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class PlayerListener(private val plugin: PixelEssentials) : Listener {
-    private val sessionStartTimes = ConcurrentHashMap<UUID, Int>()
+    private val sessionStartTimes = ConcurrentHashMap<UUID, Long>()
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
@@ -35,7 +35,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
             val existingPlayer = plugin.playerRepository.getPlayer(uuid)
             val isNewPlayer = existingPlayer == null
 
-            val currentTimestamp = (System.currentTimeMillis() / 1000).toInt()
+            val currentTimestamp = (System.currentTimeMillis() / 1000)
             sessionStartTimes[uuid] = currentTimestamp
 
             val dbPlayer = existingPlayer ?: Player(
@@ -82,7 +82,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val player = event.player
 
-            val currentTimestamp = (System.currentTimeMillis() / 1000).toInt()
+            val currentTimestamp = (System.currentTimeMillis() / 1000)
             val sessionTime = (currentTimestamp - (sessionStartTimes[player.uniqueId] ?: currentTimestamp))
 
             plugin.playerRepository.updateLastSeenAndPlaytime(player.uniqueId, sessionTime)

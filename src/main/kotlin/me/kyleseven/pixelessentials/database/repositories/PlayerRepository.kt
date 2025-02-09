@@ -48,9 +48,9 @@ class PlayerRepository(private val dsl: DSLContext) {
             .execute()
     }
 
-    fun updateLastSeenAndPlaytime(uuid: UUID, playtime: Int) {
+    fun updateLastSeenAndPlaytime(uuid: UUID, playtime: Long) {
         dsl.update(PLAYERS)
-            .set(PLAYERS.LAST_SEEN, (System.currentTimeMillis() / 1000).toInt())
+            .set(PLAYERS.LAST_SEEN, (System.currentTimeMillis() / 1000))
             .set(PLAYERS.TOTAL_PLAYTIME, PLAYERS.TOTAL_PLAYTIME.plus(playtime))
             .where(PLAYERS.UUID.eq(uuid.toString()))
             .execute()
@@ -59,7 +59,7 @@ class PlayerRepository(private val dsl: DSLContext) {
     fun getPlayerLastLocation(uuid: UUID): PlayerLastLocation? {
         return dsl.select(PLAYER_LAST_LOCATIONS.asterisk()) // Select all columns
             .from(PLAYER_LAST_LOCATIONS)
-            .innerJoin(PLAYERS).on(PLAYER_LAST_LOCATIONS.PLAYER_ID.eq(PLAYERS.ID))
+            .innerJoin(PLAYERS).on(PLAYER_LAST_LOCATIONS.PLAYER_ID.eq(PLAYERS.PLAYER_ID))
             .where(PLAYERS.UUID.eq(uuid.toString()))
             .fetchOne()?.let { record ->
                 PlayerLastLocation(
@@ -77,7 +77,7 @@ class PlayerRepository(private val dsl: DSLContext) {
         dsl.insertInto(PLAYER_LAST_LOCATIONS)
             .set(
                 PLAYER_HOMES.PLAYER_ID,
-                dsl.select(PLAYERS.ID)
+                dsl.select(PLAYERS.PLAYER_ID)
                     .from(PLAYERS)
                     .where(PLAYERS.UUID.eq(uuid.toString()))
             )
@@ -101,7 +101,7 @@ class PlayerRepository(private val dsl: DSLContext) {
     fun getPlayerHome(uuid: UUID): PlayerHome? {
         return dsl.select(PLAYER_HOMES.asterisk())
             .from(PLAYER_HOMES)
-            .innerJoin(PLAYERS).on(PLAYER_HOMES.PLAYER_ID.eq(PLAYERS.ID))
+            .innerJoin(PLAYERS).on(PLAYER_HOMES.PLAYER_ID.eq(PLAYERS.PLAYER_ID))
             .where(PLAYERS.UUID.eq(uuid.toString()))
             .fetchOne()?.let { record ->
                 PlayerHome(
@@ -119,7 +119,7 @@ class PlayerRepository(private val dsl: DSLContext) {
         dsl.insertInto(PLAYER_HOMES)
             .set(
                 PLAYER_HOMES.PLAYER_ID,
-                dsl.select(PLAYERS.ID)
+                dsl.select(PLAYERS.PLAYER_ID)
                     .from(PLAYERS)
                     .where(PLAYERS.UUID.eq(uuid.toString()))
             )
@@ -144,7 +144,7 @@ class PlayerRepository(private val dsl: DSLContext) {
         dsl.deleteFrom(PLAYER_HOMES)
             .where(
                 PLAYER_HOMES.PLAYER_ID.eq(
-                    dsl.select(PLAYERS.ID)
+                    dsl.select(PLAYERS.PLAYER_ID)
                         .from(PLAYERS)
                         .where(PLAYERS.UUID.eq(uuid.toString()))
                 )

@@ -17,9 +17,9 @@ import org.jooq.impl.UpdatableRecordImpl
 open class PlayerLastLocationsRecord private constructor() :
     UpdatableRecordImpl<PlayerLastLocationsRecord>(PlayerLastLocations.PLAYER_LAST_LOCATIONS) {
 
-    open var playerId: Int?
+    open var playerId: Long?
         set(value): Unit = set(0, value)
-        get(): Int? = get(0) as Int?
+        get(): Long? = get(0) as Long?
 
     open var x: Double
         set(value): Unit = set(1, value)
@@ -49,13 +49,13 @@ open class PlayerLastLocationsRecord private constructor() :
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Int?> = super.key() as Record1<Int?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     /**
      * Create a detached, initialised PlayerLastLocationsRecord
      */
     constructor(
-        playerId: Int? = null,
+        playerId: Long? = null,
         x: Double,
         y: Double,
         z: Double,

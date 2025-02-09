@@ -13,10 +13,8 @@ import me.kyleseven.pixelessentials.database.generated.tables.PlayerHomes.Player
 import me.kyleseven.pixelessentials.database.generated.tables.PlayerLastLocations.PlayerLastLocationsPath
 import me.kyleseven.pixelessentials.database.generated.tables.records.PlayersRecord
 import org.jooq.*
-import org.jooq.impl.DSL
+import org.jooq.impl.*
 import org.jooq.impl.Internal
-import org.jooq.impl.SQLDataType
-import org.jooq.impl.TableImpl
 
 
 /**
@@ -57,9 +55,15 @@ open class Players(
     override fun getRecordType(): Class<PlayersRecord> = PlayersRecord::class.java
 
     /**
-     * The column <code>players.id</code>.
+     * The column <code>players.player_id</code>.
      */
-    val ID: TableField<PlayersRecord, Int?> = createField(DSL.name("id"), SQLDataType.INTEGER.identity(true), this, "")
+    val PLAYER_ID: TableField<PlayersRecord, Long?> = createField(
+        DSL.name("player_id"),
+        SQLDataType.BIGINT.identity(true),
+        this,
+        "",
+        AutoConverter<Long, Long>(Long::class.java, Long::class.java)
+    )
 
     /**
      * The column <code>players.last_account_name</code>.
@@ -82,20 +86,20 @@ open class Players(
     /**
      * The column <code>players.first_join</code>.
      */
-    val FIRST_JOIN: TableField<PlayersRecord, Int?> =
-        createField(DSL.name("first_join"), SQLDataType.INTEGER.nullable(false), this, "")
+    val FIRST_JOIN: TableField<PlayersRecord, Long?> =
+        createField(DSL.name("first_join"), SQLDataType.BIGINT.nullable(false), this, "")
 
     /**
      * The column <code>players.last_seen</code>.
      */
-    val LAST_SEEN: TableField<PlayersRecord, Int?> =
-        createField(DSL.name("last_seen"), SQLDataType.INTEGER.nullable(false), this, "")
+    val LAST_SEEN: TableField<PlayersRecord, Long?> =
+        createField(DSL.name("last_seen"), SQLDataType.BIGINT.nullable(false), this, "")
 
     /**
      * The column <code>players.total_playtime</code>.
      */
-    val TOTAL_PLAYTIME: TableField<PlayersRecord, Int?> =
-        createField(DSL.name("total_playtime"), SQLDataType.INTEGER.nullable(false), this, "")
+    val TOTAL_PLAYTIME: TableField<PlayersRecord, Long?> =
+        createField(DSL.name("total_playtime"), SQLDataType.BIGINT.nullable(false), this, "")
 
     private constructor(alias: Name, aliased: Table<PlayersRecord>?) : this(
         alias,
@@ -164,7 +168,7 @@ open class Players(
         override fun `as`(alias: Table<*>): PlayersPath = PlayersPath(alias.qualifiedName, this)
     }
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
-    override fun getIdentity(): Identity<PlayersRecord, Int?> = super.getIdentity() as Identity<PlayersRecord, Int?>
+    override fun getIdentity(): Identity<PlayersRecord, Long?> = super.getIdentity() as Identity<PlayersRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<PlayersRecord> = PLAYERS__PK_PLAYERS
     override fun getUniqueKeys(): List<UniqueKey<PlayersRecord>> = listOf(PLAYERS__UK_PLAYERS_1_102966634)
 

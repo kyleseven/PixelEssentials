@@ -16,9 +16,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(Warps.WARPS) {
 
-    open var id: Int?
+    open var warpId: Long?
         set(value): Unit = set(0, value)
-        get(): Int? = get(0) as Int?
+        get(): Long? = get(0) as Long?
 
     open var name: String
         set(value): Unit = set(1, value)
@@ -52,13 +52,13 @@ open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Int?> = super.key() as Record1<Int?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     /**
      * Create a detached, initialised WarpsRecord
      */
     constructor(
-        id: Int? = null,
+        warpId: Long? = null,
         name: String,
         x: Double,
         y: Double,
@@ -67,7 +67,7 @@ open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(
         yaw: Double,
         world: String
     ) : this() {
-        this.id = id
+        this.warpId = warpId
         this.name = name
         this.x = x
         this.y = y

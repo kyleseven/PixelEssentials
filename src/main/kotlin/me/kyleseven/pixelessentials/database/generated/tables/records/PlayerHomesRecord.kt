@@ -16,13 +16,13 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class PlayerHomesRecord private constructor() : UpdatableRecordImpl<PlayerHomesRecord>(PlayerHomes.PLAYER_HOMES) {
 
-    open var id: Int?
+    open var playerHomeId: Long?
         set(value): Unit = set(0, value)
-        get(): Int? = get(0) as Int?
+        get(): Long? = get(0) as Long?
 
-    open var playerId: Int
+    open var playerId: Long
         set(value): Unit = set(1, value)
-        get(): Int = get(1) as Int
+        get(): Long = get(1) as Long
 
     open var x: Double
         set(value): Unit = set(2, value)
@@ -52,14 +52,14 @@ open class PlayerHomesRecord private constructor() : UpdatableRecordImpl<PlayerH
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Int?> = super.key() as Record1<Int?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     /**
      * Create a detached, initialised PlayerHomesRecord
      */
     constructor(
-        id: Int? = null,
-        playerId: Int,
+        playerHomeId: Long? = null,
+        playerId: Long,
         x: Double,
         y: Double,
         z: Double,
@@ -67,7 +67,7 @@ open class PlayerHomesRecord private constructor() : UpdatableRecordImpl<PlayerH
         yaw: Double,
         world: String
     ) : this() {
-        this.id = id
+        this.playerHomeId = playerHomeId
         this.playerId = playerId
         this.x = x
         this.y = y

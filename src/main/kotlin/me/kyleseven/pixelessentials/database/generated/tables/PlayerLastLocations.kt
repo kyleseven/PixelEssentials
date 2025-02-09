@@ -10,10 +10,8 @@ import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_LAST_LOCATION
 import me.kyleseven.pixelessentials.database.generated.tables.Players.PlayersPath
 import me.kyleseven.pixelessentials.database.generated.tables.records.PlayerLastLocationsRecord
 import org.jooq.*
-import org.jooq.impl.DSL
+import org.jooq.impl.*
 import org.jooq.impl.Internal
-import org.jooq.impl.SQLDataType
-import org.jooq.impl.TableImpl
 
 
 /**
@@ -56,8 +54,13 @@ open class PlayerLastLocations(
     /**
      * The column <code>player_last_locations.player_id</code>.
      */
-    val PLAYER_ID: TableField<PlayerLastLocationsRecord, Int?> =
-        createField(DSL.name("player_id"), SQLDataType.INTEGER, this, "")
+    val PLAYER_ID: TableField<PlayerLastLocationsRecord, Long?> = createField(
+        DSL.name("player_id"),
+        SQLDataType.BIGINT,
+        this,
+        "",
+        AutoConverter<Long, Long>(Long::class.java, Long::class.java)
+    )
 
     /**
      * The column <code>player_last_locations.x</code>.

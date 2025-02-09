@@ -63,6 +63,14 @@ jooq {
             database {
                 name = "org.jooq.meta.sqlite.SQLiteDatabase"
                 excludes = "flyway_schema_history"
+                forcedTypes {
+                    forcedType {
+                        name = "BIGINT"
+                        userType = "kotlin.Long"
+                        includeExpression = ".*_id"
+                        includeTypes = "(?i:INTEGER)"
+                    }
+                }
             }
             generate {
                 isKotlinNotNullPojoAttributes = true

@@ -16,9 +16,9 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class PlayersRecord private constructor() : UpdatableRecordImpl<PlayersRecord>(Players.PLAYERS) {
 
-    open var id: Int?
+    open var playerId: Long?
         set(value): Unit = set(0, value)
-        get(): Int? = get(0) as Int?
+        get(): Long? = get(0) as Long?
 
     open var lastAccountName: String
         set(value): Unit = set(1, value)
@@ -32,37 +32,37 @@ open class PlayersRecord private constructor() : UpdatableRecordImpl<PlayersReco
         set(value): Unit = set(3, value)
         get(): String = get(3) as String
 
-    open var firstJoin: Int
+    open var firstJoin: Long
         set(value): Unit = set(4, value)
-        get(): Int = get(4) as Int
+        get(): Long = get(4) as Long
 
-    open var lastSeen: Int
+    open var lastSeen: Long
         set(value): Unit = set(5, value)
-        get(): Int = get(5) as Int
+        get(): Long = get(5) as Long
 
-    open var totalPlaytime: Int
+    open var totalPlaytime: Long
         set(value): Unit = set(6, value)
-        get(): Int = get(6) as Int
+        get(): Long = get(6) as Long
 
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Int?> = super.key() as Record1<Int?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     /**
      * Create a detached, initialised PlayersRecord
      */
     constructor(
-        id: Int? = null,
+        playerId: Long? = null,
         lastAccountName: String,
         uuid: String,
         ipAddress: String,
-        firstJoin: Int,
-        lastSeen: Int,
-        totalPlaytime: Int
+        firstJoin: Long,
+        lastSeen: Long,
+        totalPlaytime: Long
     ) : this() {
-        this.id = id
+        this.playerId = playerId
         this.lastAccountName = lastAccountName
         this.uuid = uuid
         this.ipAddress = ipAddress

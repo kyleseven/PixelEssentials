@@ -9,6 +9,7 @@ import me.kyleseven.pixelessentials.database.generated.keys.WARPS__PK_WARPS
 import me.kyleseven.pixelessentials.database.generated.keys.WARPS__UK_WARPS_1_50937107
 import me.kyleseven.pixelessentials.database.generated.tables.records.WarpsRecord
 import org.jooq.*
+import org.jooq.impl.AutoConverter
 import org.jooq.impl.DSL
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
@@ -52,9 +53,15 @@ open class Warps(
     override fun getRecordType(): Class<WarpsRecord> = WarpsRecord::class.java
 
     /**
-     * The column <code>warps.id</code>.
+     * The column <code>warps.warp_id</code>.
      */
-    val ID: TableField<WarpsRecord, Int?> = createField(DSL.name("id"), SQLDataType.INTEGER.identity(true), this, "")
+    val WARP_ID: TableField<WarpsRecord, Long?> = createField(
+        DSL.name("warp_id"),
+        SQLDataType.BIGINT.identity(true),
+        this,
+        "",
+        AutoConverter<Long, Long>(Long::class.java, Long::class.java)
+    )
 
     /**
      * The column <code>warps.name</code>.
@@ -131,7 +138,7 @@ open class Warps(
      */
     constructor() : this(DSL.name("warps"), null)
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
-    override fun getIdentity(): Identity<WarpsRecord, Int?> = super.getIdentity() as Identity<WarpsRecord, Int?>
+    override fun getIdentity(): Identity<WarpsRecord, Long?> = super.getIdentity() as Identity<WarpsRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<WarpsRecord> = WARPS__PK_WARPS
     override fun getUniqueKeys(): List<UniqueKey<WarpsRecord>> = listOf(WARPS__UK_WARPS_1_50937107)
     override fun `as`(alias: String): Warps = Warps(DSL.name(alias), this)

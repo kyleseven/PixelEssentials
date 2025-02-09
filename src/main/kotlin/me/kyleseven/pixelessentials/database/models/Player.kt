@@ -4,9 +4,9 @@ data class Player(
     val lastAccountName: String,
     val uuid: String,
     val ipAddress: String,
-    val firstJoin: Int,
-    val lastSeen: Int,
-    val totalPlaytime: Int
+    val firstJoin: Long,
+    val lastSeen: Long,
+    val totalPlaytime: Long
 )
 
 data class PlayerLastLocation(

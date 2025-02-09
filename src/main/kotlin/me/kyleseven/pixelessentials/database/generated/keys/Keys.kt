@@ -27,7 +27,7 @@ import org.jooq.impl.Internal
 val PLAYER_HOMES__PK_PLAYER_HOMES: UniqueKey<PlayerHomesRecord> = Internal.createUniqueKey(
     PlayerHomes.PLAYER_HOMES,
     DSL.name("pk_player_homes"),
-    arrayOf(PlayerHomes.PLAYER_HOMES.ID),
+    arrayOf(PlayerHomes.PLAYER_HOMES.PLAYER_HOME_ID),
     true
 )
 val PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728: UniqueKey<PlayerHomesRecord> = Internal.createUniqueKey(
@@ -43,11 +43,11 @@ val PLAYER_LAST_LOCATIONS__PK_PLAYER_LAST_LOCATIONS: UniqueKey<PlayerLastLocatio
     true
 )
 val PLAYERS__PK_PLAYERS: UniqueKey<PlayersRecord> =
-    Internal.createUniqueKey(Players.PLAYERS, DSL.name("pk_players"), arrayOf(Players.PLAYERS.ID), true)
+    Internal.createUniqueKey(Players.PLAYERS, DSL.name("pk_players"), arrayOf(Players.PLAYERS.PLAYER_ID), true)
 val PLAYERS__UK_PLAYERS_1_102966634: UniqueKey<PlayersRecord> =
     Internal.createUniqueKey(Players.PLAYERS, DSL.name("uk_players_1_102966634"), arrayOf(Players.PLAYERS.UUID), true)
 val WARPS__PK_WARPS: UniqueKey<WarpsRecord> =
-    Internal.createUniqueKey(Warps.WARPS, DSL.name("pk_warps"), arrayOf(Warps.WARPS.ID), true)
+    Internal.createUniqueKey(Warps.WARPS, DSL.name("pk_warps"), arrayOf(Warps.WARPS.WARP_ID), true)
 val WARPS__UK_WARPS_1_50937107: UniqueKey<WarpsRecord> =
     Internal.createUniqueKey(Warps.WARPS, DSL.name("uk_warps_1_50937107"), arrayOf(Warps.WARPS.NAME), true)
 
@@ -60,7 +60,7 @@ val PLAYER_HOMES__FK_PLAYER_HOMES_PK_PLAYERS: ForeignKey<PlayerHomesRecord, Play
     DSL.name("fk_player_homes_pk_players"),
     arrayOf(PlayerHomes.PLAYER_HOMES.PLAYER_ID),
     me.kyleseven.pixelessentials.database.generated.keys.PLAYERS__PK_PLAYERS,
-    arrayOf(Players.PLAYERS.ID),
+    arrayOf(Players.PLAYERS.PLAYER_ID),
     true
 )
 val PLAYER_LAST_LOCATIONS__FK_PLAYER_LAST_LOCATIONS_PK_PLAYERS: ForeignKey<PlayerLastLocationsRecord, PlayersRecord> =
@@ -69,6 +69,6 @@ val PLAYER_LAST_LOCATIONS__FK_PLAYER_LAST_LOCATIONS_PK_PLAYERS: ForeignKey<Playe
         DSL.name("fk_player_last_locations_pk_players"),
         arrayOf(PlayerLastLocations.PLAYER_LAST_LOCATIONS.PLAYER_ID),
         me.kyleseven.pixelessentials.database.generated.keys.PLAYERS__PK_PLAYERS,
-        arrayOf(Players.PLAYERS.ID),
+        arrayOf(Players.PLAYERS.PLAYER_ID),
         true
     )

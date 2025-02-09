@@ -11,10 +11,8 @@ import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__UK_PLA
 import me.kyleseven.pixelessentials.database.generated.tables.Players.PlayersPath
 import me.kyleseven.pixelessentials.database.generated.tables.records.PlayerHomesRecord
 import org.jooq.*
-import org.jooq.impl.DSL
+import org.jooq.impl.*
 import org.jooq.impl.Internal
-import org.jooq.impl.SQLDataType
-import org.jooq.impl.TableImpl
 
 
 /**
@@ -55,16 +53,26 @@ open class PlayerHomes(
     override fun getRecordType(): Class<PlayerHomesRecord> = PlayerHomesRecord::class.java
 
     /**
-     * The column <code>player_homes.id</code>.
+     * The column <code>player_homes.player_home_id</code>.
      */
-    val ID: TableField<PlayerHomesRecord, Int?> =
-        createField(DSL.name("id"), SQLDataType.INTEGER.identity(true), this, "")
+    val PLAYER_HOME_ID: TableField<PlayerHomesRecord, Long?> = createField(
+        DSL.name("player_home_id"),
+        SQLDataType.BIGINT.identity(true),
+        this,
+        "",
+        AutoConverter<Long, Long>(Long::class.java, Long::class.java)
+    )
 
     /**
      * The column <code>player_homes.player_id</code>.
      */
-    val PLAYER_ID: TableField<PlayerHomesRecord, Int?> =
-        createField(DSL.name("player_id"), SQLDataType.INTEGER.nullable(false), this, "")
+    val PLAYER_ID: TableField<PlayerHomesRecord, Long?> = createField(
+        DSL.name("player_id"),
+        SQLDataType.BIGINT.nullable(false),
+        this,
+        "",
+        AutoConverter<Long, Long>(Long::class.java, Long::class.java)
+    )
 
     /**
      * The column <code>player_homes.x</code>.
@@ -177,8 +185,8 @@ open class PlayerHomes(
         override fun `as`(alias: Table<*>): PlayerHomesPath = PlayerHomesPath(alias.qualifiedName, this)
     }
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
-    override fun getIdentity(): Identity<PlayerHomesRecord, Int?> =
-        super.getIdentity() as Identity<PlayerHomesRecord, Int?>
+    override fun getIdentity(): Identity<PlayerHomesRecord, Long?> =
+        super.getIdentity() as Identity<PlayerHomesRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<PlayerHomesRecord> = PLAYER_HOMES__PK_PLAYER_HOMES
     override fun getUniqueKeys(): List<UniqueKey<PlayerHomesRecord>> = listOf(PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728)
     override fun getReferences(): List<ForeignKey<PlayerHomesRecord, *>> =
