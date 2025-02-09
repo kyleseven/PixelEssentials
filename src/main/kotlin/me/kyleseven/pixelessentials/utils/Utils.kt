@@ -48,11 +48,13 @@ fun formatDate(format: String, timestamp: Long): String {
  */
 fun formatDuration(milliseconds: Long): String {
     val duration = Duration.ofMillis(milliseconds)
-    val hours = duration.toHours()
+    val days = duration.toDays()
+    val hours = duration.toHours() % 24
     val minutes = duration.toMinutes() % 60
     val secs = duration.seconds % 60
 
     return buildString {
+        if (days > 0) append("${days}d ")
         if (hours > 0) append("${hours}h ")
         if (minutes > 0) append("${minutes}m ")
         append("${secs}s")
