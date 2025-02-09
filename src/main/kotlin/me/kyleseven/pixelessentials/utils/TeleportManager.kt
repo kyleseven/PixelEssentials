@@ -4,9 +4,6 @@ import me.kyleseven.pixelessentials.PixelEssentials
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.*
 import kotlin.math.abs
@@ -25,7 +22,7 @@ sealed class TeleportRequest {
     ) : TeleportRequest()
 }
 
-class TeleportManager(private val plugin: PixelEssentials) : Listener {
+class TeleportManager(private val plugin: PixelEssentials) {
     private val cooldowns = mutableMapOf<UUID, Long>()
     private val activeTeleports = mutableMapOf<UUID, ActiveTeleport>()
     private val pendingInvitations = mutableMapOf<UUID, TeleportInvitation>()
@@ -33,6 +30,9 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
     private data class ActiveTeleport(
         val taskId: Int,
         val initialLocation: Location,
+        val initialHealth: Double,
+        val startTime: Long,
+        val delaySeconds: Int,
         val requester: UUID,
         val target: UUID
     )
@@ -45,12 +45,12 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
     )
 
     fun isOnCooldown(player: Player): Boolean {
-        val remaining = getRemainingCooldown(player)
-        return remaining > 0
+        return getRemainingCooldown(player) > 0
     }
 
     fun getRemainingCooldown(player: Player): Long {
-        return ((cooldowns[player.uniqueId] ?: 0) - System.currentTimeMillis()).coerceAtLeast(0) / 1000
+        return ((cooldowns[player.uniqueId] ?: 0) - System.currentTimeMillis())
+            .coerceAtLeast(0) / 1000
     }
 
     private fun setCooldown(player: Player) {
@@ -76,10 +76,8 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             )
         }
 
-        // Cancel any existing teleport
         cancelExistingTeleport(playerToMove)
 
-        // Immediate teleport if no delay
         if (delaySeconds <= 0) {
             playerToMove.teleport(destination())
             if (applyCooldown) {
@@ -88,35 +86,74 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             return
         }
 
-        // Schedule delayed teleport
         val initialLocation = playerToMove.location.clone()
-        val taskId = object : BukkitRunnable() {
+        val startTime = System.currentTimeMillis()
+        val initialHealth = playerToMove.health
+
+        // Schedule the teleport task.
+        val task = object : BukkitRunnable() {
             override fun run() {
-                activeTeleports.remove(playerToMove.uniqueId)
-                if (playerToMove.isOnline) {
+                // If the player has logged off, cancel.
+                if (!playerToMove.isOnline) {
+                    cancel()
+                    activeTeleports.remove(playerToMove.uniqueId)
+                    if (request is TeleportRequest.PlayerToPlayer) {
+                        Bukkit.getPlayer(request.target.uniqueId)
+                            ?.sendMessage(mmd("<red>Teleport from ${mms(playerToMove.displayName())} was canceled because they logged off.</red>"))
+                    }
+                    return
+                }
+                val currentLocation = playerToMove.location
+
+                // Player Movement Check
+                if (hasMoved(initialLocation, currentLocation)) {
+                    cancel()
+                    activeTeleports.remove(playerToMove.uniqueId)
+                    playerToMove.sendMessage(mmd("<red>Teleport canceled because you moved.</red>"))
+                    if (request is TeleportRequest.PlayerToPlayer) {
+                        Bukkit.getPlayer(request.target.uniqueId)
+                            ?.sendMessage(mmd("<red>Teleport from ${mms(playerToMove.displayName())} was canceled because they moved.</red>"))
+                    }
+                    return
+                }
+
+                // Player Health Check
+                if (playerToMove.health < initialHealth) {
+                    cancel()
+                    activeTeleports.remove(playerToMove.uniqueId)
+                    playerToMove.sendMessage(mmd("<red>Teleport canceled because you took damage.</red>"))
+                    if (request is TeleportRequest.PlayerToPlayer) {
+                        Bukkit.getPlayer(request.target.uniqueId)
+                            ?.sendMessage(mmd("<red>Teleport from ${mms(playerToMove.displayName())} was canceled because they took damage!</red>"))
+                    }
+                    return
+                }
+
+                val now = System.currentTimeMillis()
+                if (now >= startTime + delaySeconds * 1000L) {
+                    cancel()
+                    activeTeleports.remove(playerToMove.uniqueId)
                     val targetLocation = destination()
                     playerToMove.teleport(targetLocation)
                     if (applyCooldown) {
                         setCooldown(playerToMove)
                     }
-                    playerToMove.sendMessage(
-                        mmd(
-                            "<gray>Teleported to</gray> <white>${
-                                when (request) {
-                                    is TeleportRequest.PlayerToPlayer -> mms(request.target.displayName())
-                                    is TeleportRequest.ToLocation -> request.destinationName
-                                }
-                            }</white><gray>.</gray>"
-                        )
-                    )
+                    val destinationDisplayName = when (request) {
+                        is TeleportRequest.PlayerToPlayer -> mms(request.target.displayName())
+                        is TeleportRequest.ToLocation -> request.destinationName
+                    }
+                    playerToMove.sendMessage(mmd("<gray>Teleported to</gray> <white>$destinationDisplayName</white><gray>.</gray>"))
                 }
             }
-        }.runTaskLater(plugin, delaySeconds * 20L).taskId
+        }.runTaskTimer(plugin, 20L, 5L)
 
-        // Store active teleport
+        // Store this active teleport so that we can cancel it if a new teleport is scheduled.
         activeTeleports[playerToMove.uniqueId] = ActiveTeleport(
-            taskId = taskId,
+            taskId = task.taskId,
             initialLocation = initialLocation,
+            initialHealth = initialHealth,
+            startTime = startTime,
+            delaySeconds = delaySeconds,
             requester = when (request) {
                 is TeleportRequest.PlayerToPlayer -> request.requester.uniqueId
                 is TeleportRequest.ToLocation -> playerToMove.uniqueId
@@ -127,8 +164,8 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             }
         )
 
+        // Inform the player about the warmup.
         playerToMove.sendMessage(mmd(messageTemplate.format(delaySeconds)))
-        return
     }
 
     fun addRequest(requester: Player, target: Player, isToRequester: Boolean): Boolean {
@@ -140,7 +177,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         val request = TeleportInvitation(requester.uniqueId, target.uniqueId, isToRequester, System.currentTimeMillis())
         pendingInvitations[target.uniqueId] = request
 
-        // Schedule request expiration
+        // Schedule the expiration of the teleport request.
         Bukkit.getScheduler().runTaskLater(plugin, Runnable {
             if (pendingInvitations[target.uniqueId] == request) {
                 pendingInvitations.remove(target.uniqueId)
@@ -202,11 +239,10 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
     }
 
     private fun cancelExistingTeleport(player: Player) {
-        val existingTeleport = activeTeleports[player.uniqueId]
-        if (existingTeleport != null) {
+        activeTeleports[player.uniqueId]?.let { existingTeleport ->
             Bukkit.getScheduler().cancelTask(existingTeleport.taskId)
             activeTeleports.remove(player.uniqueId)
-            player.sendMessage(mmd("<red>Previous teleport cancelled due to new teleport request.</red>"))
+            player.sendMessage(mmd("<red>Previous teleport canceled due to new teleport request.</red>"))
         }
     }
 
@@ -225,23 +261,6 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
             }
         }
         requester.sendMessage(mmd("<gray>All players have been teleported to you.</gray>"))
-    }
-
-    @EventHandler
-    fun onPlayerMove(event: PlayerMoveEvent) {
-        val player = event.player
-        val activeTeleport = activeTeleports[player.uniqueId] ?: return
-
-        if (hasMoved(activeTeleport.initialLocation, event.to)) {
-            Bukkit.getScheduler().cancelTask(activeTeleport.taskId)
-            activeTeleports.remove(player.uniqueId)
-
-            player.sendMessage(mmd("<red>Teleport was canceled because you moved.</red>"))
-            if (activeTeleport.requester != activeTeleport.target) {
-                Bukkit.getPlayer(activeTeleport.target)
-                    ?.sendMessage(mmd("<red>Teleport from ${mms(player.displayName())} was canceled because they moved!</red>"))
-            }
-        }
     }
 
     private fun hasMoved(from: Location, to: Location): Boolean {

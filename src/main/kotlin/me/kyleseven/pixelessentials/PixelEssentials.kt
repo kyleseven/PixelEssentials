@@ -40,7 +40,6 @@ open class PixelEssentials : JavaPlugin() {
         warpRepository = WarpRepository(databaseManager.dsl)
 
         // Events
-        server.pluginManager.registerEvents(teleportManager, this)
         server.pluginManager.registerEvents(PlayerListener(this), this)
 
         // Commands
