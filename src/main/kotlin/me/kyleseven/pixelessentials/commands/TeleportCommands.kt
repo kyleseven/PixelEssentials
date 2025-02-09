@@ -25,6 +25,22 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         return false
     }
 
+    private fun checkCooldownAndNotify(target: Player, sender: Player? = null): Boolean {
+        if (!plugin.teleportManager.isOnCooldown(target)) return false
+
+        val remaining = plugin.teleportManager.getRemainingCooldown(target)
+        val receiver = sender ?: target
+
+        val message = if (sender != null) {
+            "<white>${mms(target.displayName())}</white> <red>is on cooldown for another</red> <white>$remaining seconds</white><red>.</red>"
+        } else {
+            "<red>You are on cooldown for another</red> <white>$remaining seconds</white><red>.</red>"
+        }
+
+        receiver.sendMessage(mmd(message))
+        return true
+    }
+
     private fun sendTpRequestMessage(sender: Player, receiver: Player, isTpahere: Boolean) {
         val requestType = if (isTpahere) "wants you to teleport to them" else "wants to teleport to you"
         receiver.sendMessage(
@@ -45,20 +61,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.tpa")
     @CommandCompletion("@players")
     fun onTpa(player: Player, target: OnlinePlayer) {
-        if (isSelfTeleport(player, target.player)) return
-
-        if (plugin.teleportManager.isOnCooldown(player)) {
-            player.sendMessage(
-                mmd(
-                    "<red>You are on cooldown for another</red> <white>${
-                        plugin.teleportManager.getRemainingCooldown(
-                            player
-                        )
-                    } seconds</white><red>.</red>"
-                )
-            )
-            return
-        }
+        if (isSelfTeleport(player, target.player) || checkCooldownAndNotify(player)) return
 
         if (!plugin.teleportManager.addRequest(player, target.player, false)) {
             return
@@ -75,20 +78,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.tpahere")
     @CommandCompletion("@players")
     fun onTpahere(player: Player, target: OnlinePlayer) {
-        if (isSelfTeleport(player, target.player)) return
-
-        if (plugin.teleportManager.isOnCooldown(target.player)) {
-            player.sendMessage(
-                mmd(
-                    "<white>${mms(target.player.displayName())}</white> is on cooldown for another <white>${
-                        plugin.teleportManager.getRemainingCooldown(
-                            target.player
-                        )
-                    } seconds</white>."
-                )
-            )
-            return
-        }
+        if (isSelfTeleport(player, target.player) || checkCooldownAndNotify(target.player, player)) return
 
         if (!plugin.teleportManager.addRequest(player, target.player, true)) {
             return
@@ -197,18 +187,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Teleport to your home location")
     @CommandPermission("pixelessentials.home")
     fun onHome(player: Player) {
-        if (plugin.teleportManager.isOnCooldown(player)) {
-            player.sendMessage(
-                mmd(
-                    "<red>You are on cooldown for another</red> <white>${
-                        plugin.teleportManager.getRemainingCooldown(
-                            player
-                        )
-                    } seconds</white><red>.</red>"
-                )
-            )
-            return
-        }
+        if (checkCooldownAndNotify(player)) return
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val home = plugin.playerRepository.getPlayerHome(player.uniqueId) ?: run {
@@ -297,18 +276,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Teleport to a warp location")
     @CommandPermission("pixelessentials.warp")
     fun onWarp(player: Player, name: String) {
-        if (plugin.teleportManager.isOnCooldown(player)) {
-            player.sendMessage(
-                mmd(
-                    "<red>You are on cooldown for another</red> <white>${
-                        plugin.teleportManager.getRemainingCooldown(
-                            player
-                        )
-                    } seconds</white><red>.</red>"
-                )
-            )
-            return
-        }
+        if (checkCooldownAndNotify(player)) return
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val warp = plugin.warpRepository.getWarp(name) ?: run {
