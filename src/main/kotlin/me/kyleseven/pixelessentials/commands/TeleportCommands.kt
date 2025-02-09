@@ -136,7 +136,21 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Teleport all players to you")
     @CommandPermission("pixelessentials.tpall")
     fun onTpall(player: Player) {
-        plugin.teleportManager.processTpall(player)
+        Bukkit.getOnlinePlayers().forEach { plyr ->
+            if (plyr != player) {
+                plugin.teleportManager.scheduleTeleport(
+                    TeleportRequest.ToLocation(
+                        player = plyr,
+                        locationProvider = { player.location },
+                        destinationName = mms(player.displayName())
+                    ),
+                    delaySeconds = 0,
+                    applyCooldown = false
+                )
+            }
+        }
+
+        player.sendMessage(mmd("<gray>All players have been teleported to you.</gray>"))
     }
 
     @CommandAlias("tpaccept")

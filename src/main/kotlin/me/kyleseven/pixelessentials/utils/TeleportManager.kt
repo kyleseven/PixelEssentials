@@ -26,9 +26,9 @@ class TeleportManager(private val plugin: PixelEssentials) {
     private val cooldowns = mutableMapOf<UUID, Long>()
     private val activeTeleports = mutableMapOf<UUID, ActiveTeleport>()
     private val pendingInvitations = mutableMapOf<UUID, TeleportInvitation>()
-
     private val backLocations = mutableMapOf<UUID, Location>()
 
+    // Back location functions
     fun recordBackLocation(player: Player, location: Location) {
         backLocations[player.uniqueId] = location.clone()
     }
@@ -37,6 +37,7 @@ class TeleportManager(private val plugin: PixelEssentials) {
         return backLocations[player.uniqueId]
     }
 
+    // Cooldown functions
     fun isOnCooldown(player: Player): Boolean {
         return getRemainingCooldown(player) > 0
     }
@@ -50,6 +51,7 @@ class TeleportManager(private val plugin: PixelEssentials) {
         cooldowns[player.uniqueId] = System.currentTimeMillis() + (plugin.configProvider.teleportCooldown * 1000L)
     }
 
+    // Teleport scheduling and execution
     fun scheduleTeleport(
         request: TeleportRequest,
         delaySeconds: Int = plugin.configProvider.teleportDelay,
@@ -167,6 +169,7 @@ class TeleportManager(private val plugin: PixelEssentials) {
         playerToMove.sendMessage(mmd(messageTemplate.format(delaySeconds)))
     }
 
+    // Teleport request functions
     fun addRequest(requester: Player, target: Player, isToRequester: Boolean): Boolean {
         if (pendingInvitations.containsKey(target.uniqueId)) {
             requester.sendMessage(mmd("<white>${mms(target.displayName())}</white> <gray>already has a pending teleport request.</gray>"))
@@ -243,23 +246,6 @@ class TeleportManager(private val plugin: PixelEssentials) {
             activeTeleports.remove(player.uniqueId)
             player.sendMessage(mmd("<red>Previous teleport canceled due to new teleport request.</red>"))
         }
-    }
-
-    fun processTpall(requester: Player) {
-        Bukkit.getOnlinePlayers().forEach { player ->
-            if (player != requester) {
-                scheduleTeleport(
-                    TeleportRequest.ToLocation(
-                        player = player,
-                        locationProvider = { requester.location },
-                        destinationName = mms(requester.displayName())
-                    ),
-                    delaySeconds = 0,
-                    applyCooldown = false
-                )
-            }
-        }
-        requester.sendMessage(mmd("<gray>All players have been teleported to you.</gray>"))
     }
 
     private fun hasMoved(from: Location, to: Location): Boolean {
