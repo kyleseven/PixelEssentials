@@ -232,7 +232,7 @@ class TeleportManager(private val plugin: PixelEssentials) : Listener {
         val player = event.player
         val activeTeleport = activeTeleports[player.uniqueId] ?: return
 
-        if (hasMoved(event.from, event.to)) {
+        if (hasMoved(activeTeleport.initialLocation, event.to)) {
             Bukkit.getScheduler().cancelTask(activeTeleport.taskId)
             activeTeleports.remove(player.uniqueId)
 
