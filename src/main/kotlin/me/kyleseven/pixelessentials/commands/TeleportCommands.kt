@@ -1,10 +1,7 @@
 package me.kyleseven.pixelessentials.commands
 
 import co.aikar.commands.BaseCommand
-import co.aikar.commands.annotation.CommandAlias
-import co.aikar.commands.annotation.CommandCompletion
-import co.aikar.commands.annotation.CommandPermission
-import co.aikar.commands.annotation.Description
+import co.aikar.commands.annotation.*
 import co.aikar.commands.bukkit.contexts.OnlinePlayer
 import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.PlayerHome
@@ -155,6 +152,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
     @CommandAlias("tpaccept")
     @Description("Accept a teleport request")
+    @CommandPermission("pixelessentials.tpaccept")
     fun onTpaccept(player: Player) {
         if (!plugin.teleportManager.acceptRequest(player)) {
             player.sendMessage(
@@ -165,6 +163,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
     @CommandAlias("tpdeny")
     @Description("Deny a teleport request")
+    @CommandPermission("pixelessentials.tpdeny")
     fun onTpdeny(player: Player) {
         if (!plugin.teleportManager.denyRequest(player)) {
             player.sendMessage(
@@ -175,6 +174,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
     @CommandAlias("tpacancel")
     @Description("Cancel a teleport request")
+    @CommandPermission("pixelessentials.tpacancel")
     fun onTpacancel(player: Player) {
         plugin.teleportManager.cancelRequest(player)
     }
@@ -203,7 +203,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
     @CommandAlias("delhome")
     @Description("Delete your home location")
-    @CommandPermission("pixelessentials.sethome")
+    @CommandPermission("pixelessentials.delhome")
     fun onDelhome(player: Player) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             plugin.playerRepository.getPlayerHome(player.uniqueId) ?: run {
@@ -289,7 +289,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
     @CommandAlias("delwarp")
     @Description("Delete a warp location")
-    @CommandPermission("pixelessentials.setwarp")
+    @CommandPermission("pixelessentials.delwarp")
     fun onDelwarp(player: Player, name: String) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             plugin.warpRepository.getWarp(name) ?: run {
