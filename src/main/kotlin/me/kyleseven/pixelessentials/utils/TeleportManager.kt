@@ -27,22 +27,15 @@ class TeleportManager(private val plugin: PixelEssentials) {
     private val activeTeleports = mutableMapOf<UUID, ActiveTeleport>()
     private val pendingInvitations = mutableMapOf<UUID, TeleportInvitation>()
 
-    private data class ActiveTeleport(
-        val taskId: Int,
-        val initialLocation: Location,
-        val initialHealth: Double,
-        val startTime: Long,
-        val delaySeconds: Int,
-        val requester: UUID,
-        val target: UUID
-    )
+    private val backLocations = mutableMapOf<UUID, Location>()
 
-    private data class TeleportInvitation(
-        val requester: UUID,
-        val target: UUID,
-        val isToRequester: Boolean,
-        val timestamp: Long
-    )
+    fun recordBackLocation(player: Player, location: Location) {
+        backLocations[player.uniqueId] = location.clone()
+    }
+
+    fun getBackLocation(player: Player): Location? {
+        return backLocations[player.uniqueId]
+    }
 
     fun isOnCooldown(player: Player): Boolean {
         return getRemainingCooldown(player) > 0
@@ -135,9 +128,15 @@ class TeleportManager(private val plugin: PixelEssentials) {
                     activeTeleports.remove(playerToMove.uniqueId)
                     val targetLocation = destination()
                     playerToMove.teleport(targetLocation)
+
                     if (applyCooldown) {
                         setCooldown(playerToMove)
                     }
+
+                    if (playerToMove.hasPermission("pixelessentials.back.onteleport")) {
+                        recordBackLocation(playerToMove, initialLocation)
+                    }
+
                     val destinationDisplayName = when (request) {
                         is TeleportRequest.PlayerToPlayer -> mms(request.target.displayName())
                         is TeleportRequest.ToLocation -> request.destinationName
@@ -269,4 +268,21 @@ class TeleportManager(private val plugin: PixelEssentials) {
                 abs(from.y - to.y) > tolerance ||
                 abs(from.z - to.z) > tolerance
     }
+
+    private data class ActiveTeleport(
+        val taskId: Int,
+        val initialLocation: Location,
+        val initialHealth: Double,
+        val startTime: Long,
+        val delaySeconds: Int,
+        val requester: UUID,
+        val target: UUID
+    )
+
+    private data class TeleportInvitation(
+        val requester: UUID,
+        val target: UUID,
+        val isToRequester: Boolean,
+        val timestamp: Long
+    )
 }

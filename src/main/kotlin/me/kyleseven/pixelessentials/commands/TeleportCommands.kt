@@ -56,6 +56,27 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         )
     }
 
+    @CommandAlias("back")
+    @Description("Teleport to your previous location")
+    @CommandPermission("pixelessentials.back")
+    fun onBack(player: Player) {
+        if (checkCooldownAndNotify(player)) return
+
+        val backLocation = plugin.teleportManager.getBackLocation(player)
+        if (backLocation == null) {
+            player.sendMessage(mmd("<red>You don't have a location to go back to.</red>"))
+            return
+        }
+
+        plugin.teleportManager.scheduleTeleport(
+            TeleportRequest.ToLocation(
+                player = player,
+                locationProvider = { backLocation },
+                destinationName = "previous location"
+            )
+        )
+    }
+
     @CommandAlias("tpa")
     @Description("Request to teleport to a player")
     @CommandPermission("pixelessentials.tpa")
