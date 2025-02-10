@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS players (
     total_playtime BIGINT NOT NULL
 );
 
+CREATE INDEX idx_players_uuid ON players(uuid);
+CREATE INDEX idx_players_playtime ON players(total_playtime);
+
 CREATE TABLE IF NOT EXISTS player_last_locations (
     player_id INTEGER PRIMARY KEY,
     x DOUBLE NOT NULL,
@@ -41,3 +44,5 @@ CREATE TABLE IF NOT EXISTS warps (
     yaw DOUBLE NOT NULL,
     world TEXT NOT NULL
 );
+
+CREATE INDEX idx_warps_name ON warps(name);

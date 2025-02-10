@@ -5,6 +5,8 @@ package me.kyleseven.pixelessentials.database.generated.tables
 
 
 import me.kyleseven.pixelessentials.database.generated.DefaultSchema
+import me.kyleseven.pixelessentials.database.generated.indexes.IDX_PLAYERS_PLAYTIME
+import me.kyleseven.pixelessentials.database.generated.indexes.IDX_PLAYERS_UUID
 import me.kyleseven.pixelessentials.database.generated.keys.PLAYERS__PK_PLAYERS
 import me.kyleseven.pixelessentials.database.generated.keys.PLAYERS__UK_PLAYERS_1_102966634
 import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__FK_PLAYER_HOMES_PK_PLAYERS
@@ -168,6 +170,7 @@ open class Players(
         override fun `as`(alias: Table<*>): PlayersPath = PlayersPath(alias.qualifiedName, this)
     }
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
+    override fun getIndexes(): List<Index> = listOf(IDX_PLAYERS_PLAYTIME, IDX_PLAYERS_UUID)
     override fun getIdentity(): Identity<PlayersRecord, Long?> = super.getIdentity() as Identity<PlayersRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<PlayersRecord> = PLAYERS__PK_PLAYERS
     override fun getUniqueKeys(): List<UniqueKey<PlayersRecord>> = listOf(PLAYERS__UK_PLAYERS_1_102966634)
