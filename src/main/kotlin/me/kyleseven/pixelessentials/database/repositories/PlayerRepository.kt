@@ -57,7 +57,7 @@ class PlayerRepository(private val dsl: DSLContext) {
     }
 
     fun getPlayerLastLocation(uuid: UUID): PlayerLastLocation? {
-        return dsl.select(PLAYER_LAST_LOCATIONS.asterisk()) // Select all columns
+        return dsl.select(PLAYER_LAST_LOCATIONS.asterisk())
             .from(PLAYER_LAST_LOCATIONS)
             .innerJoin(PLAYERS).on(PLAYER_LAST_LOCATIONS.PLAYER_ID.eq(PLAYERS.PLAYER_ID))
             .where(PLAYERS.UUID.eq(uuid.toString()))
