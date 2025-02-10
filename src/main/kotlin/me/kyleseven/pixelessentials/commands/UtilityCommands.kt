@@ -112,7 +112,7 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val offlinePlayer = playerName.let { Bukkit.getOfflinePlayer(it) }
-            val player = offlinePlayer.uniqueId.let { plugin.playerRepository.getPlayer(it) }
+            val player = plugin.playerRepository.getPlayer(offlinePlayer.uniqueId)
 
             if (player == null) {
                 Bukkit.getScheduler().runTask(plugin, Runnable {
