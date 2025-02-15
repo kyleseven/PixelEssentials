@@ -313,7 +313,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onWarp(player: Player, @Optional name: String?) {
         // List all warp locations if name is not provided
         if (name.isNullOrBlank()) {
-            if (player.hasPermission("pixelessentials.warp.list")) {
+            if (!player.hasPermission("pixelessentials.warp.list")) {
                 player.sendMessage(mmd("<red>You don't have permission to list warps.</red>"))
                 return
             }
