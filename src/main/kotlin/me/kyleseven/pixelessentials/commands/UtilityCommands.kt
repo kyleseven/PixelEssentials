@@ -80,21 +80,34 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     "No"
                 }
 
-                sender.sendMessage(
-                    mmd(
-                        """
-                    <gray>─────── Player Information ───────</gray>
-                    <gray>Username: <white>${player.lastAccountName}</white></gray>
-                    <gray>UUID: <white>${player.uuid}</white></gray>
-                    <gray>First Join: <white>$firstJoin</white></gray>
-                    <gray>Last Seen: <white>$lastSeen</white></gray>
-                    <gray>Total Playtime: <white>$totalPlaytime</white></gray>
-                    <gray>IP Address: <white>${player.ipAddress}</white></gray>
-                    <gray>Banned: <white>$bannedStatus</white></gray>
-                    <gray>Ban Reason: <white>${banEntry?.reason ?: "N/A"}</white></gray>
-                    """.trimIndent()
-                    )
-                )
+                val opStatus = if (offlinePlayer.isOp) "Yes" else "No"
+
+                val message = StringBuilder().apply {
+                    appendLine("<gray>─────── Player Information ───────</gray>")
+                    appendLine("<gray>Username: <white>${player.lastAccountName}</white></gray>")
+                    appendLine("<gray>UUID: <white>${player.uuid}</white></gray>")
+                    appendLine("<gray>OP: <white>$opStatus</white></gray>")
+                    appendLine("<gray>First Join: <white>$firstJoin</white></gray>")
+                    appendLine("<gray>Last Seen: <white>$lastSeen</white></gray>")
+                    appendLine("<gray>Total Playtime: <white>$totalPlaytime</white></gray>")
+                    appendLine("<gray>IP Address: <white>${player.ipAddress}</white></gray>")
+                    appendLine("<gray>Banned: <white>$bannedStatus</white></gray>")
+                    appendLine("<gray>Ban Reason: <white>${banEntry?.reason ?: "N/A"}</white></gray>")
+                }
+
+                // If the player is online, get additional information
+                val onlinePlayer = Bukkit.getPlayer(offlinePlayer.uniqueId)
+                if (onlinePlayer != null) {
+                    val loc = onlinePlayer.location
+                    val locationStr = "${loc.world.name} ${loc.blockX} ${loc.blockY} ${loc.blockZ}"
+                    val gameModeStr = onlinePlayer.gameMode.name.lowercase().replaceFirstChar { it.uppercase() }
+                    message.appendLine("<gray>Location: <white>$locationStr</white></gray>")
+                    message.appendLine("<gray>Gamemode: <white>${gameModeStr}</white></gray>")
+                    message.appendLine("<gray>Health: <white>${onlinePlayer.health.toInt()}/20</white></gray>")
+                    message.appendLine("<gray>Hunger: <white>${onlinePlayer.foodLevel}/20</white></gray>")
+                }
+
+                sender.sendMessage(mmd(message.toString().trim()))
             })
         })
     }
