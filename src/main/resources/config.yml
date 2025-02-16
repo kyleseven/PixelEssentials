@@ -20,3 +20,4 @@ teleportation:
   cooldown: 30
   delay: 5
   request-expiration: 30
+  back-on-death-notification: true

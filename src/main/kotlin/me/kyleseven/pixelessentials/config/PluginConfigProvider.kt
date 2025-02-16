@@ -38,4 +38,7 @@ class PluginConfigProvider(private val plugin: PixelEssentials) : ConfigProvider
 
     override val teleportRequestExpiration: Int
         get() = plugin.config.getInt("teleportation.request-expiration")
+
+    override val backOnDeathNotificationEnabled: Boolean
+        get() = plugin.config.getBoolean("teleportation.back-on-death-notification")
 }

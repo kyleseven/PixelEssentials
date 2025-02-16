@@ -12,6 +12,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerRespawnEvent
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -106,6 +107,13 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
 
         if (event.player.hasPermission("pixelessentials.back.ondeath")) {
             plugin.teleportManager.recordBackLocation(event.player, event.entity.location.clone())
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onPlayerRespawn(event: PlayerRespawnEvent) {
+        if (plugin.configProvider.backOnDeathNotificationEnabled && event.player.hasPermission("pixelessentials.back.ondeath")) {
+            event.player.sendMessage(mmd("<gray>You can use <white>/back</white> to return to your death location.</gray>"))
         }
     }
 }

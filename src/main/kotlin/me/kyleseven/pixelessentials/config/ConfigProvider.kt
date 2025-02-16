@@ -16,4 +16,5 @@ sealed interface ConfigProvider {
     val teleportCooldown: Int
     val teleportDelay: Int
     val teleportRequestExpiration: Int
+    val backOnDeathNotificationEnabled: Boolean
 }
