@@ -1,6 +1,7 @@
 package me.kyleseven.pixelessentials
 
 import co.aikar.commands.PaperCommandManager
+import me.kyleseven.pixelessentials.commands.AliasCommands
 import me.kyleseven.pixelessentials.commands.MainCommand
 import me.kyleseven.pixelessentials.commands.TeleportCommands
 import me.kyleseven.pixelessentials.commands.UtilityCommands
@@ -11,6 +12,7 @@ import me.kyleseven.pixelessentials.database.repositories.WarpRepository
 import me.kyleseven.pixelessentials.listeners.PlayerListener
 import me.kyleseven.pixelessentials.utils.MotdBuilder
 import me.kyleseven.pixelessentials.utils.TeleportManager
+import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin
 
 open class PixelEssentials : JavaPlugin() {
@@ -47,9 +49,17 @@ open class PixelEssentials : JavaPlugin() {
         paperCommandManager.registerCommand(MainCommand(this))
         paperCommandManager.registerCommand(TeleportCommands(this))
         paperCommandManager.registerCommand(UtilityCommands(this))
+        paperCommandManager.registerCommand(AliasCommands())
+        registerCompletions(paperCommandManager)
     }
 
     override fun onDisable() {
         databaseManager.disconnect()
+    }
+
+    private fun registerCompletions(commandManager: PaperCommandManager) {
+        commandManager.commandCompletions.registerCompletion("materials") {
+            Material.entries.filter { it.isItem }.map { it.name.lowercase() }
+        }
     }
 }
