@@ -66,4 +66,13 @@ class AliasCommands : BaseCommand() {
         val command = "give ${player.name} $item $amount"
         Bukkit.dispatchCommand(player, command)
     }
+
+    @CommandAlias("tphere")
+    @Description("Teleport a player to you")
+    @CommandCompletion("@players")
+    @CommandPermission("minecraft.command.tp")
+    fun onTphere(player: Player, playerName: String) {
+        val command = "tp $playerName ${player.name}"
+        Bukkit.dispatchCommand(player, command)
+    }
 }
