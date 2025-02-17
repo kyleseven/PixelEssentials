@@ -208,6 +208,9 @@ class TeleportManager(private val plugin: PixelEssentials) {
             return false
         }
 
+        requester.sendMessage(mmd("<white>${mms(target.displayName())}</white> <green>accepted</green> <gray>your teleport request.</gray>"))
+        target.sendMessage(mmd("<green>Accepted</green> <gray>teleport request from</gray> <white>${mms(requester.displayName())}</white><gray>.</gray>"))
+
         scheduleTeleport(
             TeleportRequest.PlayerToPlayer(
                 requester = requester,
@@ -216,8 +219,6 @@ class TeleportManager(private val plugin: PixelEssentials) {
             )
         )
 
-        requester.sendMessage(mmd("<white>${mms(target.displayName())}</white> <green>accepted</green> <gray>your teleport request.</gray>"))
-        target.sendMessage(mmd("<green>Accepted</green> <gray>teleport request from</gray> <white>${mms(requester.displayName())}</white><gray>.</gray>"))
         return true
     }
 
