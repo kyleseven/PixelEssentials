@@ -58,11 +58,21 @@ class TeleportManager(private val plugin: PixelEssentials) {
         applyCooldown: Boolean = true
     ) {
         val (playerToMove, destination, messageTemplate) = when (request) {
-            is TeleportRequest.PlayerToPlayer -> Triple(
-                if (request.isToRequester) request.target else request.requester,
-                { request.target.location },
-                "<gray>Teleporting to</gray> <white>${mms(request.target.displayName())}</white> <gray>in %d seconds. Do not move.</gray>"
-            )
+            is TeleportRequest.PlayerToPlayer -> {
+                if (request.isToRequester) {
+                    Triple(
+                        request.target,
+                        { request.requester.location },
+                        "<gray>Teleporting to</gray> <white>${mms(request.requester.displayName())}</white> <gray>in %d seconds. Do not move.</gray>"
+                    )
+                } else {
+                    Triple(
+                        request.requester,
+                        { request.target.location },
+                        "<gray>Teleporting to</gray> <white>${mms(request.target.displayName())}</white> <gray>in %d seconds. Do not move.</gray>"
+                    )
+                }
+            }
 
             is TeleportRequest.ToLocation -> Triple(
                 request.player,
