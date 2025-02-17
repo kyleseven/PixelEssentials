@@ -19,6 +19,19 @@ import java.util.concurrent.ConcurrentHashMap
 class PlayerListener(private val plugin: PixelEssentials) : Listener {
     private val sessionStartTimes = ConcurrentHashMap<UUID, Long>()
 
+    init {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
+            val currentTimestamp = System.currentTimeMillis() / 1000
+            sessionStartTimes.forEach { (uuid, startTime) ->
+                val elapsedTime = currentTimestamp - startTime
+                if (elapsedTime > 0) {
+                    plugin.playerRepository.updateLastSeenAndPlaytime(uuid, elapsedTime)
+                    sessionStartTimes[uuid] = currentTimestamp
+                }
+            }
+        }, 6000L, 6000L)
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
