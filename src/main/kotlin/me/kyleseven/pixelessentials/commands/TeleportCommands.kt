@@ -387,7 +387,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     }
 
     @CommandAlias("spawn")
-    @Description("Teleport to the spawn location")
+    @Description("Teleport to spawn")
     @CommandPermission("pixelessentials.spawn")
     fun onSpawn(player: Player) {
         if (checkCooldownAndNotify(player)) return
