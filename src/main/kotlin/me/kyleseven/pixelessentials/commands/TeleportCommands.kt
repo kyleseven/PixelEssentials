@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.*
 import co.aikar.commands.bukkit.contexts.OnlinePlayer
 import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.PlayerHome
+import me.kyleseven.pixelessentials.database.models.Spawn
 import me.kyleseven.pixelessentials.database.models.Warp
 import me.kyleseven.pixelessentials.utils.TeleportRequest
 import me.kyleseven.pixelessentials.utils.mmd
@@ -381,6 +382,88 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         destinationName = warp.name
                     )
                 )
+            })
+        })
+    }
+
+    @CommandAlias("spawn")
+    @Description("Teleport to the spawn location")
+    @CommandPermission("pixelessentials.spawn")
+    fun onSpawn(player: Player) {
+        if (checkCooldownAndNotify(player)) return
+
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            val spawn = plugin.spawnRepository.getSpawn() ?: run {
+                Bukkit.getScheduler().runTask(plugin, Runnable {
+                    player.sendMessage(mmd("<red>Spawn location has not been set.</red>"))
+                })
+                return@Runnable
+            }
+
+            Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+                val world = Bukkit.getWorld(spawn.world) ?: run {
+                    player.sendMessage(mmd("<red>World <white>${spawn.world}</white> does not exist.</red>"))
+                    return@inner
+                }
+
+                plugin.teleportManager.scheduleTeleport(
+                    TeleportRequest.ToLocation(
+                        player = player,
+                        locationProvider = {
+                            Location(
+                                world,
+                                spawn.x,
+                                spawn.y,
+                                spawn.z,
+                                spawn.yaw.toFloat(),
+                                spawn.pitch.toFloat()
+                            )
+                        },
+                        destinationName = "spawn"
+                    )
+                )
+            })
+        })
+    }
+
+    @CommandAlias("setspawn")
+    @Description("Set the spawn location")
+    @CommandPermission("pixelessentials.setspawn")
+    fun onSetspawn(player: Player) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            plugin.spawnRepository.upsertSpawn(
+                Spawn(
+                    x = player.location.x,
+                    y = player.location.y,
+                    z = player.location.z,
+                    pitch = player.location.pitch.toDouble(),
+                    yaw = player.location.yaw.toDouble(),
+                    world = player.location.world.name
+                )
+            )
+
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                player.sendMessage(mmd("<gray>Spawn location has been set.</gray>"))
+            })
+        })
+    }
+
+    @CommandAlias("delspawn")
+    @Description("Delete the spawn location")
+    @CommandPermission("pixelessentials.delspawn")
+    fun onDelspawn(player: Player) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            plugin.spawnRepository.getSpawn() ?: run {
+                Bukkit.getScheduler().runTask(plugin, Runnable {
+                    player.sendMessage(mmd("<red>Spawn location has not been set.</red>"))
+                })
+                return@Runnable
+            }
+
+            plugin.spawnRepository.deleteSpawn()
+
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                player.sendMessage(mmd("<gray>Spawn location has been deleted.</gray>"))
             })
         })
     }

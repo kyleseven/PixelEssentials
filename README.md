@@ -1,16 +1,21 @@
 # PixelEssentials
+
 PixelEssentials is a Spigot plugin designed to provide some essential features for SMP servers.
 
 ## Building
+
 ### Compiling from source
+
 ```bash
 git clone https://github.com/kyleseven/PixelEssentials.git
 cd PixelEssentials/
 ./gradlew clean build
 ```
+
 Once built, the jar can be found in the `build/libs` directory.
 
 ## Command Reference
+
 | Command      | Description                                                      | Permission                                                                                      |
 |--------------|------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
 | `/tpa`       | Request to teleport to a player.                                 | `pixelessentials.tpa`                                                                           |
@@ -27,6 +32,9 @@ Once built, the jar can be found in the `build/libs` directory.
 | `/warp`      | Teleport to a warp location.                                     | `pixelessentials.warp`                                                                          |
 | `/setwarp`   | Set a warp location.                                             | `pixelessentials.setwarp`                                                                       |
 | `/delwarp`   | Delete a warp location.                                          | `pixelessentials.delwarp`                                                                       |
+| `/spawn`     | Teleport to the spawn location.                                  | `pixelessentials.spawn`                                                                         |
+| `/setspawn`  | Set the spawn location.                                          | `pixelessentials.setspawn`                                                                      |
+| `/delspawn`  | Delete the spawn location.                                       | `pixelessentials.delspawn`                                                                      |
 | `/motd`      | See the message of the day.                                      | `pixelessentials.motd`                                                                          |
 | `/list`      | See a list of all online players.                                | `pixelessentials.list`                                                                          |
 | `/ping`      | See the ping of yourself or another player.                      | `pixelessentials.ping`                                                                          |

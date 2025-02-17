@@ -4,10 +4,7 @@
 package me.kyleseven.pixelessentials.database.generated
 
 
-import me.kyleseven.pixelessentials.database.generated.tables.PlayerHomes
-import me.kyleseven.pixelessentials.database.generated.tables.PlayerLastLocations
-import me.kyleseven.pixelessentials.database.generated.tables.Players
-import me.kyleseven.pixelessentials.database.generated.tables.Warps
+import me.kyleseven.pixelessentials.database.generated.tables.*
 import org.jooq.Catalog
 import org.jooq.Table
 import org.jooq.impl.SchemaImpl
@@ -42,6 +39,11 @@ open class DefaultSchema : SchemaImpl("", DefaultCatalog.DEFAULT_CATALOG) {
     val PLAYERS: Players get() = Players.PLAYERS
 
     /**
+     * The table <code>spawn</code>.
+     */
+    val SPAWN: Spawn get() = Spawn.SPAWN
+
+    /**
      * The table <code>warps</code>.
      */
     val WARPS: Warps get() = Warps.WARPS
@@ -52,6 +54,7 @@ open class DefaultSchema : SchemaImpl("", DefaultCatalog.DEFAULT_CATALOG) {
         PlayerHomes.PLAYER_HOMES,
         PlayerLastLocations.PLAYER_LAST_LOCATIONS,
         Players.PLAYERS,
+        Spawn.SPAWN,
         Warps.WARPS
     )
 }

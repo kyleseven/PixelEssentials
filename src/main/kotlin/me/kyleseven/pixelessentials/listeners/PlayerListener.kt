@@ -6,6 +6,7 @@ import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import me.kyleseven.pixelessentials.utils.mmd
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -49,6 +50,24 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val existingPlayer = plugin.playerRepository.getPlayer(uuid)
             val isNewPlayer = existingPlayer == null
+
+            // Teleport them to spawn if they are a new player
+            if (isNewPlayer) {
+                plugin.spawnRepository.getSpawn()?.let { spawnLocation ->
+                    Bukkit.getScheduler().runTask(plugin, Runnable {
+                        player.teleport(
+                            Location(
+                                Bukkit.getWorld(spawnLocation.world),
+                                spawnLocation.x,
+                                spawnLocation.y,
+                                spawnLocation.z,
+                                spawnLocation.yaw.toFloat(),
+                                spawnLocation.pitch.toFloat()
+                            )
+                        )
+                    })
+                }
+            }
 
             val currentTimestamp = (System.currentTimeMillis() / 1000)
             sessionStartTimes[uuid] = currentTimestamp
@@ -127,6 +146,19 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
     fun onPlayerRespawn(event: PlayerRespawnEvent) {
         if (plugin.configProvider.backOnDeathNotificationEnabled && event.player.hasPermission("pixelessentials.back.ondeath")) {
             event.player.sendMessage(mmd("<gray>You can use <white>/back</white> to return to your death location.</gray>"))
+        }
+
+        if (!event.isBedSpawn && !event.isAnchorSpawn) {
+            plugin.spawnRepository.getSpawn()?.let { spawnLocation ->
+                event.respawnLocation = Location(
+                    Bukkit.getWorld(spawnLocation.world),
+                    spawnLocation.x,
+                    spawnLocation.y,
+                    spawnLocation.z,
+                    spawnLocation.yaw.toFloat(),
+                    spawnLocation.pitch.toFloat()
+                )
+            }
         }
     }
 }

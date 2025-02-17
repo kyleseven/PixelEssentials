@@ -4,10 +4,7 @@
 package me.kyleseven.pixelessentials.database.generated.tables.references
 
 
-import me.kyleseven.pixelessentials.database.generated.tables.PlayerHomes
-import me.kyleseven.pixelessentials.database.generated.tables.PlayerLastLocations
-import me.kyleseven.pixelessentials.database.generated.tables.Players
-import me.kyleseven.pixelessentials.database.generated.tables.Warps
+import me.kyleseven.pixelessentials.database.generated.tables.*
 
 
 /**
@@ -24,6 +21,11 @@ val PLAYER_LAST_LOCATIONS: PlayerLastLocations = PlayerLastLocations.PLAYER_LAST
  * The table <code>players</code>.
  */
 val PLAYERS: Players = Players.PLAYERS
+
+/**
+ * The table <code>spawn</code>.
+ */
+val SPAWN: Spawn = Spawn.SPAWN
 
 /**
  * The table <code>warps</code>.

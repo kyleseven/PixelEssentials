@@ -46,3 +46,13 @@ CREATE TABLE IF NOT EXISTS warps (
 );
 
 CREATE INDEX idx_warps_name ON warps(name);
+
+CREATE TABLE IF NOT EXISTS spawn (
+    spawn_id INTEGER PRIMARY KEY,
+    x DOUBLE NOT NULL,
+    y DOUBLE NOT NULL,
+    z DOUBLE NOT NULL,
+    pitch DOUBLE NOT NULL,
+    yaw DOUBLE NOT NULL,
+    world TEXT NOT NULL
+);

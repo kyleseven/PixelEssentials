@@ -8,6 +8,7 @@ import me.kyleseven.pixelessentials.commands.UtilityCommands
 import me.kyleseven.pixelessentials.config.PluginConfigProvider
 import me.kyleseven.pixelessentials.database.DatabaseManager
 import me.kyleseven.pixelessentials.database.repositories.PlayerRepository
+import me.kyleseven.pixelessentials.database.repositories.SpawnRepository
 import me.kyleseven.pixelessentials.database.repositories.WarpRepository
 import me.kyleseven.pixelessentials.listeners.ChatListener
 import me.kyleseven.pixelessentials.listeners.PlayerListener
@@ -27,6 +28,7 @@ open class PixelEssentials : JavaPlugin() {
     lateinit var databaseManager: DatabaseManager
     lateinit var playerRepository: PlayerRepository
     lateinit var warpRepository: WarpRepository
+    lateinit var spawnRepository: SpawnRepository
 
     override fun onEnable() {
         saveDefaultConfig()
@@ -51,6 +53,7 @@ open class PixelEssentials : JavaPlugin() {
         }
         playerRepository = PlayerRepository(databaseManager.dsl)
         warpRepository = WarpRepository(databaseManager.dsl)
+        spawnRepository = SpawnRepository(databaseManager.dsl)
 
         // Events
         server.pluginManager.registerEvents(PlayerListener(this), this)

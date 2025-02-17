@@ -4,20 +4,12 @@
 package me.kyleseven.pixelessentials.database.generated.keys
 
 
-import me.kyleseven.pixelessentials.database.generated.tables.PlayerHomes
-import me.kyleseven.pixelessentials.database.generated.tables.PlayerLastLocations
-import me.kyleseven.pixelessentials.database.generated.tables.Players
-import me.kyleseven.pixelessentials.database.generated.tables.Warps
-import me.kyleseven.pixelessentials.database.generated.tables.records.PlayerHomesRecord
-import me.kyleseven.pixelessentials.database.generated.tables.records.PlayerLastLocationsRecord
-import me.kyleseven.pixelessentials.database.generated.tables.records.PlayersRecord
-import me.kyleseven.pixelessentials.database.generated.tables.records.WarpsRecord
-
+import me.kyleseven.pixelessentials.database.generated.tables.*
+import me.kyleseven.pixelessentials.database.generated.tables.records.*
 import org.jooq.ForeignKey
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
-
 
 
 // -------------------------------------------------------------------------
@@ -46,6 +38,8 @@ val PLAYERS__PK_PLAYERS: UniqueKey<PlayersRecord> =
     Internal.createUniqueKey(Players.PLAYERS, DSL.name("pk_players"), arrayOf(Players.PLAYERS.PLAYER_ID), true)
 val PLAYERS__UK_PLAYERS_1_102966634: UniqueKey<PlayersRecord> =
     Internal.createUniqueKey(Players.PLAYERS, DSL.name("uk_players_1_102966634"), arrayOf(Players.PLAYERS.UUID), true)
+val SPAWN__PK_SPAWN: UniqueKey<SpawnRecord> =
+    Internal.createUniqueKey(Spawn.SPAWN, DSL.name("pk_spawn"), arrayOf(Spawn.SPAWN.SPAWN_ID), true)
 val WARPS__PK_WARPS: UniqueKey<WarpsRecord> =
     Internal.createUniqueKey(Warps.WARPS, DSL.name("pk_warps"), arrayOf(Warps.WARPS.WARP_ID), true)
 val WARPS__UK_WARPS_1_50937107: UniqueKey<WarpsRecord> =
