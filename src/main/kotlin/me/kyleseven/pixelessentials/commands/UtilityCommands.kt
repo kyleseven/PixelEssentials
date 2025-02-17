@@ -9,6 +9,7 @@ import me.kyleseven.pixelessentials.utils.formatDuration
 import me.kyleseven.pixelessentials.utils.mmd
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandAlias("motd")
@@ -34,14 +35,14 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandCompletion("@players")
     @CommandPermission("pixelessentials.ping")
     fun onPing(sender: CommandSender, @Optional playerName: String?) {
-        val target = playerName?.let { Bukkit.getPlayer(it) }
+        val target = if (playerName != null) Bukkit.getPlayer(playerName) else sender as? Player
         if (target == null) {
             sender.sendMessage(mmd("<red>Player not found</red>"))
             return
         }
 
         val ping = target.ping
-        sender.sendMessage(mmd("<gray>${target.name}'s ping: <white>$ping</white>ms</gray>"))
+        sender.sendMessage(mmd("<gray>${target.name}'s ping: <white>${ping}ms</white>"))
     }
 
     @CommandAlias("whois")
