@@ -118,6 +118,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
 
             val currentTimestamp = (System.currentTimeMillis() / 1000)
             val sessionTime = (currentTimestamp - (sessionStartTimes[player.uniqueId] ?: currentTimestamp))
+            sessionStartTimes.remove(player.uniqueId)
 
             plugin.playerRepository.updateLastSeenAndPlaytime(player.uniqueId, sessionTime)
             plugin.playerRepository.upsertPlayerLastLocation(
