@@ -1,15 +1,29 @@
 # PixelEssentials config
-# MOTD and Welcome Message use MiniMessage: https://webui.advntr.dev/
+# All strings use MiniMessage formatting. Test them at https://webui.advntr.dev/
 
+# Available placeholders:
+# {username} - Player's username
+# {prefix} - Player's prefix
+# {message} - Player's message
 chat:
   custom-format:
     enabled: true
     format: "<gray>[<reset>{prefix}<gray>] <reset>{username}<gray>: <reset>{message}"
 
+# Available placeholders:
+# {username} - Player's username
+# {displayname} - Player's display name
+# {server_time} - Server's current time. Use {server_time:format} to format it. Example: {server_time:h:mm a}
+# {world_time} - World's current time. Use {world_time:format} to format it. Example: {world_time:h:mm a}
+# {online} - Online players count
+# {max_players} - Maximum players count
+# {version} - Server's version
 motd:
   show-on-join: true
   message: "<gradient:#b0bec5:#eceff1>Welcome back, <gradient:#ff7e5f:#feb47b>{username}</gradient>!</gradient>\n<gradient:#b0bec5:#eceff1>It's currently <gradient:#ff7e5f:#feb47b>{server_time:h:mm a}</gradient> on <gradient:#ff7e5f:#feb47b>{server_time:M/d/y}</gradient>.</gradient>\n<gradient:#b0bec5:#eceff1>There are <gradient:#ff7e5f:#feb47b>{online}</gradient> players online.</gradient>"
 
+# Available placeholders:
+# {username} - Player's username
 messages:
   welcome-message:
     enabled: true
