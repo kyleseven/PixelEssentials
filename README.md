@@ -16,6 +16,8 @@ Once built, the jar can be found in the `build/libs` directory.
 
 ## Command Reference
 
+### PixelEssentials Commands
+
 | Command      | Description                                                      | Permission                                                                                      |
 |--------------|------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
 | `/tpa`       | Request to teleport to a player.                                 | `pixelessentials.tpa`                                                                           |
@@ -40,3 +42,16 @@ Once built, the jar can be found in the `build/libs` directory.
 | `/ping`      | See the ping of yourself or another player.                      | `pixelessentials.ping`                                                                          |
 | `/seen`      | See when a player was last online.                               | `pixelessentials.seen`                                                                          |
 | `/whois`     | See various info about a player, including UUID, IP, Ban Status. | `pixelessentials.whois`                                                                         |
+
+### Alias Commands
+
+These commands serve as shortcuts for commonly used default Minecraft commands.
+They function identically to their original counterparts and require the same permissions to execute.
+
+| Command | Description                     | Permission                   |
+|---------|---------------------------------|------------------------------|
+| `/gmc`  | Alias for `/gamemode creative`  | `minecraft.command.gamemode` |
+| `/gms`  | Alias for `/gamemode survival`  | `minecraft.command.gamemode` |                              |
+| `/gma`  | Alias for `/gamemode adventure` | `minecraft.command.gamemode` |
+| `/gmsp` | Alias for `/gamemode spectator` | `minecraft.command.gamemode` |
+| `/i`    | Alias for `/give` (for self)    | `minecraft.command.give`     |
