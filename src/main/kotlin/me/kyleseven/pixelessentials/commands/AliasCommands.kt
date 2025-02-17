@@ -8,6 +8,7 @@ import org.bukkit.entity.Player
 class AliasCommands : BaseCommand() {
     @CommandAlias("gmc")
     @Description("Switch to creative mode")
+    @CommandPermission("minecraft.command.gamemode")
     @CommandCompletion("@players")
     fun onGmc(player: Player, @Optional targetPlayer: String?) {
         val command = if (targetPlayer != null) {
@@ -20,6 +21,7 @@ class AliasCommands : BaseCommand() {
 
     @CommandAlias("gms")
     @Description("Switch to survival mode")
+    @CommandPermission("minecraft.command.gamemode")
     @CommandCompletion("@players")
     fun onGms(player: Player, @Optional targetPlayer: String?) {
         val command = if (targetPlayer != null) {
@@ -32,6 +34,7 @@ class AliasCommands : BaseCommand() {
 
     @CommandAlias("gmsp")
     @Description("Switch to spectator mode")
+    @CommandPermission("minecraft.command.gamemode")
     @CommandCompletion("@players")
     fun onGmsp(player: Player, @Optional targetPlayer: String?) {
         val command = if (targetPlayer != null) {
@@ -44,6 +47,7 @@ class AliasCommands : BaseCommand() {
 
     @CommandAlias("gma")
     @Description("Switch to adventure mode")
+    @CommandPermission("minecraft.command.gamemode")
     @CommandCompletion("@players")
     fun onGma(player: Player, @Optional targetPlayer: String?) {
         val command = if (targetPlayer != null) {
@@ -56,6 +60,7 @@ class AliasCommands : BaseCommand() {
 
     @CommandAlias("i")
     @CommandCompletion("@materials")
+    @CommandPermission("minecraft.command.give")
     @Description("Give an item to yourself")
     fun onI(player: Player, item: String, @Default("1") amount: Int) {
         val command = "give ${player.name} $item $amount"
