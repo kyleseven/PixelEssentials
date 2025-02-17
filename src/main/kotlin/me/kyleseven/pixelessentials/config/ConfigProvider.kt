@@ -1,6 +1,9 @@
 package me.kyleseven.pixelessentials.config
 
 sealed interface ConfigProvider {
+    val customChatEnabled: Boolean
+    val customChatFormat: String
+
     val motdShowOnJoin: Boolean
     val motd: String
 

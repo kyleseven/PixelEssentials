@@ -19,6 +19,9 @@ repositories {
     maven("https://repo.aikar.co/content/groups/aikar/") {
         name = "aikar"
     }
+    maven("https://jitpack.io") {
+        name = "jitpack"
+    }
 }
 
 dependencies {
@@ -28,6 +31,9 @@ dependencies {
     compileOnly("org.apache.logging.log4j:log4j-core:2.24.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
+
+    // Vault
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
 
     // Database
     compileOnly("org.xerial:sqlite-jdbc:3.48.0.0")

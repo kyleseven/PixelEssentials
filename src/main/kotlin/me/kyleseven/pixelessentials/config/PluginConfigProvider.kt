@@ -3,6 +3,13 @@ package me.kyleseven.pixelessentials.config
 import me.kyleseven.pixelessentials.PixelEssentials
 
 class PluginConfigProvider(private val plugin: PixelEssentials) : ConfigProvider {
+    // Chat
+    override val customChatEnabled: Boolean
+        get() = plugin.config.getBoolean("chat.custom-format.enabled")
+
+    override val customChatFormat: String
+        get() = plugin.config.getString("chat.custom-format.format").toString()
+
     // MOTD
     override val motdShowOnJoin: Boolean
         get() = plugin.config.getBoolean("motd.show-on-join")
