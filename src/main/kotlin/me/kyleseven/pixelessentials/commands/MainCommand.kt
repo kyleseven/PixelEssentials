@@ -62,7 +62,7 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Displays the plugin version")
     fun onVersion(sender: CommandSender) {
         @Suppress("DEPRECATION") // Description still applies to this plugin
-        sender.sendMessage(mmd("<gray>PixelEssentials <u>${plugin.description.version}</u></gray>"))
+        sender.sendMessage(mmd("<gray>PixelEssentials ${plugin.description.version}</gray> by PixelArray"))
     }
 
     @Subcommand("reload")
