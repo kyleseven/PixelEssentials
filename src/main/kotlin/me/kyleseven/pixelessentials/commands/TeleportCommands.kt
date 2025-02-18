@@ -260,7 +260,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandAlias("setwarp")
     @Description("Set a warp location")
     @CommandPermission("pixelessentials.setwarp")
-    fun onSetwarp(player: Player, name: String) {
+    fun onSetwarp(player: Player, @Single name: String) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val warp = plugin.warpRepository.getWarp(name)
             if (warp != null) {
@@ -291,7 +291,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandAlias("delwarp")
     @Description("Delete a warp location")
     @CommandPermission("pixelessentials.delwarp")
-    fun onDelwarp(player: Player, name: String) {
+    fun onDelwarp(player: Player, @Single name: String) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             plugin.warpRepository.getWarp(name) ?: run {
                 Bukkit.getScheduler().runTask(plugin, Runnable {
@@ -311,7 +311,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandAlias("warp")
     @Description("Teleport to a warp location or list all warps")
     @CommandPermission("pixelessentials.warp")
-    fun onWarp(player: Player, @Optional name: String?) {
+    fun onWarp(player: Player, @Optional @Single name: String?) {
         // List all warp locations if name is not provided
         if (name.isNullOrBlank()) {
             if (!player.hasPermission("pixelessentials.warp.list")) {
