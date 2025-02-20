@@ -85,6 +85,11 @@ class TeleportManager(private val plugin: PixelEssentials) {
 
         if (delaySeconds <= 0) {
             playerToMove.teleport(destination())
+            val destinationDisplayName = when (request) {
+                is TeleportRequest.PlayerToPlayer -> mms(request.target.displayName())
+                is TeleportRequest.ToLocation -> request.destinationName
+            }
+            playerToMove.sendMessage(mmd("<gray>Teleported to</gray> <white>$destinationDisplayName</white><gray>.</gray>"))
             if (applyCooldown) {
                 setCooldown(playerToMove)
             }
