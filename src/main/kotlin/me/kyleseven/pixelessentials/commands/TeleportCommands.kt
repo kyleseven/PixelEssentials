@@ -12,6 +12,7 @@ import me.kyleseven.pixelessentials.utils.mmd
 import me.kyleseven.pixelessentials.utils.mms
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
@@ -311,11 +312,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandAlias("warp")
     @Description("Teleport to a warp location or list all warps")
     @CommandPermission("pixelessentials.warp")
-    fun onWarp(player: Player, @Optional @Single name: String?) {
-        // List all warp locations if name is not provided
-        if (name.isNullOrBlank()) {
-            if (!player.hasPermission("pixelessentials.warp.list")) {
-                player.sendMessage(mmd("<red>You don't have permission to list warps.</red>"))
+    fun onWarp(sender: CommandSender, @Optional @Single name: String?) {
+        // List all warp locations if name is not provided or sender is not a player
+        if (name.isNullOrBlank() || sender !is Player) {
+            if (!sender.hasPermission("pixelessentials.warp.list")) {
+                sender.sendMessage(mmd("<red>You don't have permission to list warps.</red>"))
                 return
             }
 
@@ -338,11 +339,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
                 Bukkit.getScheduler().runTask(plugin, Runnable inner@{
                     if (warps.isEmpty()) {
-                        player.sendMessage(mmd("<red>There are no warps.</red>"))
+                        sender.sendMessage(mmd("<red>There are no warps.</red>"))
                         return@inner
                     }
 
-                    player.sendMessage(mmd(warpList))
+                    sender.sendMessage(mmd(warpList))
                 })
             })
 
@@ -350,25 +351,25 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         }
 
         // Teleport to warp location if name is provided
-        if (checkCooldownAndNotify(player)) return
+        if (checkCooldownAndNotify(sender)) return
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val warp = plugin.warpRepository.getWarp(name) ?: run {
                 Bukkit.getScheduler().runTask(plugin, Runnable {
-                    player.sendMessage(mmd("<red>Warp location <white>$name</white> does not exist.</red>"))
+                    sender.sendMessage(mmd("<red>Warp location <white>$name</white> does not exist.</red>"))
                 })
                 return@Runnable
             }
 
             Bukkit.getScheduler().runTask(plugin, Runnable inner@{
                 val world = Bukkit.getWorld(warp.world) ?: run {
-                    player.sendMessage(mmd("<red>World <white>${warp.world}</white> does not exist.</red>"))
+                    sender.sendMessage(mmd("<red>World <white>${warp.world}</white> does not exist.</red>"))
                     return@inner
                 }
 
                 plugin.teleportManager.scheduleTeleport(
                     TeleportRequest.ToLocation(
-                        player = player,
+                        player = sender,
                         locationProvider = {
                             Location(
                                 world,
