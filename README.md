@@ -39,8 +39,8 @@ Once built, the jar can be found in the `build/libs` directory.
 | `/spawn`     | Teleport to the spawn location.                                       | `pixelessentials.spawn`                                                                         |
 | `/setspawn`  | Set the spawn location.                                               | `pixelessentials.setspawn`                                                                      |
 | `/delspawn`  | Delete the spawn location.                                            | `pixelessentials.delspawn`                                                                      |
-| `/tell`      | Send a private message to a player.                                   | `pixelessentials.tell`                                                                          |
-| `/reply`     | Send a private message to the last person who messaged you.           | `pixelessentials.tell`                                                                          |
+| `/tell`      | Send a private message to a player.                                   | `pixelessentials.msg`                                                                           |
+| `/reply`     | Send a private message to the last person who messaged you.           | `pixelessentials.msg`                                                                           |
 | `/motd`      | See the message of the day.                                           | `pixelessentials.motd`                                                                          |
 | `/list`      | See a list of all online players.                                     | `pixelessentials.list`                                                                          |
 | `/ping`      | See the ping of yourself or another player.                           | `pixelessentials.ping`                                                                          |

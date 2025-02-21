@@ -33,11 +33,11 @@ class ChatCommands : BaseCommand() {
         lastReceivedMessages[trackingKey] = MessageData(senderName, Instant.now())
     }
 
-    @CommandAlias("tell|msg|m|whisper")
+    @CommandAlias("msg|m|whisper|w|tell")
     @Description("Send a private message to a player or console")
     @CommandCompletion("@players|console")
-    @CommandPermission("pixelessentials.tell")
-    fun onTell(sender: CommandSender, targetName: String, message: String) {
+    @CommandPermission("pixelessentials.msg")
+    fun onMsg(sender: CommandSender, targetName: String, message: String) {
         val target = when (targetName.lowercase()) {
             "console" -> Bukkit.getConsoleSender()
             else -> Bukkit.getPlayer(targetName) ?: run {
@@ -51,7 +51,7 @@ class ChatCommands : BaseCommand() {
 
     @CommandAlias("reply|r")
     @Description("Reply to the last player who messaged you")
-    @CommandPermission("pixelessentials.tell")
+    @CommandPermission("pixelessentials.msg")
     fun onReply(sender: CommandSender, message: String) {
         val trackingKey = if (sender is ConsoleCommandSender) consoleName else sender.name
         val lastMessageData = lastReceivedMessages[trackingKey]
