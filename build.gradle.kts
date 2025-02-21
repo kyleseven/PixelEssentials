@@ -29,7 +29,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.1")
     compileOnly("org.apache.logging.log4j:log4j-core:2.24.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
     // Vault
@@ -37,8 +37,8 @@ dependencies {
 
     // Database
     compileOnly("org.xerial:sqlite-jdbc:3.48.0.0")
-    implementation("org.jooq:jooq:3.19.18")
-    implementation("org.flywaydb:flyway-core:11.3.0")
+    compileOnly("org.jooq:jooq:3.19.18")
+    compileOnly("org.flywaydb:flyway-core:11.3.0")
 
     // Jooq Codegen
     jooqCodegen("org.xerial:sqlite-jdbc:3.48.0.0")
@@ -113,17 +113,12 @@ tasks.shadowJar {
         attributes["paperweight-mappings-namespace"] = "mojang"
     }
 
-    relocate("kotlin", "me.kyleseven.pixelessentials.kotlin")
     relocate("co.aikar.commands", "me.kyleseven.pixelessentials.acf")
     relocate("co.aikar.locales", "me.kyleseven.pixelessentials.locales")
-    relocate("org.flywaydb", "me.kyleseven.pixelessentials.flyway")
-    relocate("org.jooq", "me.kyleseven.pixelessentials.jooq")
 
     mergeServiceFiles()
 
-    minimize {
-        exclude(dependency("org.flywaydb:.*:.*"))
-    }
+    minimize()
 }
 
 tasks.processResources {

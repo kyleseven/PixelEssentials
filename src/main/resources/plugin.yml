@@ -4,3 +4,7 @@ main: me.kyleseven.pixelessentials.PixelEssentials
 api-version: '1.21'
 depend:
   - Vault
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:2.1.10
+  - org.jooq:jooq:3.19.18
+  - org.flywaydb:flyway-core:11.3.0

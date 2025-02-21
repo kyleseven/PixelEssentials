@@ -29,7 +29,7 @@ class DatabaseManager(private val plugin: PixelEssentials) {
             }
 
             // Disable Flyway logging
-            Configurator.setLevel("me.kyleseven.pixelessentials.flyway.core", Level.WARN)
+            Configurator.setLevel("org.flywaydb.core", Level.WARN)
 
             // Run Flyway Migrations
             Flyway.configure(plugin.javaClass.classLoader)
@@ -45,8 +45,7 @@ class DatabaseManager(private val plugin: PixelEssentials) {
             System.setProperty("org.jooq.no-logo", "true")
             System.setProperty("org.jooq.no-tips", "true")
             System.setProperty(
-                "me.kyleseven.pixelessentials.jooq.log.me.kyleseven.pixelessentials.jooq.impl.DefaultExecuteContext.logVersionSupport",
-                "ERROR"
+                "org.jooq.log.org.jooq.impl.DefaultExecuteContext.logVersionSupport", "ERROR"
             )
 
             return true
