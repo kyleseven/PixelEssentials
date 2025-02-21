@@ -130,7 +130,6 @@ open class Spawn(
      * Create a <code>spawn</code> table reference
      */
     constructor() : this(DSL.name("spawn"), null)
-
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
     override fun getPrimaryKey(): UniqueKey<SpawnRecord> = SPAWN__PK_SPAWN
     override fun `as`(alias: String): Spawn = Spawn(DSL.name(alias), this)

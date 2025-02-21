@@ -7,7 +7,7 @@ package me.kyleseven.pixelessentials.database.generated.tables
 import me.kyleseven.pixelessentials.database.generated.DefaultSchema
 import me.kyleseven.pixelessentials.database.generated.indexes.IDX_WARPS_NAME
 import me.kyleseven.pixelessentials.database.generated.keys.WARPS__PK_WARPS
-import me.kyleseven.pixelessentials.database.generated.keys.WARPS__UK_WARPS_1_50937107
+import me.kyleseven.pixelessentials.database.generated.keys.WARPS__UK_WARPS_1_40153825
 import me.kyleseven.pixelessentials.database.generated.tables.records.WarpsRecord
 import org.jooq.*
 import org.jooq.impl.AutoConverter
@@ -58,7 +58,7 @@ open class Warps(
      */
     val WARP_ID: TableField<WarpsRecord, Long?> = createField(
         DSL.name("warp_id"),
-        SQLDataType.BIGINT.identity(true),
+        SQLDataType.BIGINT,
         this,
         "",
         AutoConverter<Long, Long>(Long::class.java, Long::class.java)
@@ -140,9 +140,8 @@ open class Warps(
     constructor() : this(DSL.name("warps"), null)
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
     override fun getIndexes(): List<Index> = listOf(IDX_WARPS_NAME)
-    override fun getIdentity(): Identity<WarpsRecord, Long?> = super.getIdentity() as Identity<WarpsRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<WarpsRecord> = WARPS__PK_WARPS
-    override fun getUniqueKeys(): List<UniqueKey<WarpsRecord>> = listOf(WARPS__UK_WARPS_1_50937107)
+    override fun getUniqueKeys(): List<UniqueKey<WarpsRecord>> = listOf(WARPS__UK_WARPS_1_40153825)
     override fun `as`(alias: String): Warps = Warps(DSL.name(alias), this)
     override fun `as`(alias: Name): Warps = Warps(alias, this)
     override fun `as`(alias: Table<*>): Warps = Warps(alias.qualifiedName, this)

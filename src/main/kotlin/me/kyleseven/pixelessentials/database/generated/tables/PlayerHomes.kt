@@ -7,7 +7,7 @@ package me.kyleseven.pixelessentials.database.generated.tables
 import me.kyleseven.pixelessentials.database.generated.DefaultSchema
 import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__FK_PLAYER_HOMES_PK_PLAYERS
 import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__PK_PLAYER_HOMES
-import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728
+import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__UK_PLAYER_HOMES_1_7953388
 import me.kyleseven.pixelessentials.database.generated.tables.Players.PlayersPath
 import me.kyleseven.pixelessentials.database.generated.tables.records.PlayerHomesRecord
 import org.jooq.*
@@ -57,7 +57,7 @@ open class PlayerHomes(
      */
     val PLAYER_HOME_ID: TableField<PlayerHomesRecord, Long?> = createField(
         DSL.name("player_home_id"),
-        SQLDataType.BIGINT.identity(true),
+        SQLDataType.BIGINT,
         this,
         "",
         AutoConverter<Long, Long>(Long::class.java, Long::class.java)
@@ -185,10 +185,8 @@ open class PlayerHomes(
         override fun `as`(alias: Table<*>): PlayerHomesPath = PlayerHomesPath(alias.qualifiedName, this)
     }
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
-    override fun getIdentity(): Identity<PlayerHomesRecord, Long?> =
-        super.getIdentity() as Identity<PlayerHomesRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<PlayerHomesRecord> = PLAYER_HOMES__PK_PLAYER_HOMES
-    override fun getUniqueKeys(): List<UniqueKey<PlayerHomesRecord>> = listOf(PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728)
+    override fun getUniqueKeys(): List<UniqueKey<PlayerHomesRecord>> = listOf(PLAYER_HOMES__UK_PLAYER_HOMES_1_7953388)
     override fun getReferences(): List<ForeignKey<PlayerHomesRecord, *>> =
         listOf(PLAYER_HOMES__FK_PLAYER_HOMES_PK_PLAYERS)
 
