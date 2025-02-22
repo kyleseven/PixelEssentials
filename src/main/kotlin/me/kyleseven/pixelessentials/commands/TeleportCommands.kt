@@ -262,6 +262,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Set a warp location")
     @CommandPermission("pixelessentials.setwarp")
     fun onSetwarp(player: Player, @Single name: String) {
+        if (name.length > 32) {
+            player.sendMessage(mmd("<red>Warp location name must be 32 characters or less.</red>"))
+            return
+        }
+
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             val warp = plugin.warpRepository.getWarp(name)
             if (warp != null) {
