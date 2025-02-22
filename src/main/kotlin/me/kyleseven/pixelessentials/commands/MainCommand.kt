@@ -34,7 +34,7 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
             CommandHelp("/spawn", "Teleport to spawn.", listOf("pixelessentials.spawn")),
             CommandHelp("/setspawn", "Set the spawn location.", listOf("pixelessentials.setspawn")),
             CommandHelp("/delspawn", "Delete the spawn location.", listOf("pixelessentials.delspawn")),
-            CommandHelp("/tell", "Send a private message to a player.", listOf("pixelessentials.msg")),
+            CommandHelp("/msg", "Send a private message to a player.", listOf("pixelessentials.msg")),
             CommandHelp("/reply", "Reply to the last player who messaged you.", listOf("pixelessentials.msg")),
             CommandHelp("/motd", "See the message of the day.", listOf("pixelessentials.motd")),
             CommandHelp("/list", "See a list of all online players.", listOf("pixelessentials.list")),
