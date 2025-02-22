@@ -34,14 +34,14 @@ class ChatCommands : BaseCommand() {
     }
 
     @CommandAlias("msg|m|whisper|w|tell")
-    @Description("Send a private message to a player or console")
-    @CommandCompletion("@players|console")
+    @Description("Send a private message to a player")
+    @CommandCompletion("@players")
     @CommandPermission("pixelessentials.msg")
     fun onMsg(sender: CommandSender, targetName: String, message: String) {
         val target = when (targetName.lowercase()) {
             "console" -> Bukkit.getConsoleSender()
             else -> Bukkit.getPlayer(targetName) ?: run {
-                sender.sendMessage(mmd("<red>Target not found</red>"))
+                sender.sendMessage(mmd("<red>Player not found</red>"))
                 return
             }
         }
