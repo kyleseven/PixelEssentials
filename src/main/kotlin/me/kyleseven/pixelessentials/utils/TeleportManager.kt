@@ -232,7 +232,12 @@ class TeleportManager(private val plugin: PixelEssentials) {
         val requester = Bukkit.getPlayer(request.requester)
 
         requester?.sendMessage(mmd("<white>${mms(target.displayName())}</white> <red>denied</red> <gray>your teleport request.</gray>"))
-        target.sendMessage(mmd("<red>Denied</red> <gray>teleport request from</gray> <white>${requester?.displayName() ?: "Unknown Player"}</white><gray>.</gray>"))
+        target.sendMessage(
+            mmd(
+                "<red>Denied</red> <gray>teleport request from</gray> <white>${
+                    requester?.displayName()
+                        ?.let { mms(it) } ?: "Unknown Player"
+                }</white><gray>.</gray>"))
         return true
     }
 
