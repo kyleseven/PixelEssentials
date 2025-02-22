@@ -7,9 +7,7 @@ import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.PlayerHome
 import me.kyleseven.pixelessentials.database.models.Spawn
 import me.kyleseven.pixelessentials.database.models.Warp
-import me.kyleseven.pixelessentials.utils.TeleportRequest
-import me.kyleseven.pixelessentials.utils.mmd
-import me.kyleseven.pixelessentials.utils.mms
+import me.kyleseven.pixelessentials.utils.*
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
@@ -185,7 +183,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @Description("Set your home location")
     @CommandPermission("pixelessentials.sethome")
     fun onSethome(player: Player) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             plugin.playerRepository.upsertPlayerHome(
                 player.uniqueId, PlayerHome(
                     x = player.location.x,
@@ -197,27 +195,27 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 )
             )
 
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+            runTask(plugin) {
                 player.sendMessage(mmd("<gray>Your home location has been set.</gray>"))
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("delhome")
     @Description("Delete your home location")
     @CommandPermission("pixelessentials.delhome")
     fun onDelhome(player: Player) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             plugin.playerRepository.getPlayerHome(player.uniqueId) ?: run {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+                runTask(plugin) {
                     player.sendMessage(mmd("<red>You don't have a home location set.</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
             plugin.playerRepository.deletePlayerHome(player.uniqueId)
             player.sendMessage(mmd("<gray>Your home location has been deleted.</gray>"))
-        })
+        }
     }
 
     @CommandAlias("home")
@@ -226,16 +224,16 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onHome(player: Player) {
         if (checkCooldownAndNotify(player)) return
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val home = plugin.playerRepository.getPlayerHome(player.uniqueId) ?: run {
                 player.sendMessage(mmd("<red>You don't have a home location set.</red>"))
-                return@Runnable
+                return@runTaskAsync
             }
 
-            Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+            runTask(plugin) {
                 val world = Bukkit.getWorld(home.world) ?: run {
                     player.sendMessage(mmd("<red>World <white>${home.world}</white> does not exist.</red>"))
-                    return@inner
+                    return@runTask
                 }
 
                 plugin.teleportManager.scheduleTeleport(
@@ -254,8 +252,8 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         destinationName = "home"
                     )
                 )
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("setwarp")
@@ -267,13 +265,13 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
             return
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val warp = plugin.warpRepository.getWarp(name)
             if (warp != null) {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+                runTask(plugin) {
                     player.sendMessage(mmd("<red>Warp location <white>${warp.name}</white> already exists.</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
             plugin.warpRepository.upsertWarp(
@@ -288,30 +286,30 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 )
             )
 
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+            runTask(plugin) {
                 player.sendMessage(mmd("<gray>Warp location <white>$name</white> has been set.</gray>"))
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("delwarp")
     @Description("Delete a warp location")
     @CommandPermission("pixelessentials.delwarp")
     fun onDelwarp(player: Player, @Single name: String) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             plugin.warpRepository.getWarp(name) ?: run {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+                runTask(plugin) {
                     player.sendMessage(mmd("<red>Warp location <white>$name</white> does not exist.</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
             plugin.warpRepository.deleteWarp(name)
 
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+            runTask(plugin) {
                 player.sendMessage(mmd("<gray>Warp location <white>$name</white> has been deleted.</gray>"))
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("warp")
@@ -325,7 +323,7 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 return
             }
 
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            runTaskAsync(plugin) {
                 val warps = plugin.warpRepository.getWarps()
 
                 var warpList = "<gray>Warps:</gray> "
@@ -342,15 +340,15 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     }
                 }
 
-                Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+                runTask(plugin) {
                     if (warps.isEmpty()) {
                         sender.sendMessage(mmd("<red>There are no warps.</red>"))
-                        return@inner
+                        return@runTask
                     }
 
                     sender.sendMessage(mmd(warpList))
-                })
-            })
+                }
+            }
 
             return
         }
@@ -358,18 +356,18 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
         // Teleport to warp location if name is provided
         if (checkCooldownAndNotify(sender)) return
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val warp = plugin.warpRepository.getWarp(name) ?: run {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+                runTask(plugin) {
                     sender.sendMessage(mmd("<red>Warp location <white>$name</white> does not exist.</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
-            Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+            runTask(plugin) {
                 val world = Bukkit.getWorld(warp.world) ?: run {
                     sender.sendMessage(mmd("<red>World <white>${warp.world}</white> does not exist.</red>"))
-                    return@inner
+                    return@runTask
                 }
 
                 plugin.teleportManager.scheduleTeleport(
@@ -388,8 +386,8 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         destinationName = warp.name
                     )
                 )
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("spawn")
@@ -398,18 +396,18 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onSpawn(player: Player) {
         if (checkCooldownAndNotify(player)) return
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val spawn = plugin.spawnRepository.getSpawn() ?: run {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+                runTask(plugin) {
                     player.sendMessage(mmd("<red>Spawn location has not been set.</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
-            Bukkit.getScheduler().runTask(plugin, Runnable inner@{
+            runTask(plugin) {
                 val world = Bukkit.getWorld(spawn.world) ?: run {
                     player.sendMessage(mmd("<red>World <white>${spawn.world}</white> does not exist.</red>"))
-                    return@inner
+                    return@runTask
                 }
 
                 plugin.teleportManager.scheduleTeleport(
@@ -428,15 +426,15 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         destinationName = "spawn"
                     )
                 )
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("setspawn")
     @Description("Set the spawn location")
     @CommandPermission("pixelessentials.setspawn")
     fun onSetspawn(player: Player) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             plugin.spawnRepository.upsertSpawn(
                 Spawn(
                     x = player.location.x,
@@ -448,29 +446,29 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 )
             )
 
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+            runTask(plugin) {
                 player.sendMessage(mmd("<gray>Spawn location has been set.</gray>"))
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("delspawn")
     @Description("Delete the spawn location")
     @CommandPermission("pixelessentials.delspawn")
     fun onDelspawn(player: Player) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             plugin.spawnRepository.getSpawn() ?: run {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+                runTask(plugin) {
                     player.sendMessage(mmd("<red>Spawn location has not been set.</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
             plugin.spawnRepository.deleteSpawn()
 
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+            runTask(plugin) {
                 player.sendMessage(mmd("<gray>Spawn location has been deleted.</gray>"))
-            })
-        })
+            }
+        }
     }
 }

@@ -4,9 +4,7 @@ import co.aikar.commands.BaseCommand
 import co.aikar.commands.annotation.*
 import io.papermc.paper.ban.BanListType
 import me.kyleseven.pixelessentials.PixelEssentials
-import me.kyleseven.pixelessentials.utils.formatDate
-import me.kyleseven.pixelessentials.utils.formatDuration
-import me.kyleseven.pixelessentials.utils.mmd
+import me.kyleseven.pixelessentials.utils.*
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -50,21 +48,21 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandCompletion("@players")
     @CommandPermission("pixelessentials.whois")
     fun onWhois(sender: CommandSender, playerName: String) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val offlinePlayer = Bukkit.getOfflinePlayer(playerName)
             val player = plugin.playerRepository.getPlayer(offlinePlayer.uniqueId)
             if (player == null) {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+                runTask(plugin) {
                     sender.sendMessage(mmd("<red>Player not found in database</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
             val firstJoin = formatDate("M/d/yyyy h:mm a", player.firstJoin * 1000L)
             val lastSeen = formatDate("M/d/yyyy h:mm a", player.lastSeen * 1000L)
             val totalPlaytime = formatDuration(player.totalPlaytime * 1000L)
 
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+            runTask(plugin) {
                 val banList = Bukkit.getBanList(BanListType.PROFILE)
                 val banEntry = banList.getBanEntry(Bukkit.createProfile(offlinePlayer.uniqueId))
                 val isBanned = banEntry != null
@@ -109,8 +107,8 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 }
 
                 sender.sendMessage(mmd(message.toString().trim()))
-            })
-        })
+            }
+        }
     }
 
     @CommandAlias("seen")
@@ -124,15 +122,13 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
             return
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val offlinePlayer = playerName.let { Bukkit.getOfflinePlayer(it) }
-            val player = plugin.playerRepository.getPlayer(offlinePlayer.uniqueId)
-
-            if (player == null) {
-                Bukkit.getScheduler().runTask(plugin, Runnable {
+            val player = plugin.playerRepository.getPlayer(offlinePlayer.uniqueId) ?: run {
+                runTask(plugin) {
                     sender.sendMessage(mmd("<red>Player not found in database</red>"))
-                })
-                return@Runnable
+                }
+                return@runTaskAsync
             }
 
             val lastSeenTimestamp = player.lastSeen * 1000L
@@ -142,9 +138,10 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     lastSeenTimestamp
                 )
             } (${formatDuration(System.currentTimeMillis() - lastSeenTimestamp)} ago)"
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+
+            runTask(plugin) {
                 sender.sendMessage(mmd("<gray>${player.lastAccountName} was last seen on <white>$lastSeen</white></gray>"))
-            })
-        })
+            }
+        }
     }
 }

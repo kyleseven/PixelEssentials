@@ -1,7 +1,9 @@
 package me.kyleseven.pixelessentials.utils
 
+import me.kyleseven.pixelessentials.PixelEssentials
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import org.bukkit.Bukkit
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -59,4 +61,24 @@ fun formatDuration(milliseconds: Long): String {
         if (minutes > 0) append("${minutes}m ")
         append("${secs}s")
     }.trim()
+}
+
+/**
+ * Run a task asynchronously.
+ *
+ * @param plugin The plugin instance.
+ * @param task The task to run.
+ */
+fun runTaskAsync(plugin: PixelEssentials, task: () -> Unit) {
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable(task))
+}
+
+/**
+ * Run a task synchronously.
+ *
+ * @param plugin The plugin instance.
+ * @param task The task to run.
+ */
+fun runTask(plugin: PixelEssentials, task: () -> Unit) {
+    Bukkit.getScheduler().runTask(plugin, Runnable(task))
 }

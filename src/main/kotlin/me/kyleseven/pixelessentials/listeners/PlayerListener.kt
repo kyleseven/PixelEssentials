@@ -4,6 +4,8 @@ import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.Player
 import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
 import me.kyleseven.pixelessentials.utils.mmd
+import me.kyleseven.pixelessentials.utils.runTask
+import me.kyleseven.pixelessentials.utils.runTaskAsync
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -47,14 +49,14 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         }
         event.joinMessage(null)
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val existingPlayer = plugin.playerRepository.getPlayer(uuid)
             val isNewPlayer = existingPlayer == null
 
             // Teleport them to spawn if they are a new player
             if (isNewPlayer) {
                 plugin.spawnRepository.getSpawn()?.let { spawnLocation ->
-                    Bukkit.getScheduler().runTask(plugin, Runnable {
+                    runTask(plugin) {
                         player.teleport(
                             Location(
                                 Bukkit.getWorld(spawnLocation.world),
@@ -65,7 +67,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
                                 spawnLocation.pitch.toFloat()
                             )
                         )
-                    })
+                    }
                 }
             }
 
@@ -90,7 +92,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
             plugin.playerRepository.upsertPlayer(updatedPlayer)
 
             // Broadcast welcome message
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+            runTask(plugin) {
                 if (isNewPlayer && plugin.configProvider.welcomeMessageEnabled) {
                     val welcomeMessage = plugin.configProvider.welcomeMessage.replace("{username}", player.name)
                     plugin.server.broadcast(mmd(welcomeMessage))
@@ -103,8 +105,8 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
                 if (plugin.configProvider.motdShowOnJoin) {
                     player.sendMessage(plugin.motdBuilder.build(player))
                 }
-            })
-        })
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -113,7 +115,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
             event.quitMessage(mmd(plugin.configProvider.customLeaveMessage.replace("{username}", event.player.name)))
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        runTaskAsync(plugin) {
             val player = event.player
 
             val currentTimestamp = (System.currentTimeMillis() / 1000)
@@ -131,7 +133,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
                     world = player.world.name
                 )
             )
-        })
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
