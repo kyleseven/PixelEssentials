@@ -58,12 +58,12 @@ open class PixelEssentials : JavaPlugin() {
 
         // Commands
         val paperCommandManager = PaperCommandManager(this)
+        paperCommandManager.registerCommand(AdminCommands(this))
+        paperCommandManager.registerCommand(AliasCommands())
+        paperCommandManager.registerCommand(ChatCommands())
         paperCommandManager.registerCommand(MainCommand(this))
         paperCommandManager.registerCommand(TeleportCommands(this))
         paperCommandManager.registerCommand(UtilityCommands(this))
-        paperCommandManager.registerCommand(AliasCommands())
-        paperCommandManager.registerCommand(ChatCommands())
-        paperCommandManager.registerCommand(AdminCommands())
         registerCompletions(paperCommandManager)
     }
 
