@@ -63,6 +63,7 @@ open class PixelEssentials : JavaPlugin() {
         paperCommandManager.registerCommand(UtilityCommands(this))
         paperCommandManager.registerCommand(AliasCommands())
         paperCommandManager.registerCommand(ChatCommands())
+        paperCommandManager.registerCommand(AdminCommands())
         registerCompletions(paperCommandManager)
     }
 

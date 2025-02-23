@@ -44,7 +44,13 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
                 "/whois",
                 "See various info about a player, including UUID, IP, Ban Status.",
                 listOf("pixelessentials.whois")
-            )
+            ),
+            CommandHelp(
+                "/invsee", "Open the inventory of another player.", listOf("pixelessentials.invsee")
+            ),
+            CommandHelp(
+                "/enderchest", "Open the ender chest of another player.", listOf("pixelessentials.enderchest")
+            ),
         )
     }
 
