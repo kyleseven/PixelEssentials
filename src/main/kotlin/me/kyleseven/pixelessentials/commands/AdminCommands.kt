@@ -98,7 +98,7 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     message.appendLine("<gray>Hunger: <white>${onlinePlayer.foodLevel}/20</white></gray>")
                 }
 
-                message.lines().forEach { sender.sendMessage(mmd(it)) }
+                message.trim().lines().forEach { sender.sendMessage(mmd(it)) }
             }
         }
     }
