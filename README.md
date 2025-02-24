@@ -1,6 +1,8 @@
 # PixelEssentials
 
-PixelEssentials is a Spigot plugin designed to provide some essential features for SMP servers, inspired by EssentialsX.
+PixelEssentials is a Paper plugin designed to provide some essential features for SMP servers, inspired by EssentialsX.
+
+This plugin is not compatible with Spigot due to the use of `AsyncChatEvent` and the Adventure API.
 
 **This plugin is still in development and may not be stable. Use at your own risk.**
 
