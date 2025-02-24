@@ -50,8 +50,7 @@ class DatabaseManager(private val plugin: PixelEssentials) {
 
             return true
         } catch (e: Exception) {
-            plugin.logger.severe("Failed to connect to the database: ${e.message}")
-            e.printStackTrace()
+            plugin.logger.log(java.util.logging.Level.SEVERE, "Failed to connect to the database:", e)
             return false
         }
     }
@@ -69,8 +68,7 @@ class DatabaseManager(private val plugin: PixelEssentials) {
                 connection.close()
             }
         } catch (e: Exception) {
-            plugin.logger.severe("Failed to disconnect from the database: ${e.message}")
-            e.printStackTrace()
+            plugin.logger.log(java.util.logging.Level.SEVERE, "Failed to disconnect from the database:", e)
         }
     }
 }
