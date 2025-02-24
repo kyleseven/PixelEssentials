@@ -18,6 +18,12 @@ cd PixelEssentials/
 
 Once built, the jar can be found in the `build/libs` directory.
 
+## Installation
+
+1. Install [Vault](https://www.spigotmc.org/resources/vault.34315/) by placing the jar the `plugins/` directory.
+2. Install PixelEssentials by placing the jar in the `plugins/` directory.
+3. The `config.yml` and SQLite database will be created when the server is started.
+
 ## Command Reference
 
 ### PixelEssentials Commands
