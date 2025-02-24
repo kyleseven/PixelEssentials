@@ -68,7 +68,9 @@ open class PixelEssentials : JavaPlugin() {
     }
 
     override fun onDisable() {
-        databaseManager.disconnect()
+        if (::databaseManager.isInitialized) {
+            databaseManager.disconnect()
+        }
     }
 
     private fun registerCompletions(commandManager: PaperCommandManager) {
