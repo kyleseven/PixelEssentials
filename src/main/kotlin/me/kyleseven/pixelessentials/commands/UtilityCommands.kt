@@ -111,13 +111,13 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 }
 
                 val previousComponent = if (page > 1) {
-                    "<gradient:#ff7e5f:#feb47b><click:run_command:'/playtimetop ${page - 1}'>«</click></gradient>"
+                    "<gradient:#ff7e5f:#feb47b><hover:show_text:'/playtimetop ${page - 1}'><click:run_command:'/playtimetop ${page - 1}'>«</click></hover></gradient>"
                 } else {
                     "<gradient:gray:dark_gray>«</gradient>"
                 }
 
                 val nextComponent = if (page < pageCount) {
-                    "<gradient:#ff7e5f:#feb47b><click:run_command:'/playtimetop ${page + 1}'>»</click></gradient>"
+                    "<gradient:#ff7e5f:#feb47b><hover:show_text:'/playtimetop ${page + 1}'><click:run_command:'/playtimetop ${page + 1}'>»</click></hover></gradient>"
                 } else {
                     "<gradient:gray:dark_gray>»</gradient>"
                 }
