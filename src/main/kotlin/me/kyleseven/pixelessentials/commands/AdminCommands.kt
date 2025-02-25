@@ -49,6 +49,8 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
                 return@runTaskAsync
             }
 
+            val lastLocation = plugin.playerRepository.getPlayerLastLocation(offlinePlayer.uniqueId)
+
             runTask(plugin) {
                 val formatKeyValue = { key: String, value: Any? ->
                     "<gray>$key: <white>${value ?: "N/A"}</white></gray>"
@@ -82,7 +84,9 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     formatKeyValue("Ban Reason", banEntry?.reason ?: "N/A")
                 )
 
-                Bukkit.getPlayer(offlinePlayer.uniqueId)?.let { onlinePlayer ->
+                val onlinePlayer = Bukkit.getPlayer(offlinePlayer.uniqueId)
+                if (onlinePlayer != null) {
+                    // Player is online
                     val loc = onlinePlayer.location
                     infoLines.addAll(
                         listOf(
@@ -93,6 +97,16 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
                             formatKeyValue("Hunger", "${onlinePlayer.foodLevel}/20")
                         )
                     )
+                } else {
+                    // Player is offline
+                    if (lastLocation != null) {
+                        infoLines.add(
+                            formatKeyValue(
+                                "Last Location",
+                                "${lastLocation.world} ${lastLocation.x} ${lastLocation.y} ${lastLocation.z}"
+                            )
+                        )
+                    }
                 }
 
                 infoLines.forEach { sender.sendMessage(mmd(it)) }
