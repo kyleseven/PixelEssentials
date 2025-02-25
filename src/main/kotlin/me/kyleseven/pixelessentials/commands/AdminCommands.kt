@@ -42,63 +42,60 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
     fun onWhois(sender: CommandSender, playerName: String) {
         runTaskAsync(plugin) {
             val offlinePlayer = Bukkit.getOfflinePlayer(playerName)
-            val player = plugin.playerRepository.getPlayer(offlinePlayer.uniqueId)
-            if (player == null) {
+            val player = plugin.playerRepository.getPlayer(offlinePlayer.uniqueId) ?: run {
                 runTask(plugin) {
                     sender.sendMessage(mmd("<red>Player not found in database</red>"))
                 }
                 return@runTaskAsync
             }
 
-            val firstJoin = formatDate("M/d/yyyy h:mm a", player.firstJoin * 1000L)
-            val lastSeen = formatDate("M/d/yyyy h:mm a", player.lastSeen * 1000L)
-            val totalPlaytime = formatDuration(player.totalPlaytime * 1000L)
-
             runTask(plugin) {
+                val formatKeyValue = { key: String, value: Any? ->
+                    "<gray>$key: <white>${value ?: "N/A"}</white></gray>"
+                }
+
                 val banList = Bukkit.getBanList(BanListType.PROFILE)
                 val banEntry = banList.getBanEntry(Bukkit.createProfile(offlinePlayer.uniqueId))
-                val isBanned = banEntry != null
-                val expirationDate = banEntry?.expiration
 
-                val bannedStatus = if (isBanned) {
-                    if (expirationDate != null) {
-                        val formattedExpiration = formatDate("M/d/yyyy h:mm a", expirationDate.time)
+                val bannedStatus = if (banEntry == null) {
+                    "No"
+                } else {
+                    val expiration = banEntry.expiration
+                    if (expiration != null) {
+                        val formattedExpiration = formatDate("M/d/yyyy h:mm a", expiration.time)
                         "Yes (Expires: $formattedExpiration)"
                     } else {
                         "Yes"
                     }
-                } else {
-                    "No"
                 }
 
-                val opStatus = if (offlinePlayer.isOp) "Yes" else "No"
+                val infoLines = mutableListOf(
+                    "<gray>─────── Player Information ───────</gray>",
+                    formatKeyValue("Username", player.lastAccountName),
+                    formatKeyValue("UUID", player.uuid),
+                    formatKeyValue("OP", if (offlinePlayer.isOp) "Yes" else "No"),
+                    formatKeyValue("First Join", formatDate("M/d/yyyy h:mm a", player.firstJoin * 1000L)),
+                    formatKeyValue("Last Seen", formatDate("M/d/yyyy h:mm a", player.lastSeen * 1000L)),
+                    formatKeyValue("Total Playtime", formatDuration(player.totalPlaytime * 1000L)),
+                    formatKeyValue("IP Address", player.ipAddress),
+                    formatKeyValue("Banned", bannedStatus),
+                    formatKeyValue("Ban Reason", banEntry?.reason ?: "N/A")
+                )
 
-                val message = StringBuilder().apply {
-                    appendLine("<gray>─────── Player Information ───────</gray>")
-                    appendLine("<gray>Username: <white>${player.lastAccountName}</white></gray>")
-                    appendLine("<gray>UUID: <white>${player.uuid}</white></gray>")
-                    appendLine("<gray>OP: <white>$opStatus</white></gray>")
-                    appendLine("<gray>First Join: <white>$firstJoin</white></gray>")
-                    appendLine("<gray>Last Seen: <white>$lastSeen</white></gray>")
-                    appendLine("<gray>Total Playtime: <white>$totalPlaytime</white></gray>")
-                    appendLine("<gray>IP Address: <white>${player.ipAddress}</white></gray>")
-                    appendLine("<gray>Banned: <white>$bannedStatus</white></gray>")
-                    appendLine("<gray>Ban Reason: <white>${banEntry?.reason ?: "N/A"}</white></gray>")
-                }
-
-                // If the player is online, get additional information
-                val onlinePlayer = Bukkit.getPlayer(offlinePlayer.uniqueId)
-                if (onlinePlayer != null) {
+                Bukkit.getPlayer(offlinePlayer.uniqueId)?.let { onlinePlayer ->
                     val loc = onlinePlayer.location
-                    val locationStr = "${loc.world.name} ${loc.blockX} ${loc.blockY} ${loc.blockZ}"
-                    val gameModeStr = onlinePlayer.gameMode.name.lowercase().replaceFirstChar { it.uppercase() }
-                    message.appendLine("<gray>Location: <white>$locationStr</white></gray>")
-                    message.appendLine("<gray>Gamemode: <white>${gameModeStr}</white></gray>")
-                    message.appendLine("<gray>Health: <white>${onlinePlayer.health.toInt()}/20</white></gray>")
-                    message.appendLine("<gray>Hunger: <white>${onlinePlayer.foodLevel}/20</white></gray>")
+                    infoLines.addAll(
+                        listOf(
+                            formatKeyValue("Location", "${loc.world.name} ${loc.blockX} ${loc.blockY} ${loc.blockZ}"),
+                            formatKeyValue(
+                                "Gamemode", onlinePlayer.gameMode.name.lowercase().replaceFirstChar { it.uppercase() }),
+                            formatKeyValue("Health", "${onlinePlayer.health.toInt()}/20"),
+                            formatKeyValue("Hunger", "${onlinePlayer.foodLevel}/20")
+                        )
+                    )
                 }
 
-                message.trim().lines().forEach { sender.sendMessage(mmd(it)) }
+                infoLines.forEach { sender.sendMessage(mmd(it)) }
             }
         }
     }
