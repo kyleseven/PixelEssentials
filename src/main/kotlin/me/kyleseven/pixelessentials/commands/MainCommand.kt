@@ -51,6 +51,11 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
             CommandHelp(
                 "/enderchest", "Open the ender chest of another player.", listOf("pixelessentials.enderchest")
             ),
+            CommandHelp(
+                "/playtimetop",
+                "Show a leaderboard of players ordered by playtime.",
+                listOf("pixelessentials.playtimetop")
+            ),
         )
     }
 

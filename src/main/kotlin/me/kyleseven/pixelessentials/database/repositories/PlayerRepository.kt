@@ -151,4 +151,22 @@ class PlayerRepository(private val dsl: DSLContext) {
             )
             .execute()
     }
+
+    fun getPlaytimeLeaderboard(page: Int, pageSize: Int): List<Player> {
+        return dsl.selectFrom(PLAYERS)
+            .orderBy(PLAYERS.TOTAL_PLAYTIME.desc())
+            .limit(pageSize)
+            .offset((page - 1) * pageSize)
+            .fetch()
+            .map { player ->
+                Player(
+                    lastAccountName = player.lastAccountName,
+                    uuid = player.uuid,
+                    ipAddress = player.ipAddress,
+                    firstJoin = player.firstJoin,
+                    lastSeen = player.lastSeen,
+                    totalPlaytime = player.totalPlaytime
+                )
+            }
+    }
 }

@@ -75,4 +75,59 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
             }
         }
     }
+
+    @CommandAlias("playtimetop")
+    @Description("Show a leaderboard of players ordered by play time")
+    @CommandPermission("pixelessentials.playtimetop")
+    fun onPlaytimeTop(sender: CommandSender, @Default("1") page: Int) {
+        val pageSize = 8
+        runTaskAsync(plugin) {
+            val pageCount = Math.ceilDiv(plugin.playerRepository.getPlayerCount(), pageSize)
+            if (page < 1 || page > pageCount) {
+                runTask(plugin) {
+                    sender.sendMessage(mmd("<red>Invalid page number</red>"))
+                }
+                return@runTaskAsync
+            }
+
+            val players = plugin.playerRepository.getPlaytimeLeaderboard(page, pageSize)
+            val startRank = (page - 1) * pageSize + 1
+
+            runTask(plugin) {
+                sender.sendMessage(
+                    mmd(
+                        "<gradient:dark_gray:gray>───────</gradient> <gradient:#ff7e5f:#feb47b>Playtime Top</gradient> <gradient:gray:dark_gray>───────</gradient>"
+                    )
+                )
+
+                players.forEachIndexed { index, player ->
+                    val rank = startRank + index
+                    val playtime = String.format("%.2f hours", player.totalPlaytime / 3600.0)
+                    sender.sendMessage(
+                        mmd(
+                            "<gradient:#ff7e5f:#feb47b>$rank.</gradient> <gray>${player.lastAccountName}</gray> <dark_gray>:</dark_gray> <white>$playtime</white>"
+                        )
+                    )
+                }
+
+                val previousComponent = if (page > 1) {
+                    "<gradient:#ff7e5f:#feb47b><click:run_command:'/playtimetop ${page - 1}'>«</click></gradient>"
+                } else {
+                    "<gradient:gray:dark_gray>«</gradient>"
+                }
+
+                val nextComponent = if (page < pageCount) {
+                    "<gradient:#ff7e5f:#feb47b><click:run_command:'/playtimetop ${page + 1}'>»</click></gradient>"
+                } else {
+                    "<gradient:gray:dark_gray>»</gradient>"
+                }
+
+                sender.sendMessage(
+                    mmd(
+                        "<gradient:dark_gray:gray>──────</gradient> $previousComponent <gradient:#ff7e5f:#feb47b>Page $page of $pageCount</gradient> $nextComponent <gradient:gray:dark_gray>──────</gradient>"
+                    )
+                )
+            }
+        }
+    }
 }
