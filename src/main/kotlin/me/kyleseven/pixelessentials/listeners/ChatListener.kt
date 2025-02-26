@@ -29,12 +29,14 @@ class ChatListener(private val plugin: PixelEssentials) : Listener, ChatRenderer
         val format = plugin.configProvider.customChatFormat
 
         val prefix = plugin.vaultChat.getPlayerPrefix(source)
+        val suffix = plugin.vaultChat.getPlayerSuffix(source)
         val username = source.name
         val rawMessage = LegacyComponentSerializer.legacySection().serialize(message)
 
         val processedMessage = processMessage(source, rawMessage)
 
         val formattedMessage = format.replace("{prefix}", prefix)
+            .replace("{suffix}", suffix)
             .replace("{username}", username)
             .replace("{message}", processedMessage)
 

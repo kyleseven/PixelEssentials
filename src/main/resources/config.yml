@@ -4,6 +4,7 @@
 # Available placeholders:
 # {username} - Player's username
 # {prefix} - Player's prefix
+# {suffix} - Player's suffix
 # {message} - Player's message
 chat:
   custom-format:
