@@ -118,6 +118,37 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
         }
     }
 
+    @CommandAlias("playtime")
+    @Description("Check your own play time or another player's")
+    @CommandPermission("pixelessentials.playtime")
+    fun onPlaytime(sender: CommandSender, @Optional @Single playerName: String?) {
+        if (sender !is Player && playerName == null) {
+            sender.sendMessage(mmd("<red>You must specify a player name when running this command from console.</red>"))
+            return
+        }
+
+        runTaskAsync(plugin) {
+            val playerUuid = if (playerName != null) {
+                val target = Bukkit.getPlayer(playerName) ?: Bukkit.getOfflinePlayer(playerName)
+                target.uniqueId
+            } else {
+                (sender as Player).uniqueId
+            }
+
+            val player = plugin.playerRepository.getPlayer(playerUuid) ?: run {
+                runTask(plugin) {
+                    sender.sendMessage(mmd("<red>Player not found in database</red>"))
+                }
+                return@runTaskAsync
+            }
+
+            val playtime = String.format("%.2f hours", player.totalPlaytime / 3600.0)
+            runTask(plugin) {
+                sender.sendMessage(mmd("<gray>${player.lastAccountName}'s play time: <white>$playtime</white></gray>"))
+            }
+        }
+    }
+
     @CommandAlias("playtimetop")
     @Description("Show a leaderboard of players ordered by play time")
     @CommandPermission("pixelessentials.playtimetop")

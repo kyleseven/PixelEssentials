@@ -58,7 +58,8 @@ Once built, the jar can be found in the `build/libs` directory.
 | `/whois`       | See various info about a player, including UUID, IP, Ban Status.      | `pixelessentials.whois`                                                                         |
 | `/invsee`      | Open another player's inventory.                                      | `pixelessentials.invsee`                                                                        |
 | `/enderchest`  | Open another player's ender chest.                                    | `pixelessentials.enderchest`                                                                    |
-| `/sudo`        | Force another player to run a command                                 | `pixelessentials.sudo`                                                                          |
+| `/sudo`        | Force another player to run a command.                                | `pixelessentials.sudo`                                                                          |
+| `/playtime`    | See your own or another player's playtime.                            | `pixelessentials.playtime`                                                                      |
 | `/playtimetop` | Show a leaderboard of players ordered by play time.                   | `pixelessentials.playtimetop`                                                                   |
 
 ### Alias Commands

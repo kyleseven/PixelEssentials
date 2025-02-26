@@ -57,6 +57,9 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
                 "/sudo", "Force another player to run a command.", listOf("pixelessentials.sudo")
             ),
             CommandHelp(
+                "/playtime", "See your own or another player's playtime.", listOf("pixelessentials.playtime")
+            ),
+            CommandHelp(
                 "/playtimetop",
                 "Show a leaderboard of players ordered by playtime.",
                 listOf("pixelessentials.playtimetop")
