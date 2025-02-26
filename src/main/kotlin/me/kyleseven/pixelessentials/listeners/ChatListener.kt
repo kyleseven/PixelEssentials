@@ -5,6 +5,7 @@ import io.papermc.paper.event.player.AsyncChatEvent
 import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.utils.mmd
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -31,17 +32,27 @@ class ChatListener(private val plugin: PixelEssentials) : Listener, ChatRenderer
         val username = source.name
         val rawMessage = LegacyComponentSerializer.legacySection().serialize(message)
 
-        val processedMessage = if (source.hasPermission("pixelessentials.chat.url")) {
-            makeUrlsClickable(rawMessage)
-        } else {
-            rawMessage
-        }
+        val processedMessage = processMessage(source, rawMessage)
 
         val formattedMessage = format.replace("{prefix}", prefix)
             .replace("{username}", username)
             .replace("{message}", processedMessage)
 
         return mmd(formattedMessage)
+    }
+
+    private fun processMessage(player: Player, rawMessage: String): String {
+        var processedMessage = rawMessage
+
+        if (!player.hasPermission("pixelessentials.chat.minimessage")) {
+            processedMessage = MiniMessage.miniMessage().stripTags(rawMessage)
+        }
+
+        if (player.hasPermission("pixelessentials.chat.url")) {
+            processedMessage = makeUrlsClickable(processedMessage)
+        }
+
+        return processedMessage
     }
 
     private fun makeUrlsClickable(message: String): String {
