@@ -21,6 +21,10 @@ class PluginConfigProvider(private val plugin: PixelEssentials) : ConfigProvider
     override val motd: String
         get() = plugin.config.getString("motd.message").toString()
 
+    // Rules
+    override val rules: String
+        get() = plugin.config.getString("rules.message").toString()
+
     // Messages
     override val welcomeMessageEnabled: Boolean
         get() = plugin.config.getBoolean("messages.welcome-message.enabled")

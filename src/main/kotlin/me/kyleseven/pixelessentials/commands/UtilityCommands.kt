@@ -24,6 +24,13 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
         sender.sendMessage(plugin.motdBuilder.build(sender))
     }
 
+    @CommandAlias("rules")
+    @Description("See the server rules")
+    @CommandPermission("pixelessentials.rules")
+    fun onRules(sender: CommandSender) {
+        sender.sendMessage(mmd(plugin.configProvider.rules))
+    }
+
     @CommandAlias("list")
     @Description("List all online players")
     @CommandPermission("pixelessentials.list")

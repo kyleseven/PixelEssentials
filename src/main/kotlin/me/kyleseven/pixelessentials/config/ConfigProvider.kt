@@ -9,6 +9,8 @@ sealed interface ConfigProvider {
     val motdShowOnJoin: Boolean
     val motd: String
 
+    val rules: String
+
     val welcomeMessageEnabled: Boolean
     val welcomeMessage: String
 

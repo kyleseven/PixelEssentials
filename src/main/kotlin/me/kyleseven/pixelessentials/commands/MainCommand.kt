@@ -38,6 +38,7 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
             CommandHelp("/msg", "Send a private message to a player.", listOf("pixelessentials.msg")),
             CommandHelp("/reply", "Reply to the last player who messaged you.", listOf("pixelessentials.msg")),
             CommandHelp("/motd", "See the message of the day.", listOf("pixelessentials.motd")),
+            CommandHelp("/rules", "See the server rules.", listOf("pixelessentials.rules")),
             CommandHelp("/list", "See a list of all online players.", listOf("pixelessentials.list")),
             CommandHelp("/ping", "See the ping of yourself or another player.", listOf("pixelessentials.ping")),
             CommandHelp("/seen", "See when a player was last online.", listOf("pixelessentials.seen")),

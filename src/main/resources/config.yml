@@ -25,6 +25,15 @@ motd:
     <gradient:#b0bec5:#eceff1>It's currently <gradient:#ff7e5f:#feb47b>{server_time:h:mm a}</gradient> on <gradient:#ff7e5f:#feb47b>{server_time:M/d/y}</gradient>.</gradient>
     <gradient:#b0bec5:#eceff1>There are <gradient:#ff7e5f:#feb47b>{online}</gradient> players online.</gradient>
 
+rules:
+  message: |-
+    <gradient:dark_gray:gray>───────</gradient> <gradient:#ff7e5f:#feb47b>Server Rules</gradient> <gradient:gray:dark_gray>───────</gradient>
+    <gradient:#b0bec5:#eceff1>1.</gradient> <gray>Be respectful to everyone.</gray>
+    <gradient:#b0bec5:#eceff1>2.</gradient> <gray>No griefing or stealing.</gray>
+    <gradient:#b0bec5:#eceff1>3.</gradient> <gray>No cheating or hacking.</gray>
+    <gradient:#b0bec5:#eceff1>4.</gradient> <gray>No spamming or advertising.</gray>
+    <gradient:#b0bec5:#eceff1>5.</gradient> <gray>Use common sense.</gray>
+
 # Available placeholders:
 # {username} - Player's username
 messages:

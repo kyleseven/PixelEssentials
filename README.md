@@ -51,6 +51,7 @@ Once built, the jar can be found in the `build/libs` directory.
 | `/msg`         | Send a private message to a player.                                   | `pixelessentials.msg`                                                                           |
 | `/reply`       | Send a private message to the last person who messaged you.           | `pixelessentials.msg`                                                                           |
 | `/motd`        | See the message of the day.                                           | `pixelessentials.motd`                                                                          |
+| `/rules`       | See the server rules.                                                 | `pixelessentials.rules`                                                                         |
 | `/list`        | See a list of all online players.                                     | `pixelessentials.list`                                                                          |
 | `/ping`        | See the ping of yourself or another player.                           | `pixelessentials.ping`                                                                          |
 | `/seen`        | See when a player was last online.                                    | `pixelessentials.seen`                                                                          |
