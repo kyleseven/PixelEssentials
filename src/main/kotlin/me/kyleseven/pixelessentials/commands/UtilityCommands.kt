@@ -27,8 +27,23 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandAlias("rules")
     @Description("See the server rules")
     @CommandPermission("pixelessentials.rules")
-    fun onRules(sender: CommandSender) {
-        sender.sendMessage(mmd(plugin.configProvider.rules))
+    fun onRules(sender: CommandSender, @Default("1") page: Int) {
+        val rules = plugin.configProvider.rules.split("\n")
+        val pageCount = Math.ceilDiv(rules.size, 9)
+        if (page < 1 || page > pageCount) {
+            sender.sendMessage(mmd("<red>Invalid page number. Please use a number between 1 and $pageCount.</red>"))
+            return
+        }
+
+        val start = (page - 1) * 9
+        val end = (start + 9).coerceAtMost(rules.size)
+        rules.subList(start, end).forEach {
+            sender.sendMessage(mmd(it))
+        }
+
+        if (page < pageCount) {
+            sender.sendMessage(mmd("<gray>Use <click:run_command:'/rules ${page + 1}'><hover:show_text:'Click to show next page'><white>/rules ${page + 1}</white></hover></click> to view the next page.</gray>"))
+        }
     }
 
     @CommandAlias("list")
