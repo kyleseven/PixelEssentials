@@ -326,15 +326,18 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
             runTaskAsync(plugin) {
                 val warps = plugin.warpRepository.getWarps()
 
-                var warpList = "<gray>Warps:</gray> "
+                var warpList = "<gray>Warps (${warps.size}):</gray> "
                 warps.forEachIndexed { i, warp ->
+                    val warpCommand = "/warp ${warp.name}"
+
                     val hoverText = """
+                <white>$warpCommand</white>
                 <gray>x:</gray> <white>${warp.x}</white>
                 <gray>y:</gray> <white>${warp.y}</white>
                 <gray>z:</gray> <white>${warp.z}</white>
                 <gray>world:</gray> <white>${warp.world}</white>""".trimIndent()
 
-                    warpList += "<hover:show_text:'$hoverText'><white>${warp.name}</white></hover>"
+                    warpList += "<click:run_command:'$warpCommand'><hover:show_text:'$hoverText'><white>${warp.name}</white></hover></click>"
                     if (i < warps.size - 1) {
                         warpList += "<gray>, </gray>"
                     }
