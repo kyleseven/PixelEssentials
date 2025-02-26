@@ -1,6 +1,8 @@
-package me.kyleseven.pixelessentials.utils
+package me.kyleseven.pixelessentials.managers
 
 import me.kyleseven.pixelessentials.PixelEssentials
+import me.kyleseven.pixelessentials.utils.mmd
+import me.kyleseven.pixelessentials.utils.mms
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player

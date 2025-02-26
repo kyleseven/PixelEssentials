@@ -10,10 +10,10 @@ import me.kyleseven.pixelessentials.database.repositories.WarpRepository
 import me.kyleseven.pixelessentials.listeners.AFKListener
 import me.kyleseven.pixelessentials.listeners.ChatListener
 import me.kyleseven.pixelessentials.listeners.PlayerListener
-import me.kyleseven.pixelessentials.utils.AFKManager
+import me.kyleseven.pixelessentials.managers.AFKManager
+import me.kyleseven.pixelessentials.managers.PlaytimeTracker
+import me.kyleseven.pixelessentials.managers.TeleportManager
 import me.kyleseven.pixelessentials.utils.MotdBuilder
-import me.kyleseven.pixelessentials.utils.PlaytimeTracker
-import me.kyleseven.pixelessentials.utils.TeleportManager
 import net.milkbowl.vault.chat.Chat
 import org.bukkit.Material
 import org.bukkit.plugin.RegisteredServiceProvider

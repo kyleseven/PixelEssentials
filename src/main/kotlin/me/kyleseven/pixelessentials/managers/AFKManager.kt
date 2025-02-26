@@ -1,6 +1,7 @@
-package me.kyleseven.pixelessentials.utils
+package me.kyleseven.pixelessentials.managers
 
 import me.kyleseven.pixelessentials.PixelEssentials
+import me.kyleseven.pixelessentials.utils.mmd
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*

@@ -1,4 +1,4 @@
-package me.kyleseven.pixelessentials.utils
+package me.kyleseven.pixelessentials.managers
 
 import me.kyleseven.pixelessentials.PixelEssentials
 import org.bukkit.Bukkit
