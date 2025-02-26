@@ -9,8 +9,14 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import java.util.regex.Pattern
 
 class ChatListener(private val plugin: PixelEssentials) : Listener, ChatRenderer.ViewerUnaware {
+    private val urlPattern = Pattern.compile(
+        "(?i)\\b((?:https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])",
+        Pattern.CASE_INSENSITIVE
+    ).toRegex()
+
     @EventHandler
     fun onChat(event: AsyncChatEvent) {
         if (!plugin.configProvider.customChatEnabled) return
@@ -25,10 +31,23 @@ class ChatListener(private val plugin: PixelEssentials) : Listener, ChatRenderer
         val username = source.name
         val rawMessage = LegacyComponentSerializer.legacySection().serialize(message)
 
+        val processedMessage = if (source.hasPermission("pixelessentials.chat.url")) {
+            makeUrlsClickable(rawMessage)
+        } else {
+            rawMessage
+        }
+
         val formattedMessage = format.replace("{prefix}", prefix)
             .replace("{username}", username)
-            .replace("{message}", rawMessage)
+            .replace("{message}", processedMessage)
 
         return mmd(formattedMessage)
+    }
+
+    private fun makeUrlsClickable(message: String): String {
+        return urlPattern.replace(message) { matchResult ->
+            val url = matchResult.value
+            "<click:open_url:'$url'><hover:show_text:'Click to open URL'><u>$url</u></hover></click>"
+        }
     }
 }

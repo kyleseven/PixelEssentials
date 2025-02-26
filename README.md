@@ -24,7 +24,7 @@ Once built, the jar can be found in the `build/libs` directory.
 2. Install PixelEssentials by placing the jar in the `plugins/` directory.
 3. The `config.yml` and SQLite database will be created when the server is started.
 
-## Command Reference
+## Usage
 
 ### PixelEssentials Commands
 
@@ -72,3 +72,11 @@ They function identically to their original counterparts and require the same pe
 | `/gmsp`   | Alias for `/gamemode spectator` | `minecraft.command.gamemode` |
 | `/i`      | Alias for `/give` (for self)    | `minecraft.command.give`     |
 | `/tphere` | Alias for `/tp {target} {self}` | `minecraft.command.teleport` |
+
+### Additional Permissions
+
+These permissions are not required to execute any commands, but are used to grant additional features.
+
+| Permission                 | Description                                    |
+|----------------------------|------------------------------------------------|
+| `pixelessentials.chat.url` | URLs in chat from this user will be clickable. |
