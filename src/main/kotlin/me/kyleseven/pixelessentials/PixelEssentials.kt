@@ -18,14 +18,22 @@ import org.bukkit.plugin.java.JavaPlugin
 
 open class PixelEssentials : JavaPlugin() {
     lateinit var configProvider: PluginConfigProvider
+        private set
     lateinit var vaultChat: Chat
+        private set
     lateinit var teleportManager: TeleportManager
+        private set
     lateinit var motdBuilder: MotdBuilder
+        private set
 
     lateinit var databaseManager: DatabaseManager
+        private set
     lateinit var playerRepository: PlayerRepository
+        private set
     lateinit var warpRepository: WarpRepository
+        private set
     lateinit var spawnRepository: SpawnRepository
+        private set
 
     override fun onEnable() {
         saveDefaultConfig()
