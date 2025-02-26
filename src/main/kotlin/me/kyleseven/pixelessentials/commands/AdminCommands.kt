@@ -53,7 +53,7 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
             return
         }
 
-        targetPlayer.performCommand(command)
+        targetPlayer.chat("/$command")
         sender.sendMessage(mmd("<gray>Forced <white>${targetPlayer.name}</white> to run <white>/$command</white>.</gray>"))
     }
 
