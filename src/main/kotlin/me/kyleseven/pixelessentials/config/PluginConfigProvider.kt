@@ -3,6 +3,10 @@ package me.kyleseven.pixelessentials.config
 import me.kyleseven.pixelessentials.PixelEssentials
 
 class PluginConfigProvider(private val plugin: PixelEssentials) : ConfigProvider {
+    // AFK
+    override val afkTimeout: Int
+        get() = plugin.config.getInt("afk.timeout")
+
     // Chat
     override val customChatEnabled: Boolean
         get() = plugin.config.getBoolean("chat.custom-format.enabled")

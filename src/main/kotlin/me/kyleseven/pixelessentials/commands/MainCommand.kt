@@ -13,6 +13,7 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
         data class CommandHelp(val name: String, val description: String, val permissions: List<String>)
 
         val COMMAND_LIST = listOf(
+            CommandHelp("/afk", "Toggle your AFK status.", listOf("pixelessentials.afk")),
             CommandHelp("/tpa", "Request to teleport to a player.", listOf("pixelessentials.tpa")),
             CommandHelp("/tpahere", "Request a player to teleport to you.", listOf("pixelessentials.tpahere")),
             CommandHelp("/tpaall", "Request all players to teleport to you.", listOf("pixelessentials.tpaall")),

@@ -1,6 +1,8 @@
 package me.kyleseven.pixelessentials.config
 
 sealed interface ConfigProvider {
+    val afkTimeout: Int
+
     val customChatEnabled: Boolean
     val customChatFormat: String
 

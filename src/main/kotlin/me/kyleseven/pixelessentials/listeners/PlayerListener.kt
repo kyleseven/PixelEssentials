@@ -16,25 +16,8 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
-import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 class PlayerListener(private val plugin: PixelEssentials) : Listener {
-    private val sessionStartTimes = ConcurrentHashMap<UUID, Long>()
-
-    init {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
-            val currentTimestamp = System.currentTimeMillis() / 1000
-            sessionStartTimes.forEach { (uuid, startTime) ->
-                val elapsedTime = currentTimestamp - startTime
-                if (elapsedTime > 0) {
-                    plugin.playerRepository.updateLastSeenAndPlaytime(uuid, elapsedTime)
-                    sessionStartTimes[uuid] = currentTimestamp
-                }
-            }
-        }, 6000L, 6000L)
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
@@ -72,7 +55,9 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
             }
 
             val currentTimestamp = (System.currentTimeMillis() / 1000)
-            sessionStartTimes[uuid] = currentTimestamp
+
+            plugin.playtimeTracker.startSession(uuid)
+            plugin.afkManager.handlePlayerJoin(player.uniqueId)
 
             val dbPlayer = existingPlayer ?: Player(
                 lastAccountName = player.name,
@@ -117,14 +102,14 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
 
         runTaskAsync(plugin) {
             val player = event.player
+            val uuid = player.uniqueId
 
-            val currentTimestamp = (System.currentTimeMillis() / 1000)
-            val sessionTime = (currentTimestamp - (sessionStartTimes[player.uniqueId] ?: currentTimestamp))
-            sessionStartTimes.remove(player.uniqueId)
+            // End playtime session and update database
+            val sessionTime = plugin.playtimeTracker.endSession(uuid)
+            plugin.playerRepository.updateLastSeenAndPlaytime(uuid, sessionTime)
 
-            plugin.playerRepository.updateLastSeenAndPlaytime(player.uniqueId, sessionTime)
             plugin.playerRepository.upsertPlayerLastLocation(
-                player.uniqueId, PlayerLastLocation(
+                uuid, PlayerLastLocation(
                     x = player.location.x,
                     y = player.location.y,
                     z = player.location.z,

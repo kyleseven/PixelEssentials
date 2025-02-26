@@ -9,6 +9,14 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
+    @CommandAlias("afk")
+    @Description("Toggle your AFK status")
+    @CommandPermission("pixelessentials.afk")
+    fun onAfk(sender: Player) {
+        val isAfk = plugin.afkManager.isAfk(sender)
+        plugin.afkManager.setAfk(sender, !isAfk)
+    }
+
     @CommandAlias("motd")
     @Description("Get the message of the day")
     @CommandPermission("pixelessentials.motd")
@@ -21,8 +29,17 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.list")
     fun onList(sender: CommandSender) {
         val players = plugin.server.onlinePlayers
-        val playerList =
-            "<gray>Online Players (${players.size}): </gray>" + players.joinToString(separator = "<gray>, </gray>") { "<white>${it.name}</white>" }
+        var playerList = "<gray>Online Players (${players.size}): </gray>"
+
+        players.sortedBy { it.name }.forEach { player ->
+            val playerName = if (plugin.afkManager.isAfk(player)) {
+                "<gray>[AFK] ${player.name}</gray>"
+            } else {
+                "<white>${player.name}</white>"
+            }
+
+            playerList += "$playerName<gray>, </gray>"
+        }
 
         sender.sendMessage(mmd(playerList))
     }

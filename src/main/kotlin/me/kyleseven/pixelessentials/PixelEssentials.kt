@@ -7,9 +7,12 @@ import me.kyleseven.pixelessentials.database.DatabaseManager
 import me.kyleseven.pixelessentials.database.repositories.PlayerRepository
 import me.kyleseven.pixelessentials.database.repositories.SpawnRepository
 import me.kyleseven.pixelessentials.database.repositories.WarpRepository
+import me.kyleseven.pixelessentials.listeners.AFKListener
 import me.kyleseven.pixelessentials.listeners.ChatListener
 import me.kyleseven.pixelessentials.listeners.PlayerListener
+import me.kyleseven.pixelessentials.utils.AFKManager
 import me.kyleseven.pixelessentials.utils.MotdBuilder
+import me.kyleseven.pixelessentials.utils.PlaytimeTracker
 import me.kyleseven.pixelessentials.utils.TeleportManager
 import net.milkbowl.vault.chat.Chat
 import org.bukkit.Material
@@ -22,6 +25,10 @@ open class PixelEssentials : JavaPlugin() {
     lateinit var vaultChat: Chat
         private set
     lateinit var teleportManager: TeleportManager
+        private set
+    lateinit var afkManager: AFKManager
+        private set
+    lateinit var playtimeTracker: PlaytimeTracker
         private set
     lateinit var motdBuilder: MotdBuilder
         private set
@@ -41,6 +48,8 @@ open class PixelEssentials : JavaPlugin() {
         // Late init
         configProvider = PluginConfigProvider(this)
         teleportManager = TeleportManager(this)
+        afkManager = AFKManager(this).apply { initialize() }
+        playtimeTracker = PlaytimeTracker(this).apply { initialize() }
         motdBuilder = MotdBuilder(this)
         vaultChat = setupChat().let {
             it ?: run {
@@ -63,6 +72,7 @@ open class PixelEssentials : JavaPlugin() {
         // Events
         server.pluginManager.registerEvents(PlayerListener(this), this)
         server.pluginManager.registerEvents(ChatListener(this), this)
+        server.pluginManager.registerEvents(AFKListener(this), this)
 
         // Commands
         val paperCommandManager = PaperCommandManager(this)
@@ -78,6 +88,14 @@ open class PixelEssentials : JavaPlugin() {
     override fun onDisable() {
         if (::databaseManager.isInitialized) {
             databaseManager.disconnect()
+        }
+
+        if (::playtimeTracker.isInitialized) {
+            playtimeTracker.shutdown()
+        }
+
+        if (::afkManager.isInitialized) {
+            afkManager.shutdown()
         }
     }
 

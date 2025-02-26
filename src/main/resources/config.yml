@@ -35,6 +35,9 @@ messages:
     enabled: true
     message: "<yellow>{username} left the game</yellow>"
 
+afk:
+  timeout: 300
+
 teleportation:
   cooldown: 30
   delay: 5

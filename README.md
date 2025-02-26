@@ -30,6 +30,7 @@ Once built, the jar can be found in the `build/libs` directory.
 
 | Command        | Description                                                           | Permission                                                                                      |
 |----------------|-----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| `/afk`         | Toggle your AFK status.                                               | `pixelessentials.afk`                                                                           |
 | `/tpa`         | Request to teleport to a player.                                      | `pixelessentials.tpa`                                                                           |
 | `/tpahere`     | Request a player to teleport to you.                                  | `pixelessentials.tpahere`                                                                       |
 | `/tpaall`      | Request all players to teleport to you.                               | `pixelessentials.tpaall`                                                                        |
