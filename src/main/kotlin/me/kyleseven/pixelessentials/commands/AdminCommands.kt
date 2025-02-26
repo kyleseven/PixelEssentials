@@ -35,6 +35,28 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
         player.openInventory(target.player.enderChest)
     }
 
+    @CommandAlias("sudo")
+    @Description("Make another player run a command")
+    @CommandCompletion("@players <command>")
+    @CommandPermission("pixelessentials.sudo")
+    fun onSudo(sender: CommandSender, target: OnlinePlayer, command: String) {
+        val targetPlayer = target.player
+        if (targetPlayer.hasPermission("pixelessentials.sudo.exempt")) {
+            sender.sendMessage(mmd("<red>That player is exempt from sudo commands.</red>"))
+            return
+        }
+
+        // Check if the command is a chat message
+        if (command.startsWith("c:")) {
+            val message = command.substring(2)
+            targetPlayer.chat(message)
+            return
+        }
+
+        targetPlayer.performCommand(command)
+        sender.sendMessage(mmd("<gray>Forced <white>${targetPlayer.name}</white> to run <white>/$command</white>.</gray>"))
+    }
+
     @CommandAlias("whois")
     @Description("Get information about a player")
     @CommandCompletion("@players")

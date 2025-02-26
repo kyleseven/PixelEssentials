@@ -58,6 +58,7 @@ Once built, the jar can be found in the `build/libs` directory.
 | `/whois`       | See various info about a player, including UUID, IP, Ban Status.      | `pixelessentials.whois`                                                                         |
 | `/invsee`      | Open another player's inventory.                                      | `pixelessentials.invsee`                                                                        |
 | `/enderchest`  | Open another player's ender chest.                                    | `pixelessentials.enderchest`                                                                    |
+| `/sudo`        | Force another player to run a command                                 | `pixelessentials.sudo`                                                                          |
 | `/playtimetop` | Show a leaderboard of players ordered by play time.                   | `pixelessentials.playtimetop`                                                                   |
 
 ### Alias Commands
@@ -78,7 +79,8 @@ They function identically to their original counterparts and require the same pe
 
 These permissions are not required to execute any commands, but are used to grant additional features.
 
-| Permission                         | Description                                    |
-|------------------------------------|------------------------------------------------|
-| `pixelessentials.chat.minimessage` | Allow MiniMessage formatting in chat.          |
-| `pixelessentials.chat.url`         | URLs in chat from this user will be clickable. |
+| Permission                         | Description                                                 |
+|------------------------------------|-------------------------------------------------------------|
+| `pixelessentials.chat.minimessage` | Allow MiniMessage formatting in chat.                       |
+| `pixelessentials.chat.url`         | URLs in chat from this user will be clickable.              |
+| `pixelessentials.sudo.exempt`      | `/sudo` will fail if used on a player with this permission. |
