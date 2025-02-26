@@ -29,11 +29,11 @@ motd:
 rules:
   message: |-
     <gradient:dark_gray:gray>───────</gradient> <gradient:#ff7e5f:#feb47b>Server Rules</gradient> <gradient:gray:dark_gray>───────</gradient>
-    <gradient:#b0bec5:#eceff1>1.</gradient> <gray>Be respectful to everyone.</gray>
-    <gradient:#b0bec5:#eceff1>2.</gradient> <gray>No griefing or stealing.</gray>
-    <gradient:#b0bec5:#eceff1>3.</gradient> <gray>No cheating or hacking.</gray>
-    <gradient:#b0bec5:#eceff1>4.</gradient> <gray>No spamming or advertising.</gray>
-    <gradient:#b0bec5:#eceff1>5.</gradient> <gray>Use common sense.</gray>
+    <gradient:#ff7e5f:#feb47b>1.</gradient> <gray>Be respectful to everyone.</gray>
+    <gradient:#ff7e5f:#feb47b>2.</gradient> <gray>No griefing or stealing.</gray>
+    <gradient:#ff7e5f:#feb47b>3.</gradient> <gray>No cheating or hacking.</gray>
+    <gradient:#ff7e5f:#feb47b>4.</gradient> <gray>No spamming or advertising.</gray>
+    <gradient:#ff7e5f:#feb47b>5.</gradient> <gray>Use common sense.</gray>
 
 # Available placeholders:
 # {username} - Player's username
