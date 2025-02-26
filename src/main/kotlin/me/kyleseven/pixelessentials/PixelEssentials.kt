@@ -86,17 +86,9 @@ open class PixelEssentials : JavaPlugin() {
     }
 
     override fun onDisable() {
-        if (::databaseManager.isInitialized) {
-            databaseManager.disconnect()
-        }
-
-        if (::playtimeTracker.isInitialized) {
-            playtimeTracker.shutdown()
-        }
-
-        if (::afkManager.isInitialized) {
-            afkManager.shutdown()
-        }
+        if (::databaseManager.isInitialized) databaseManager.disconnect()
+        if (::playtimeTracker.isInitialized) playtimeTracker.shutdown()
+        if (::afkManager.isInitialized) afkManager.shutdown()
     }
 
     private fun registerCompletions(commandManager: PaperCommandManager) {
