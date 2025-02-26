@@ -112,7 +112,7 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
             val pageCount = Math.ceilDiv(plugin.playerRepository.getPlayerCount(), pageSize)
             if (page < 1 || page > pageCount) {
                 runTask(plugin) {
-                    sender.sendMessage(mmd("<red>Invalid page number</red>"))
+                    sender.sendMessage(mmd("<red>Invalid page number. Please use a number between 1 and $pageCount.</red>"))
                 }
                 return@runTaskAsync
             }
