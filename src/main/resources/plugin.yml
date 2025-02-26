@@ -1,5 +1,7 @@
 name: PixelEssentials
 version: ${version}
+author: kyleseven
+description: A collection of essential features for your server.
 main: me.kyleseven.pixelessentials.PixelEssentials
 api-version: '1.21'
 depend:
