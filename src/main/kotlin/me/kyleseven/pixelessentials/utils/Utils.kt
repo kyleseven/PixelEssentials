@@ -46,21 +46,34 @@ fun formatDate(format: String, timestamp: Long): String {
  * Format a duration into a human-readable string.
  *
  * @param milliseconds The duration in milliseconds.
+ * @param maxUnits The maximum number of units to display.
+ * @param useFullWords Whether to use full words for units.
  * @return The formatted duration string.
  */
-fun formatDuration(milliseconds: Long): String {
+fun formatDuration(milliseconds: Long, maxUnits: Int = Int.MAX_VALUE, useFullWords: Boolean = false): String {
     val duration = Duration.ofMillis(milliseconds)
     val days = duration.toDays()
     val hours = duration.toHours() % 24
     val minutes = duration.toMinutes() % 60
     val secs = duration.seconds % 60
 
-    return buildString {
-        if (days > 0) append("${days}d ")
-        if (hours > 0) append("${hours}h ")
-        if (minutes > 0) append("${minutes}m ")
-        append("${secs}s")
-    }.trim()
+    val parts = mutableListOf<String>()
+    val pluralize = { value: Long, singular: String, plural: String -> if (value == 1L) singular else plural }
+
+    if (days > 0) {
+        parts.add(if (useFullWords) "$days ${pluralize(days, "day", "days")}" else "${days}d")
+    }
+    if (hours > 0) {
+        parts.add(if (useFullWords) "$hours ${pluralize(hours, "hour", "hours")}" else "${hours}h")
+    }
+    if (minutes > 0) {
+        parts.add(if (useFullWords) "$minutes ${pluralize(minutes, "minute", "minutes")}" else "${minutes}m")
+    }
+    if (secs > 0 || parts.isEmpty()) {
+        parts.add(if (useFullWords) "$secs ${pluralize(secs, "second", "seconds")}" else "${secs}s")
+    }
+
+    return parts.take(maxUnits.coerceAtLeast(1)).joinToString(" ")
 }
 
 /**
