@@ -103,7 +103,7 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         infoLines.add(
                             formatKeyValue(
                                 "Last Location",
-                                "${lastLocation.world} ${lastLocation.x} ${lastLocation.y} ${lastLocation.z}"
+                                "${lastLocation.world} ${lastLocation.x.toInt()} ${lastLocation.y.toInt()} ${lastLocation.z.toInt()}"
                             )
                         )
                     }
