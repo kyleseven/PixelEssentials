@@ -51,17 +51,13 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandPermission("pixelessentials.list")
     fun onList(sender: CommandSender) {
         val players = plugin.server.onlinePlayers
-        var playerList = "<gray>Online Players (${players.size}): </gray>"
+        val (afkPlayers, activePlayers) = players.partition { plugin.afkManager.isAfk(it) }
 
-        players.sortedBy { it.name }.forEach { player ->
-            val playerName = if (plugin.afkManager.isAfk(player)) {
-                "<gray>[AFK] ${player.name}</gray>"
-            } else {
-                "<white>${player.name}</white>"
-            }
+        val formattedActive = activePlayers.sortedBy { it.name }.map { "<white>${it.name}</white>" }
+        val formattedAfk = afkPlayers.sortedBy { it.name }.map { "<gray>[AFK] ${it.name}</gray>" }
 
-            playerList += "$playerName<gray>, </gray>"
-        }
+        val playerList =
+            "<gray>Online Players (${players.size}): </gray>" + (formattedActive + formattedAfk).joinToString("<gray>, </gray>")
 
         sender.sendMessage(mmd(playerList))
     }
