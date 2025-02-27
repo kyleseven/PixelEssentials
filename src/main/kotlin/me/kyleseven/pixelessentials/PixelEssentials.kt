@@ -20,6 +20,15 @@ import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin
 
 open class PixelEssentials : JavaPlugin() {
+    lateinit var databaseManager: DatabaseManager
+        private set
+    lateinit var playerRepository: PlayerRepository
+        private set
+    lateinit var warpRepository: WarpRepository
+        private set
+    lateinit var spawnRepository: SpawnRepository
+        private set
+
     lateinit var configProvider: PluginConfigProvider
         private set
     lateinit var vaultChat: Chat
@@ -33,17 +42,18 @@ open class PixelEssentials : JavaPlugin() {
     lateinit var motdBuilder: MotdBuilder
         private set
 
-    lateinit var databaseManager: DatabaseManager
-        private set
-    lateinit var playerRepository: PlayerRepository
-        private set
-    lateinit var warpRepository: WarpRepository
-        private set
-    lateinit var spawnRepository: SpawnRepository
-        private set
-
     override fun onEnable() {
         saveDefaultConfig()
+
+        // Database
+        databaseManager = DatabaseManager(this)
+        if (!databaseManager.connect()) {
+            server.pluginManager.disablePlugin(this)
+            return
+        }
+        playerRepository = PlayerRepository(databaseManager.dsl)
+        warpRepository = WarpRepository(databaseManager.dsl)
+        spawnRepository = SpawnRepository(databaseManager.dsl)
 
         // Late init
         configProvider = PluginConfigProvider(this)
@@ -58,16 +68,6 @@ open class PixelEssentials : JavaPlugin() {
                 return
             }
         }
-
-        // Database
-        databaseManager = DatabaseManager(this)
-        if (!databaseManager.connect()) {
-            server.pluginManager.disablePlugin(this)
-            return
-        }
-        playerRepository = PlayerRepository(databaseManager.dsl)
-        warpRepository = WarpRepository(databaseManager.dsl)
-        spawnRepository = SpawnRepository(databaseManager.dsl)
 
         // Events
         server.pluginManager.registerEvents(PlayerListener(this), this)
@@ -86,9 +86,9 @@ open class PixelEssentials : JavaPlugin() {
     }
 
     override fun onDisable() {
-        if (::databaseManager.isInitialized) databaseManager.disconnect()
         if (::playtimeTracker.isInitialized) playtimeTracker.shutdown()
         if (::afkManager.isInitialized) afkManager.shutdown()
+        if (::databaseManager.isInitialized) databaseManager.disconnect()
     }
 
     private fun registerCompletions(commandManager: PaperCommandManager) {
