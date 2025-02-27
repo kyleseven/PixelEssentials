@@ -1,8 +1,10 @@
 package me.kyleseven.pixelessentials.database.repositories
 
+import me.kyleseven.pixelessentials.database.generated.tables.references.PLAYERS
 import me.kyleseven.pixelessentials.database.generated.tables.references.WARPS
 import me.kyleseven.pixelessentials.database.models.Warp
 import org.jooq.DSLContext
+import java.util.*
 
 class WarpRepository(private val dsl: DSLContext) {
     fun getWarp(name: String): Warp? {
@@ -21,9 +23,15 @@ class WarpRepository(private val dsl: DSLContext) {
             }
     }
 
-    fun upsertWarp(warp: Warp) {
+    fun upsertWarp(warp: Warp, creatorUUID: UUID) {
         dsl.insertInto(WARPS)
             .set(WARPS.NAME, warp.name)
+            .set(
+                WARPS.PLAYER_ID,
+                dsl.select(PLAYERS.PLAYER_ID)
+                    .from(PLAYERS)
+                    .where(PLAYERS.UUID.eq(creatorUUID.toString()))
+            )
             .set(WARPS.X, warp.x)
             .set(WARPS.Y, warp.y)
             .set(WARPS.Z, warp.z)
@@ -32,6 +40,12 @@ class WarpRepository(private val dsl: DSLContext) {
             .set(WARPS.WORLD, warp.world)
             .onConflict(WARPS.NAME)
             .doUpdate()
+            .set(
+                WARPS.PLAYER_ID,
+                dsl.select(PLAYERS.PLAYER_ID)
+                    .from(PLAYERS)
+                    .where(PLAYERS.UUID.eq(creatorUUID.toString()))
+            )
             .set(WARPS.X, warp.x)
             .set(WARPS.Y, warp.y)
             .set(WARPS.Z, warp.z)

@@ -20,33 +20,37 @@ open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var name: String
+    open var playerId: Long
         set(value): Unit = set(1, value)
-        get(): String = get(1) as String
+        get(): Long = get(1) as Long
+
+    open var name: String
+        set(value): Unit = set(2, value)
+        get(): String = get(2) as String
 
     open var x: Double
-        set(value): Unit = set(2, value)
-        get(): Double = get(2) as Double
-
-    open var y: Double
         set(value): Unit = set(3, value)
         get(): Double = get(3) as Double
 
-    open var z: Double
+    open var y: Double
         set(value): Unit = set(4, value)
         get(): Double = get(4) as Double
 
-    open var pitch: Double
+    open var z: Double
         set(value): Unit = set(5, value)
         get(): Double = get(5) as Double
 
-    open var yaw: Double
+    open var pitch: Double
         set(value): Unit = set(6, value)
         get(): Double = get(6) as Double
 
-    open var world: String
+    open var yaw: Double
         set(value): Unit = set(7, value)
-        get(): String = get(7) as String
+        get(): Double = get(7) as Double
+
+    open var world: String
+        set(value): Unit = set(8, value)
+        get(): String = get(8) as String
 
     // -------------------------------------------------------------------------
     // Primary key information
@@ -59,6 +63,7 @@ open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(
      */
     constructor(
         warpId: Long? = null,
+        playerId: Long,
         name: String,
         x: Double,
         y: Double,
@@ -68,6 +73,7 @@ open class WarpsRecord private constructor() : UpdatableRecordImpl<WarpsRecord>(
         world: String
     ) : this() {
         this.warpId = warpId
+        this.playerId = playerId
         this.name = name
         this.x = x
         this.y = y

@@ -22,9 +22,9 @@ val PLAYER_HOMES__PK_PLAYER_HOMES: UniqueKey<PlayerHomesRecord> = Internal.creat
     arrayOf(PlayerHomes.PLAYER_HOMES.PLAYER_HOME_ID),
     true
 )
-val PLAYER_HOMES__UK_PLAYER_HOMES_1_7953388: UniqueKey<PlayerHomesRecord> = Internal.createUniqueKey(
+val PLAYER_HOMES__UK_PLAYER_HOMES_1_90449728: UniqueKey<PlayerHomesRecord> = Internal.createUniqueKey(
     PlayerHomes.PLAYER_HOMES,
-    DSL.name("uk_player_homes_1_7953388"),
+    DSL.name("uk_player_homes_1_90449728"),
     arrayOf(PlayerHomes.PLAYER_HOMES.PLAYER_ID),
     true
 )
@@ -36,14 +36,14 @@ val PLAYER_LAST_LOCATIONS__PK_PLAYER_LAST_LOCATIONS: UniqueKey<PlayerLastLocatio
 )
 val PLAYERS__PK_PLAYERS: UniqueKey<PlayersRecord> =
     Internal.createUniqueKey(Players.PLAYERS, DSL.name("pk_players"), arrayOf(Players.PLAYERS.PLAYER_ID), true)
-val PLAYERS__UK_PLAYERS_1_100296842: UniqueKey<PlayersRecord> =
-    Internal.createUniqueKey(Players.PLAYERS, DSL.name("uk_players_1_100296842"), arrayOf(Players.PLAYERS.UUID), true)
+val PLAYERS__UK_PLAYERS_1_102966634: UniqueKey<PlayersRecord> =
+    Internal.createUniqueKey(Players.PLAYERS, DSL.name("uk_players_1_102966634"), arrayOf(Players.PLAYERS.UUID), true)
 val SPAWN__PK_SPAWN: UniqueKey<SpawnRecord> =
     Internal.createUniqueKey(Spawn.SPAWN, DSL.name("pk_spawn"), arrayOf(Spawn.SPAWN.SPAWN_ID), true)
 val WARPS__PK_WARPS: UniqueKey<WarpsRecord> =
     Internal.createUniqueKey(Warps.WARPS, DSL.name("pk_warps"), arrayOf(Warps.WARPS.WARP_ID), true)
-val WARPS__UK_WARPS_1_40153825: UniqueKey<WarpsRecord> =
-    Internal.createUniqueKey(Warps.WARPS, DSL.name("uk_warps_1_40153825"), arrayOf(Warps.WARPS.NAME), true)
+val WARPS__UK_WARPS_1_50937107: UniqueKey<WarpsRecord> =
+    Internal.createUniqueKey(Warps.WARPS, DSL.name("uk_warps_1_50937107"), arrayOf(Warps.WARPS.NAME), true)
 
 // -------------------------------------------------------------------------
 // FOREIGN KEY definitions
@@ -66,3 +66,11 @@ val PLAYER_LAST_LOCATIONS__FK_PLAYER_LAST_LOCATIONS_PK_PLAYERS: ForeignKey<Playe
         arrayOf(Players.PLAYERS.PLAYER_ID),
         true
     )
+val WARPS__FK_WARPS_PK_PLAYERS: ForeignKey<WarpsRecord, PlayersRecord> = Internal.createForeignKey(
+    Warps.WARPS,
+    DSL.name("fk_warps_pk_players"),
+    arrayOf(Warps.WARPS.PLAYER_ID),
+    me.kyleseven.pixelessentials.database.generated.keys.PLAYERS__PK_PLAYERS,
+    arrayOf(Players.PLAYERS.PLAYER_ID),
+    true
+)

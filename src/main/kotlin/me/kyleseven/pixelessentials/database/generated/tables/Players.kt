@@ -5,14 +5,13 @@ package me.kyleseven.pixelessentials.database.generated.tables
 
 
 import me.kyleseven.pixelessentials.database.generated.DefaultSchema
+import me.kyleseven.pixelessentials.database.generated.indexes.IDX_PLAYERS_ACCOUNT_NAME
 import me.kyleseven.pixelessentials.database.generated.indexes.IDX_PLAYERS_PLAYTIME
 import me.kyleseven.pixelessentials.database.generated.indexes.IDX_PLAYERS_UUID
-import me.kyleseven.pixelessentials.database.generated.keys.PLAYERS__PK_PLAYERS
-import me.kyleseven.pixelessentials.database.generated.keys.PLAYERS__UK_PLAYERS_1_100296842
-import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_HOMES__FK_PLAYER_HOMES_PK_PLAYERS
-import me.kyleseven.pixelessentials.database.generated.keys.PLAYER_LAST_LOCATIONS__FK_PLAYER_LAST_LOCATIONS_PK_PLAYERS
+import me.kyleseven.pixelessentials.database.generated.keys.*
 import me.kyleseven.pixelessentials.database.generated.tables.PlayerHomes.PlayerHomesPath
 import me.kyleseven.pixelessentials.database.generated.tables.PlayerLastLocations.PlayerLastLocationsPath
+import me.kyleseven.pixelessentials.database.generated.tables.Warps.WarpsPath
 import me.kyleseven.pixelessentials.database.generated.tables.records.PlayersRecord
 import org.jooq.*
 import org.jooq.impl.*
@@ -170,9 +169,9 @@ open class Players(
         override fun `as`(alias: Table<*>): PlayersPath = PlayersPath(alias.qualifiedName, this)
     }
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
-    override fun getIndexes(): List<Index> = listOf(IDX_PLAYERS_PLAYTIME, IDX_PLAYERS_UUID)
+    override fun getIndexes(): List<Index> = listOf(IDX_PLAYERS_ACCOUNT_NAME, IDX_PLAYERS_PLAYTIME, IDX_PLAYERS_UUID)
     override fun getPrimaryKey(): UniqueKey<PlayersRecord> = PLAYERS__PK_PLAYERS
-    override fun getUniqueKeys(): List<UniqueKey<PlayersRecord>> = listOf(PLAYERS__UK_PLAYERS_1_100296842)
+    override fun getUniqueKeys(): List<UniqueKey<PlayersRecord>> = listOf(PLAYERS__UK_PLAYERS_1_102966634)
 
     private lateinit var _playerHomes: PlayerHomesPath
 
@@ -208,6 +207,21 @@ open class Players(
 
     val playerLastLocations: PlayerLastLocationsPath
         get(): PlayerLastLocationsPath = playerLastLocations()
+
+    private lateinit var _warps: WarpsPath
+
+    /**
+     * Get the implicit to-many join path to the <code>warps</code> table
+     */
+    fun warps(): WarpsPath {
+        if (!this::_warps.isInitialized)
+            _warps = WarpsPath(this, null, WARPS__FK_WARPS_PK_PLAYERS.inverseKey)
+
+        return _warps;
+    }
+
+    val warps: WarpsPath
+        get(): WarpsPath = warps()
     override fun `as`(alias: String): Players = Players(DSL.name(alias), this)
     override fun `as`(alias: Name): Players = Players(alias, this)
     override fun `as`(alias: Table<*>): Players = Players(alias.qualifiedName, this)

@@ -6,14 +6,15 @@ package me.kyleseven.pixelessentials.database.generated.tables
 
 import me.kyleseven.pixelessentials.database.generated.DefaultSchema
 import me.kyleseven.pixelessentials.database.generated.indexes.IDX_WARPS_NAME
+import me.kyleseven.pixelessentials.database.generated.indexes.IDX_WARPS_PLAYER_ID
+import me.kyleseven.pixelessentials.database.generated.keys.WARPS__FK_WARPS_PK_PLAYERS
 import me.kyleseven.pixelessentials.database.generated.keys.WARPS__PK_WARPS
-import me.kyleseven.pixelessentials.database.generated.keys.WARPS__UK_WARPS_1_40153825
+import me.kyleseven.pixelessentials.database.generated.keys.WARPS__UK_WARPS_1_50937107
+import me.kyleseven.pixelessentials.database.generated.tables.Players.PlayersPath
 import me.kyleseven.pixelessentials.database.generated.tables.records.WarpsRecord
 import org.jooq.*
-import org.jooq.impl.AutoConverter
-import org.jooq.impl.DSL
-import org.jooq.impl.SQLDataType
-import org.jooq.impl.TableImpl
+import org.jooq.impl.*
+import org.jooq.impl.Internal
 
 
 /**
@@ -59,6 +60,17 @@ open class Warps(
     val WARP_ID: TableField<WarpsRecord, Long?> = createField(
         DSL.name("warp_id"),
         SQLDataType.BIGINT,
+        this,
+        "",
+        AutoConverter<Long, Long>(Long::class.java, Long::class.java)
+    )
+
+    /**
+     * The column <code>warps.player_id</code>.
+     */
+    val PLAYER_ID: TableField<WarpsRecord, Long?> = createField(
+        DSL.name("player_id"),
+        SQLDataType.BIGINT.nullable(false),
         this,
         "",
         AutoConverter<Long, Long>(Long::class.java, Long::class.java)
@@ -138,10 +150,49 @@ open class Warps(
      * Create a <code>warps</code> table reference
      */
     constructor() : this(DSL.name("warps"), null)
+
+    constructor(
+        path: Table<out Record>,
+        childPath: ForeignKey<out Record, WarpsRecord>?,
+        parentPath: InverseForeignKey<out Record, WarpsRecord>?
+    ) : this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, WARPS, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class WarpsPath : Warps, Path<WarpsRecord> {
+        constructor(
+            path: Table<out Record>,
+            childPath: ForeignKey<out Record, WarpsRecord>?,
+            parentPath: InverseForeignKey<out Record, WarpsRecord>?
+        ) : super(path, childPath, parentPath)
+
+        private constructor(alias: Name, aliased: Table<WarpsRecord>) : super(alias, aliased)
+
+        override fun `as`(alias: String): WarpsPath = WarpsPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): WarpsPath = WarpsPath(alias, this)
+        override fun `as`(alias: Table<*>): WarpsPath = WarpsPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else DefaultSchema.DEFAULT_SCHEMA
-    override fun getIndexes(): List<Index> = listOf(IDX_WARPS_NAME)
+    override fun getIndexes(): List<Index> = listOf(IDX_WARPS_NAME, IDX_WARPS_PLAYER_ID)
     override fun getPrimaryKey(): UniqueKey<WarpsRecord> = WARPS__PK_WARPS
-    override fun getUniqueKeys(): List<UniqueKey<WarpsRecord>> = listOf(WARPS__UK_WARPS_1_40153825)
+    override fun getUniqueKeys(): List<UniqueKey<WarpsRecord>> = listOf(WARPS__UK_WARPS_1_50937107)
+    override fun getReferences(): List<ForeignKey<WarpsRecord, *>> = listOf(WARPS__FK_WARPS_PK_PLAYERS)
+
+    private lateinit var _players: PlayersPath
+
+    /**
+     * Get the implicit join path to the <code>players</code> table.
+     */
+    fun players(): PlayersPath {
+        if (!this::_players.isInitialized)
+            _players = PlayersPath(this, WARPS__FK_WARPS_PK_PLAYERS, null)
+
+        return _players;
+    }
+
+    val players: PlayersPath
+        get(): PlayersPath = players()
     override fun `as`(alias: String): Warps = Warps(DSL.name(alias), this)
     override fun `as`(alias: Name): Warps = Warps(alias, this)
     override fun `as`(alias: Table<*>): Warps = Warps(alias.qualifiedName, this)

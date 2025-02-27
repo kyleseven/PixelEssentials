@@ -287,7 +287,8 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                     pitch = player.location.pitch.toDouble(),
                     yaw = player.location.yaw.toDouble(),
                     world = player.location.world.name
-                )
+                ),
+                player.uniqueId
             )
 
             runTask(plugin) {

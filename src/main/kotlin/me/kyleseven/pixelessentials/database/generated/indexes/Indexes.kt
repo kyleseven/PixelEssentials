@@ -17,6 +17,12 @@ import org.jooq.impl.Internal
 // INDEX definitions
 // -------------------------------------------------------------------------
 
+val IDX_PLAYERS_ACCOUNT_NAME: Index = Internal.createIndex(
+    DSL.name("idx_players_account_name"),
+    Players.PLAYERS,
+    arrayOf(Players.PLAYERS.LAST_ACCOUNT_NAME),
+    false
+)
 val IDX_PLAYERS_PLAYTIME: Index = Internal.createIndex(
     DSL.name("idx_players_playtime"),
     Players.PLAYERS,
@@ -27,3 +33,5 @@ val IDX_PLAYERS_UUID: Index =
     Internal.createIndex(DSL.name("idx_players_uuid"), Players.PLAYERS, arrayOf(Players.PLAYERS.UUID), false)
 val IDX_WARPS_NAME: Index =
     Internal.createIndex(DSL.name("idx_warps_name"), Warps.WARPS, arrayOf(Warps.WARPS.NAME), false)
+val IDX_WARPS_PLAYER_ID: Index =
+    Internal.createIndex(DSL.name("idx_warps_player_id"), Warps.WARPS, arrayOf(Warps.WARPS.PLAYER_ID), false)
