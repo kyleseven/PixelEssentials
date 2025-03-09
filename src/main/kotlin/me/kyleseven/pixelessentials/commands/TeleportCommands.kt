@@ -337,9 +337,9 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
                     val hoverText = """
                 <white>$warpCommand</white>
-                <gray>x:</gray> <white>${warp.x}</white>
-                <gray>y:</gray> <white>${warp.y}</white>
-                <gray>z:</gray> <white>${warp.z}</white>
+                <gray>x:</gray> <white>${"%.1f".format(warp.x)}</white>
+                <gray>y:</gray> <white>${"%.1f".format(warp.y)}</white>
+                <gray>z:</gray> <white>${"%.1f".format(warp.z)}</white>
                 <gray>world:</gray> <white>${warp.world}</white>""".trimIndent()
 
                     warpList += "<click:run_command:'$warpCommand'><hover:show_text:'$hoverText'><white>${warp.name}</white></hover></click>"
