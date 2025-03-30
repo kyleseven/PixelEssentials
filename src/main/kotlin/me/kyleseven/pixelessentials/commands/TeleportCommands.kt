@@ -12,6 +12,7 @@ import me.kyleseven.pixelessentials.utils.mmd
 import me.kyleseven.pixelessentials.utils.mms
 import me.kyleseven.pixelessentials.utils.runTask
 import me.kyleseven.pixelessentials.utils.runTaskAsync
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
@@ -330,22 +331,32 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
             runTaskAsync(plugin) {
                 val warps = plugin.warpRepository.getWarps()
+                val chunkedWarps = warps.chunked(30)
 
-                var warpList = "<gray>Warps (${warps.size}):</gray> "
-                warps.forEachIndexed { i, warp ->
-                    val warpCommand = "/warp ${warp.name}"
+                val messageComponents = mutableListOf<Component>()
 
-                    val hoverText = """
-                <white>$warpCommand</white>
-                <gray>x:</gray> <white>${"%.1f".format(warp.x)}</white>
-                <gray>y:</gray> <white>${"%.1f".format(warp.y)}</white>
-                <gray>z:</gray> <white>${"%.1f".format(warp.z)}</white>
-                <gray>world:</gray> <white>${warp.world}</white>""".trimIndent()
+                var warpIndex = 0
+                chunkedWarps.forEach { chunk ->
+                    var warpListChunk = ""
+                    chunk.forEach { warp ->
+                        val warpCommand = "/warp ${warp.name}"
 
-                    warpList += "<click:run_command:'$warpCommand'><hover:show_text:'$hoverText'><white>${warp.name}</white></hover></click>"
-                    if (i < warps.size - 1) {
-                        warpList += "<gray>, </gray>"
+                        val hoverText = """
+                            <white>$warpCommand</white>
+                            <gray>x:</gray> <white>${"%.1f".format(warp.x)}</white>
+                            <gray>y:</gray> <white>${"%.1f".format(warp.y)}</white>
+                            <gray>z:</gray> <white>${"%.1f".format(warp.z)}</white>
+                            <gray>world:</gray> <white>${warp.world}</white>""".trimIndent()
+
+                        warpListChunk += "<click:run_command:'$warpCommand'><hover:show_text:'$hoverText'><white>${warp.name}</white></hover></click>"
+                        if (warpIndex < warps.size - 1) {
+                            warpListChunk += "<gray>, </gray>"
+                        }
+
+                        warpIndex++
                     }
+
+                    messageComponents.add(mmd(warpListChunk))
                 }
 
                 runTask(plugin) {
@@ -354,7 +365,11 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         return@runTask
                     }
 
-                    sender.sendMessage(mmd(warpList))
+                    var warpListComponent = mmd("<gray>Warps (${warps.size}):</gray> ")
+                    messageComponents.forEach {
+                        warpListComponent = warpListComponent.append(it)
+                    }
+                    sender.sendMessage(warpListComponent)
                 }
             }
 
