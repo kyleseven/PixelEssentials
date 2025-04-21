@@ -67,6 +67,11 @@ class UtilityCommands(private val plugin: PixelEssentials) : BaseCommand() {
     @CommandCompletion("@players")
     @CommandPermission("pixelessentials.ping")
     fun onPing(sender: CommandSender, @Optional playerName: String?) {
+        if (sender !is Player && playerName == null) {
+            sender.sendMessage(mmd("<red>You must specify a player name when running this command from console.</red>"))
+            return
+        }
+
         val target = if (playerName != null) Bukkit.getPlayer(playerName) else sender as? Player
         if (target == null) {
             sender.sendMessage(mmd("<red>Player not found</red>"))
