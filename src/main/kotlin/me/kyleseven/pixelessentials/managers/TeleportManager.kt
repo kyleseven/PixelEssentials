@@ -97,6 +97,10 @@ class TeleportManager(private val plugin: PixelEssentials) {
             }
 
         if (effectiveDelay <= 0) {
+            if (playerToMove.hasPermission("pixelessentials.back.onteleport")) {
+                recordBackLocation(playerToMove, playerToMove.location.clone())
+            }
+
             playerToMove.teleport(destination())
             val destinationDisplayName = when (request) {
                 is TeleportRequest.PlayerToPlayer -> mms(request.target.displayName())
