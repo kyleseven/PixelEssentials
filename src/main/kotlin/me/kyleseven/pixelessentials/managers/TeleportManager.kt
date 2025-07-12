@@ -50,6 +50,10 @@ class TeleportManager(private val plugin: PixelEssentials) {
     }
 
     private fun setCooldown(player: Player) {
+        if (player.hasPermission("pixelessentials.teleport.cooldown.bypass")) {
+            return
+        }
+
         cooldowns[player.uniqueId] = System.currentTimeMillis() + (plugin.configProvider.teleportCooldown * 1000L)
     }
 
@@ -85,7 +89,14 @@ class TeleportManager(private val plugin: PixelEssentials) {
 
         cancelExistingTeleport(playerToMove)
 
-        if (delaySeconds <= 0) {
+        val effectiveDelay =
+            if (playerToMove.hasPermission("pixelessentials.teleport.delay.bypass") || delaySeconds <= 0) {
+                0
+            } else {
+                delaySeconds
+            }
+
+        if (effectiveDelay <= 0) {
             playerToMove.teleport(destination())
             val destinationDisplayName = when (request) {
                 is TeleportRequest.PlayerToPlayer -> mms(request.target.displayName())
@@ -142,7 +153,7 @@ class TeleportManager(private val plugin: PixelEssentials) {
                 }
 
                 val now = System.currentTimeMillis()
-                if (now >= startTime + delaySeconds * 1000L) {
+                if (now >= startTime + effectiveDelay * 1000L) {
                     cancel()
                     activeTeleports.remove(playerToMove.uniqueId)
                     val targetLocation = destination()
@@ -171,7 +182,7 @@ class TeleportManager(private val plugin: PixelEssentials) {
             initialLocation = initialLocation,
             initialHealth = initialHealth,
             startTime = startTime,
-            delaySeconds = delaySeconds,
+            delaySeconds = effectiveDelay,
             requester = when (request) {
                 is TeleportRequest.PlayerToPlayer -> request.requester.uniqueId
                 is TeleportRequest.ToLocation -> playerToMove.uniqueId
@@ -183,7 +194,7 @@ class TeleportManager(private val plugin: PixelEssentials) {
         )
 
         // Inform the player about the warmup.
-        playerToMove.sendMessage(mmd(messageTemplate.format(delaySeconds)))
+        playerToMove.sendMessage(mmd(messageTemplate.format(effectiveDelay)))
     }
 
     // Teleport request functions

@@ -80,8 +80,10 @@ They function identically to their original counterparts and require the same pe
 
 These permissions are not required to execute any commands, but are used to grant additional features.
 
-| Permission                         | Description                                                 |
-|------------------------------------|-------------------------------------------------------------|
-| `pixelessentials.chat.minimessage` | Allow MiniMessage formatting in chat.                       |
-| `pixelessentials.chat.url`         | URLs in chat from this user will be clickable.              |
-| `pixelessentials.sudo.exempt`      | `/sudo` will fail if used on a player with this permission. |
+| Permission                                 | Description                                                 |
+|--------------------------------------------|-------------------------------------------------------------|
+| `pixelessentials.chat.minimessage`         | Allow MiniMessage formatting in chat.                       |
+| `pixelessentials.chat.url`                 | URLs in chat from this user will be clickable.              |
+| `pixelessentials.sudo.exempt`              | `/sudo` will fail if used on a player with this permission. |
+| `pixelessentials.teleport.cooldown.bypass` | Bypass teleport cooldowns.                                  |
+| `pixelessentials.teleport.delay.bypass`    | Bypass teleport delays.                                     |
