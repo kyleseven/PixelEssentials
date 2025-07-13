@@ -43,6 +43,13 @@ open class PixelEssentials : JavaPlugin() {
         private set
 
     override fun onEnable() {
+        // Check for PaperMC
+        if (!isPaper()) {
+            logger.severe("This plugin requires Paper to run. Please install Paper and try again.")
+            server.pluginManager.disablePlugin(this)
+            return
+        }
+
         saveDefaultConfig()
 
         // Database
@@ -89,6 +96,15 @@ open class PixelEssentials : JavaPlugin() {
         if (::playtimeTracker.isInitialized) playtimeTracker.shutdown()
         if (::afkManager.isInitialized) afkManager.shutdown()
         if (::databaseManager.isInitialized) databaseManager.disconnect()
+    }
+
+    private fun isPaper(): Boolean {
+        try {
+            Class.forName("io.papermc.paper.PaperBootstrap")
+            return true
+        } catch (_: ClassNotFoundException) {
+            return false
+        }
     }
 
     private fun registerCompletions(commandManager: PaperCommandManager) {
