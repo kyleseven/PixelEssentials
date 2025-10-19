@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.2.10"
-    id("com.gradleup.shadow") version "9.0.0-beta6"
+    kotlin("jvm") version "2.2.20"
+    id("com.gradleup.shadow") version "9.2.2"
     id("org.jooq.jooq-codegen-gradle") version "3.19.18"
     id("org.flywaydb.flyway") version "11.3.0"
 }
@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     // Paper API
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.1")
     compileOnly("org.apache.logging.log4j:log4j-core:2.24.1")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
