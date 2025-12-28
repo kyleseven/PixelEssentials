@@ -22,7 +22,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
         val uuid = player.uniqueId
-        val ipAddress = player.address.address.hostAddress
+        val ipAddress = player.address?.address?.hostAddress ?: "UNKNOWN"
 
         // Get custom join message (if enabled) and suppress default join message
         val joinMessage: Component? = if (plugin.configProvider.customJoinMessageEnabled) {

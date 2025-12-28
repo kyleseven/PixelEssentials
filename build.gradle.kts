@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.2.20"
-    id("com.gradleup.shadow") version "9.2.2"
+    kotlin("jvm") version "2.3.0"
+    id("com.gradleup.shadow") version "9.3.0"
     id("org.jooq.jooq-codegen-gradle") version "3.19.18"
     id("org.flywaydb.flyway") version "11.3.0"
 }
@@ -26,9 +26,9 @@ repositories {
 
 dependencies {
     // Paper API
-    compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
-    compileOnly("org.apache.logging.log4j:log4j-api:2.24.1")
-    compileOnly("org.apache.logging.log4j:log4j-core:2.24.1")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("org.apache.logging.log4j:log4j-api:2.25.2")
+    compileOnly("org.apache.logging.log4j:log4j-core:2.25.2")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
@@ -44,10 +44,6 @@ dependencies {
     jooqCodegen("org.xerial:sqlite-jdbc:3.48.0.0")
     jooqCodegen("org.jooq:jooq-meta:3.19.18")
     jooqCodegen("org.jooq:jooq-codegen:3.19.18")
-
-    // Testing
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.29.1")
 }
 
 val targetJavaVersion = 21
