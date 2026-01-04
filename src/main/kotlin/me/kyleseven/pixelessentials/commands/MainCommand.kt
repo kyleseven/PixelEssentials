@@ -55,6 +55,9 @@ class MainCommand(private val plugin: PixelEssentials) : BaseCommand() {
                 "/enderchest", "Open the ender chest of another player.", listOf("pixelessentials.enderchest")
             ),
             CommandHelp(
+                "/more", "Fill your held item to a full stack.", listOf("pixelessentials.more")
+            ),
+            CommandHelp(
                 "/sudo", "Force another player to run a command.", listOf("pixelessentials.sudo")
             ),
             CommandHelp(

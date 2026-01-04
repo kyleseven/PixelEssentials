@@ -35,6 +35,23 @@ class AdminCommands(private val plugin: PixelEssentials) : BaseCommand() {
         player.openInventory(target.player.enderChest)
     }
 
+    @CommandAlias("more")
+    @Description("Fill the held item to a full stack")
+    @CommandPermission("pixelessentials.more")
+    fun onMore(player: Player) {
+        val itemInHand = player.inventory.itemInMainHand
+
+        if (itemInHand.type.isAir) {
+            player.sendMessage(mmd("<red>You must be holding an item to use this command.</red>"))
+            return
+        }
+
+        val maxStackSize = itemInHand.type.maxStackSize
+        itemInHand.amount = maxStackSize
+
+        player.sendMessage(mmd("<gray>Stacked </gray><white>${mms(itemInHand.displayName())}</white><gray> to </gray><white>$maxStackSize</white><gray>.</gray>"))
+    }
+
     @CommandAlias("sudo")
     @Description("Make another player run a command")
     @CommandCompletion("@players <command>")
