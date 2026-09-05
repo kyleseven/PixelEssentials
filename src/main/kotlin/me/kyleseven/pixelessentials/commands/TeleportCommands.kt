@@ -13,6 +13,9 @@ import me.kyleseven.pixelessentials.utils.mms
 import me.kyleseven.pixelessentials.utils.runTask
 import me.kyleseven.pixelessentials.utils.runTaskAsync
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
@@ -331,32 +334,38 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
 
             runTaskAsync(plugin) {
                 val warps = plugin.warpRepository.getWarps()
-                val chunkedWarps = warps.chunked(30)
 
-                val messageComponents = mutableListOf<Component>()
+                val warpListComponent = warps.foldIndexed(
+                    Component.text("Warps (${warps.size}): ", NamedTextColor.GRAY)
+                ) { index, component, warp ->
+                    val warpCommand = "/warp ${warp.name}"
+                    val hoverText = Component.text(warpCommand, NamedTextColor.WHITE)
+                        .append(Component.newline())
+                        .append(Component.text("x: ", NamedTextColor.GRAY))
+                        .append(Component.text("%.1f".format(warp.x), NamedTextColor.WHITE))
+                        .append(Component.newline())
+                        .append(Component.text("y: ", NamedTextColor.GRAY))
+                        .append(Component.text("%.1f".format(warp.y), NamedTextColor.WHITE))
+                        .append(Component.newline())
+                        .append(Component.text("z: ", NamedTextColor.GRAY))
+                        .append(Component.text("%.1f".format(warp.z), NamedTextColor.WHITE))
+                        .append(Component.newline())
+                        .append(Component.text("world: ", NamedTextColor.GRAY))
+                        .append(Component.text(warp.world, NamedTextColor.WHITE))
 
-                var warpIndex = 0
-                chunkedWarps.forEach { chunk ->
-                    var warpListChunk = ""
-                    chunk.forEach { warp ->
-                        val warpCommand = "/warp ${warp.name}"
-
-                        val hoverText = """
-                            <white>$warpCommand</white>
-                            <gray>x:</gray> <white>${"%.1f".format(warp.x)}</white>
-                            <gray>y:</gray> <white>${"%.1f".format(warp.y)}</white>
-                            <gray>z:</gray> <white>${"%.1f".format(warp.z)}</white>
-                            <gray>world:</gray> <white>${warp.world}</white>""".trimIndent()
-
-                        warpListChunk += "<click:run_command:'$warpCommand'><hover:show_text:'$hoverText'><white>${warp.name}</white></hover></click>"
-                        if (warpIndex < warps.size - 1) {
-                            warpListChunk += "<gray>, </gray>"
+                    component
+                        .append(
+                            Component.text(warp.name, NamedTextColor.WHITE)
+                                .clickEvent(ClickEvent.runCommand(warpCommand))
+                                .hoverEvent(HoverEvent.showText(hoverText))
+                        )
+                        .let {
+                            if (index < warps.lastIndex) {
+                                it.append(Component.text(", ", NamedTextColor.GRAY))
+                            } else {
+                                it
+                            }
                         }
-
-                        warpIndex++
-                    }
-
-                    messageComponents.add(mmd(warpListChunk))
                 }
 
                 runTask(plugin) {
@@ -365,10 +374,6 @@ class TeleportCommands(private val plugin: PixelEssentials) : BaseCommand() {
                         return@runTask
                     }
 
-                    var warpListComponent = mmd("<gray>Warps (${warps.size}):</gray> ")
-                    messageComponents.forEach {
-                        warpListComponent = warpListComponent.append(it)
-                    }
                     sender.sendMessage(warpListComponent)
                 }
             }
