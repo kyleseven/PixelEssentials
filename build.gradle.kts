@@ -1,8 +1,10 @@
+import org.gradle.api.file.DuplicatesStrategy
+
 plugins {
-    kotlin("jvm") version "2.3.0"
-    id("com.gradleup.shadow") version "9.3.0"
-    id("org.jooq.jooq-codegen-gradle") version "3.19.18"
-    id("org.flywaydb.flyway") version "11.3.0"
+    kotlin("jvm") version "2.4.10"
+    id("com.gradleup.shadow") version "9.6.1"
+    id("org.jooq.jooq-codegen-gradle") version "3.21.7"
+    id("org.flywaydb.flyway") version "13.5.0"
 }
 
 group = "me.kyleseven"
@@ -26,9 +28,9 @@ repositories {
 
 dependencies {
     // Paper API
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly("org.apache.logging.log4j:log4j-api:2.25.2")
-    compileOnly("org.apache.logging.log4j:log4j-core:2.25.2")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.121-stable")
+    compileOnly("org.apache.logging.log4j:log4j-api:2.26.0")
+    compileOnly("org.apache.logging.log4j:log4j-core:2.26.0")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
@@ -36,17 +38,17 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
 
     // Database
-    compileOnly("org.xerial:sqlite-jdbc:3.48.0.0")
-    compileOnly("org.jooq:jooq:3.19.18")
-    compileOnly("org.flywaydb:flyway-core:11.3.0")
+    compileOnly("org.xerial:sqlite-jdbc:3.53.4.0")
+    compileOnly("org.jooq:jooq:3.21.7")
+    compileOnly("org.flywaydb:flyway-core:13.5.0")
 
     // Jooq Codegen
-    jooqCodegen("org.xerial:sqlite-jdbc:3.48.0.0")
-    jooqCodegen("org.jooq:jooq-meta:3.19.18")
-    jooqCodegen("org.jooq:jooq-codegen:3.19.18")
+    jooqCodegen("org.xerial:sqlite-jdbc:3.53.4.0")
+    jooqCodegen("org.jooq:jooq-meta:3.21.7")
+    jooqCodegen("org.jooq:jooq-codegen:3.21.7")
 }
 
-val targetJavaVersion = 21
+val targetJavaVersion = 25
 kotlin {
     jvmToolchain(targetJavaVersion)
     compilerOptions.javaParameters = true
@@ -105,6 +107,7 @@ tasks.test {
 
 tasks.shadowJar {
     archiveClassifier.set("")
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         attributes["paperweight-mappings-namespace"] = "mojang"
     }
