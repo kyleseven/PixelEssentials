@@ -126,7 +126,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         if (event.isCancelled) return
 
         if (event.player.hasPermission("pixelessentials.back.ondeath")) {
-            plugin.teleportManager.recordBackLocation(event.player, event.entity.location.clone())
+            plugin.teleportService.recordBackLocation(event.player, event.entity.location.clone())
         }
     }
 

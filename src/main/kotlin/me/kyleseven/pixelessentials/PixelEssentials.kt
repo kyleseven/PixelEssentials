@@ -12,7 +12,8 @@ import me.kyleseven.pixelessentials.listeners.ChatListener
 import me.kyleseven.pixelessentials.listeners.PlayerListener
 import me.kyleseven.pixelessentials.managers.AFKManager
 import me.kyleseven.pixelessentials.managers.PlaytimeTracker
-import me.kyleseven.pixelessentials.managers.TeleportManager
+import me.kyleseven.pixelessentials.managers.TeleportInvitationService
+import me.kyleseven.pixelessentials.managers.TeleportService
 import me.kyleseven.pixelessentials.utils.MotdBuilder
 import net.milkbowl.vault.chat.Chat
 import org.bukkit.Material
@@ -33,7 +34,9 @@ open class PixelEssentials : JavaPlugin() {
         private set
     lateinit var vaultChat: Chat
         private set
-    lateinit var teleportManager: TeleportManager
+    lateinit var teleportService: TeleportService
+        private set
+    lateinit var teleportInvitationService: TeleportInvitationService
         private set
     lateinit var afkManager: AFKManager
         private set
@@ -64,7 +67,8 @@ open class PixelEssentials : JavaPlugin() {
 
         // Late init
         configProvider = PluginConfigProvider(this)
-        teleportManager = TeleportManager(this)
+        teleportService = TeleportService(this)
+        teleportInvitationService = TeleportInvitationService(this, teleportService)
         afkManager = AFKManager(this).apply { initialize() }
         playtimeTracker = PlaytimeTracker(this).apply { initialize() }
         motdBuilder = MotdBuilder(this)
@@ -87,7 +91,20 @@ open class PixelEssentials : JavaPlugin() {
         paperCommandManager.registerCommand(AliasCommands())
         paperCommandManager.registerCommand(ChatCommands())
         paperCommandManager.registerCommand(MainCommand(this))
-        paperCommandManager.registerCommand(TeleportCommands(this))
+        paperCommandManager.registerCommand(BackCommands(teleportService))
+        paperCommandManager.registerCommand(
+            HomeCommands(this, playerRepository, teleportService)
+        )
+        paperCommandManager.registerCommand(
+            SpawnCommands(this, spawnRepository, teleportService)
+        )
+        paperCommandManager.registerCommand(
+            TeleportRequestCommands(teleportInvitationService, teleportService)
+        )
+        paperCommandManager.registerCommand(TeleportAdminCommands(teleportService))
+        paperCommandManager.registerCommand(
+            WarpCommands(this, warpRepository, teleportService)
+        )
         paperCommandManager.registerCommand(UtilityCommands(this))
         registerCompletions(paperCommandManager)
     }
