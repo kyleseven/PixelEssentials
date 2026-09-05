@@ -2,7 +2,9 @@ package me.kyleseven.pixelessentials.commands
 
 import co.aikar.commands.BaseCommand
 import co.aikar.commands.annotation.*
+import me.kyleseven.pixelessentials.utils.mmd
 import org.bukkit.Bukkit
+import org.bukkit.command.CommandException
 import org.bukkit.entity.Player
 
 class AliasCommands : BaseCommand() {
@@ -64,7 +66,15 @@ class AliasCommands : BaseCommand() {
     @Description("Give an item to yourself")
     fun onI(player: Player, item: String, @Default("1") amount: Int) {
         val command = "give ${player.name} $item $amount"
-        Bukkit.dispatchCommand(player, command)
+        try {
+            if (!Bukkit.dispatchCommand(player, command)) {
+                player.sendMessage(mmd("<red>Unable to give <white>$item</white>.</red>"))
+            }
+        } catch (_: CommandException) {
+            player.sendMessage(
+                mmd("<red>Unknown or invalid item <white>$item</white>. Use a valid Minecraft item ID.</red>")
+            )
+        }
     }
 
     @CommandAlias("tphere")
