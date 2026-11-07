@@ -1,5 +1,6 @@
 package me.kyleseven.pixelessentials
 
+import co.aikar.commands.MessageType
 import co.aikar.commands.PaperCommandManager
 import me.kyleseven.pixelessentials.commands.*
 import me.kyleseven.pixelessentials.commands.teleport.*
@@ -17,6 +18,7 @@ import me.kyleseven.pixelessentials.managers.teleport.TeleportManager
 import me.kyleseven.pixelessentials.managers.teleport.TpaManager
 import me.kyleseven.pixelessentials.utils.MotdBuilder
 import net.milkbowl.vault.chat.Chat
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin
@@ -88,6 +90,7 @@ open class PixelEssentials : JavaPlugin() {
 
         // Commands
         val paperCommandManager = PaperCommandManager(this)
+        setMessageFormats(paperCommandManager)
         paperCommandManager.registerCommand(AdminCommands(this))
         paperCommandManager.registerCommand(AliasCommands())
         paperCommandManager.registerCommand(ChatCommands())
@@ -114,6 +117,17 @@ open class PixelEssentials : JavaPlugin() {
         } catch (_: ClassNotFoundException) {
             return false
         }
+    }
+
+    /**
+     * Match ACF's built-in messages (e.g. "No player matching ...") to the plugin's colors.
+     * ACF's Paper manager only accepts the legacy [ChatColor], hence the suppression.
+     */
+    @Suppress("DEPRECATION")
+    private fun setMessageFormats(commandManager: PaperCommandManager) {
+        commandManager.setFormat(MessageType.ERROR, ChatColor.RED, ChatColor.WHITE, ChatColor.RED)
+        commandManager.setFormat(MessageType.SYNTAX, ChatColor.GRAY, ChatColor.WHITE, ChatColor.GRAY)
+        commandManager.setFormat(MessageType.INFO, ChatColor.GRAY, ChatColor.WHITE, ChatColor.GRAY)
     }
 
     private fun registerCompletions(commandManager: PaperCommandManager) {
