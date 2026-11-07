@@ -8,21 +8,3 @@ data class Player(
     val lastSeen: Long,
     val totalPlaytime: Long
 )
-
-data class PlayerLastLocation(
-    val x: Double,
-    val y: Double,
-    val z: Double,
-    val pitch: Double,
-    val yaw: Double,
-    val world: String
-)
-
-data class PlayerHome(
-    val x: Double,
-    val y: Double,
-    val z: Double,
-    val pitch: Double,
-    val yaw: Double,
-    val world: String
-)

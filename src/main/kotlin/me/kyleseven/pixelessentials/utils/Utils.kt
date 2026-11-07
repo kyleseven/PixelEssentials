@@ -3,6 +3,7 @@ package me.kyleseven.pixelessentials.utils
 import me.kyleseven.pixelessentials.PixelEssentials
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -12,10 +13,11 @@ import java.util.*
  * Deserialize a string into a [Component] using MiniMessage.
  *
  * @param s The string to deserialize.
+ * @param resolvers Resolvers for placeholders in the string, e.g. `Placeholder.component("player", name)`.
  * @return The deserialized [Component].
  */
-fun mmd(s: String): Component {
-    return MiniMessage.miniMessage().deserialize(s)
+fun mmd(s: String, vararg resolvers: TagResolver): Component {
+    return MiniMessage.miniMessage().deserialize(s, *resolvers)
 }
 
 /**
@@ -26,6 +28,17 @@ fun mmd(s: String): Component {
  */
 fun mms(c: Component): String {
     return MiniMessage.miniMessage().serialize(c)
+}
+
+/**
+ * Get a player's display name if they are online, otherwise their last known name.
+ *
+ * @param uuid The player's UUID.
+ * @return The player's name as a [Component].
+ */
+fun displayNameOf(uuid: UUID): Component {
+    return Bukkit.getPlayer(uuid)?.displayName()
+        ?: Component.text(Bukkit.getOfflinePlayer(uuid).name ?: "Unknown Player")
 }
 
 /**

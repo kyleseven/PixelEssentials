@@ -2,6 +2,7 @@ package me.kyleseven.pixelessentials
 
 import co.aikar.commands.PaperCommandManager
 import me.kyleseven.pixelessentials.commands.*
+import me.kyleseven.pixelessentials.commands.teleport.*
 import me.kyleseven.pixelessentials.config.PluginConfigProvider
 import me.kyleseven.pixelessentials.database.DatabaseManager
 import me.kyleseven.pixelessentials.database.repositories.PlayerRepository
@@ -12,7 +13,8 @@ import me.kyleseven.pixelessentials.listeners.ChatListener
 import me.kyleseven.pixelessentials.listeners.PlayerListener
 import me.kyleseven.pixelessentials.managers.AFKManager
 import me.kyleseven.pixelessentials.managers.PlaytimeTracker
-import me.kyleseven.pixelessentials.managers.TeleportManager
+import me.kyleseven.pixelessentials.managers.teleport.TeleportManager
+import me.kyleseven.pixelessentials.managers.teleport.TpaManager
 import me.kyleseven.pixelessentials.utils.MotdBuilder
 import net.milkbowl.vault.chat.Chat
 import org.bukkit.Material
@@ -34,6 +36,8 @@ open class PixelEssentials : JavaPlugin() {
     lateinit var vaultChat: Chat
         private set
     lateinit var teleportManager: TeleportManager
+        private set
+    lateinit var tpaManager: TpaManager
         private set
     lateinit var afkManager: AFKManager
         private set
@@ -65,6 +69,7 @@ open class PixelEssentials : JavaPlugin() {
         // Late init
         configProvider = PluginConfigProvider(this)
         teleportManager = TeleportManager(this)
+        tpaManager = TpaManager(this)
         afkManager = AFKManager(this).apply { initialize() }
         playtimeTracker = PlaytimeTracker(this).apply { initialize() }
         motdBuilder = MotdBuilder(this)
@@ -87,8 +92,12 @@ open class PixelEssentials : JavaPlugin() {
         paperCommandManager.registerCommand(AliasCommands())
         paperCommandManager.registerCommand(ChatCommands())
         paperCommandManager.registerCommand(MainCommand(this))
-        paperCommandManager.registerCommand(TeleportCommands(this))
         paperCommandManager.registerCommand(UtilityCommands(this))
+        paperCommandManager.registerCommand(BackCommand(this))
+        paperCommandManager.registerCommand(HomeCommands(this))
+        paperCommandManager.registerCommand(SpawnCommands(this))
+        paperCommandManager.registerCommand(TpaCommands(this))
+        paperCommandManager.registerCommand(WarpCommands(this))
         registerCompletions(paperCommandManager)
     }
 

@@ -1,7 +1,9 @@
 package me.kyleseven.pixelessentials.database.repositories
 
+import me.kyleseven.pixelessentials.database.generated.tables.records.WarpsRecord
 import me.kyleseven.pixelessentials.database.generated.tables.references.PLAYERS
 import me.kyleseven.pixelessentials.database.generated.tables.references.WARPS
+import me.kyleseven.pixelessentials.database.models.StoredLocation
 import me.kyleseven.pixelessentials.database.models.Warp
 import org.jooq.DSLContext
 import java.util.*
@@ -10,20 +12,11 @@ class WarpRepository(private val dsl: DSLContext) {
     fun getWarp(name: String): Warp? {
         return dsl.selectFrom(WARPS)
             .where(WARPS.NAME.eq(name))
-            .fetchOne()?.let { warp ->
-                Warp(
-                    name = warp.name,
-                    x = warp.x,
-                    y = warp.y,
-                    z = warp.z,
-                    pitch = warp.pitch,
-                    yaw = warp.yaw,
-                    world = warp.world
-                )
-            }
+            .fetchOne()?.toWarp()
     }
 
     fun upsertWarp(warp: Warp, creatorUUID: UUID) {
+        val location = warp.location
         dsl.insertInto(WARPS)
             .set(WARPS.NAME, warp.name)
             .set(
@@ -32,12 +25,12 @@ class WarpRepository(private val dsl: DSLContext) {
                     .from(PLAYERS)
                     .where(PLAYERS.UUID.eq(creatorUUID.toString()))
             )
-            .set(WARPS.X, warp.x)
-            .set(WARPS.Y, warp.y)
-            .set(WARPS.Z, warp.z)
-            .set(WARPS.PITCH, warp.pitch)
-            .set(WARPS.YAW, warp.yaw)
-            .set(WARPS.WORLD, warp.world)
+            .set(WARPS.X, location.x)
+            .set(WARPS.Y, location.y)
+            .set(WARPS.Z, location.z)
+            .set(WARPS.PITCH, location.pitch)
+            .set(WARPS.YAW, location.yaw)
+            .set(WARPS.WORLD, location.world)
             .onConflict(WARPS.NAME)
             .doUpdate()
             .set(
@@ -46,12 +39,12 @@ class WarpRepository(private val dsl: DSLContext) {
                     .from(PLAYERS)
                     .where(PLAYERS.UUID.eq(creatorUUID.toString()))
             )
-            .set(WARPS.X, warp.x)
-            .set(WARPS.Y, warp.y)
-            .set(WARPS.Z, warp.z)
-            .set(WARPS.PITCH, warp.pitch)
-            .set(WARPS.YAW, warp.yaw)
-            .set(WARPS.WORLD, warp.world)
+            .set(WARPS.X, location.x)
+            .set(WARPS.Y, location.y)
+            .set(WARPS.Z, location.z)
+            .set(WARPS.PITCH, location.pitch)
+            .set(WARPS.YAW, location.yaw)
+            .set(WARPS.WORLD, location.world)
             .execute()
     }
 
@@ -63,33 +56,27 @@ class WarpRepository(private val dsl: DSLContext) {
 
     fun getWarps(): List<Warp> {
         return dsl.selectFrom(WARPS)
-            .fetch { warp ->
-                Warp(
-                    name = warp.name,
-                    x = warp.x,
-                    y = warp.y,
-                    z = warp.z,
-                    pitch = warp.pitch,
-                    yaw = warp.yaw,
-                    world = warp.world
-                )
-            }
+            .fetch { it.toWarp() }
     }
 
     fun getWarpsPaginated(page: Int, pageSize: Int): List<Warp> {
         return dsl.selectFrom(WARPS)
             .limit(pageSize)
             .offset((page - 1) * pageSize)
-            .fetch { warp ->
-                Warp(
-                    name = warp.name,
-                    x = warp.x,
-                    y = warp.y,
-                    z = warp.z,
-                    pitch = warp.pitch,
-                    yaw = warp.yaw,
-                    world = warp.world
-                )
-            }
+            .fetch { it.toWarp() }
+    }
+
+    private fun WarpsRecord.toWarp(): Warp {
+        return Warp(
+            name = name,
+            location = StoredLocation(
+                x = x,
+                y = y,
+                z = z,
+                pitch = pitch,
+                yaw = yaw,
+                world = world
+            )
+        )
     }
 }

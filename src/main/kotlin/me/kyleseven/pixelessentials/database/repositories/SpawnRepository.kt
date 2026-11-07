@@ -1,14 +1,14 @@
 package me.kyleseven.pixelessentials.database.repositories
 
 import me.kyleseven.pixelessentials.database.generated.tables.references.SPAWN
-import me.kyleseven.pixelessentials.database.models.Spawn
+import me.kyleseven.pixelessentials.database.models.StoredLocation
 import org.jooq.DSLContext
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
 
 class SpawnRepository(private val dsl: DSLContext) {
-    private var cachedSpawn: Spawn? = null
+    private var cachedSpawn: StoredLocation? = null
     private val lock = ReentrantReadWriteLock()
 
     init {
@@ -16,7 +16,7 @@ class SpawnRepository(private val dsl: DSLContext) {
             .from(SPAWN)
             .where(SPAWN.SPAWN_ID.eq(1))
             .fetchOne()?.let { record ->
-                Spawn(
+                StoredLocation(
                     x = record.get(SPAWN.X)!!,
                     y = record.get(SPAWN.Y)!!,
                     z = record.get(SPAWN.Z)!!,
@@ -29,7 +29,7 @@ class SpawnRepository(private val dsl: DSLContext) {
         lock.write { cachedSpawn = loadedSpawn }
     }
 
-    fun upsertSpawn(spawn: Spawn) {
+    fun upsertSpawn(spawn: StoredLocation) {
         dsl.insertInto(SPAWN)
             .set(SPAWN.SPAWN_ID, 1)
             .set(SPAWN.X, spawn.x)
@@ -51,7 +51,7 @@ class SpawnRepository(private val dsl: DSLContext) {
         lock.write { cachedSpawn = spawn }
     }
 
-    fun getSpawn(): Spawn? {
+    fun getSpawn(): StoredLocation? {
         return lock.read { cachedSpawn }
     }
 

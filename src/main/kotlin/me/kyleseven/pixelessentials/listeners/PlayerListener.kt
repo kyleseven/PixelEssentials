@@ -2,13 +2,11 @@ package me.kyleseven.pixelessentials.listeners
 
 import me.kyleseven.pixelessentials.PixelEssentials
 import me.kyleseven.pixelessentials.database.models.Player
-import me.kyleseven.pixelessentials.database.models.PlayerLastLocation
+import me.kyleseven.pixelessentials.database.models.toStoredLocation
 import me.kyleseven.pixelessentials.utils.mmd
 import me.kyleseven.pixelessentials.utils.runTask
 import me.kyleseven.pixelessentials.utils.runTaskAsync
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -38,18 +36,9 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
 
             // Teleport them to spawn if they are a new player
             if (isNewPlayer) {
-                plugin.spawnRepository.getSpawn()?.let { spawnLocation ->
+                plugin.spawnRepository.getSpawn()?.let { spawn ->
                     runTask(plugin) {
-                        player.teleport(
-                            Location(
-                                Bukkit.getWorld(spawnLocation.world),
-                                spawnLocation.x,
-                                spawnLocation.y,
-                                spawnLocation.z,
-                                spawnLocation.yaw.toFloat(),
-                                spawnLocation.pitch.toFloat()
-                            )
-                        )
+                        spawn.toLocation()?.let { player.teleport(it) }
                     }
                 }
             }
@@ -100,24 +89,16 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
             event.quitMessage(mmd(plugin.configProvider.customLeaveMessage.replace("{username}", event.player.name)))
         }
 
-        runTaskAsync(plugin) {
-            val player = event.player
-            val uuid = player.uniqueId
+        val uuid = event.player.uniqueId
+        // Read the location on the main thread
+        val lastLocation = event.player.location.toStoredLocation()
 
+        runTaskAsync(plugin) {
             // End playtime session and update database
             val sessionTime = plugin.playtimeTracker.endSession(uuid)
             plugin.playerRepository.updateLastSeenAndPlaytime(uuid, sessionTime)
 
-            plugin.playerRepository.upsertPlayerLastLocation(
-                uuid, PlayerLastLocation(
-                    x = player.location.x,
-                    y = player.location.y,
-                    z = player.location.z,
-                    pitch = player.location.pitch.toDouble(),
-                    yaw = player.location.yaw.toDouble(),
-                    world = player.world.name
-                )
-            )
+            plugin.playerRepository.upsertPlayerLastLocation(uuid, lastLocation)
         }
     }
 
@@ -126,7 +107,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         if (event.isCancelled) return
 
         if (event.player.hasPermission("pixelessentials.back.ondeath")) {
-            plugin.teleportManager.recordBackLocation(event.player, event.entity.location.clone())
+            plugin.teleportManager.recordBackLocation(event.player, event.entity.location)
         }
     }
 
@@ -137,16 +118,7 @@ class PlayerListener(private val plugin: PixelEssentials) : Listener {
         }
 
         if (!event.isBedSpawn && !event.isAnchorSpawn) {
-            plugin.spawnRepository.getSpawn()?.let { spawnLocation ->
-                event.respawnLocation = Location(
-                    Bukkit.getWorld(spawnLocation.world),
-                    spawnLocation.x,
-                    spawnLocation.y,
-                    spawnLocation.z,
-                    spawnLocation.yaw.toFloat(),
-                    spawnLocation.pitch.toFloat()
-                )
-            }
+            plugin.spawnRepository.getSpawn()?.toLocation()?.let { event.respawnLocation = it }
         }
     }
 }
